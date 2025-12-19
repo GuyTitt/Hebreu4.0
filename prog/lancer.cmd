@@ -1,8 +1,8 @@
 @echo off
-REM Début de "lancer.cmd" version "2.1" — Site réel uniquement
+REM Début de "lancer.cmd" version "2.2"
 cls
 echo.
-echo lancer.cmd — Version 2.1 (Site réel uniquement)
+echo lancer.cmd — Version 2.2
 echo.
 
 :: Activation de l'environnement virtuel si nécessaire
@@ -38,6 +38,8 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
+rem créer /Hebreu4.0/html/Hebreu4.0/html/style.css
+xcopy html\style.css html\Hebreu4.0\html\style.css
 
 echo.
 echo === Démarrage du serveur local ===
@@ -47,4 +49,4 @@ echo.
 echo Site réel disponible sur : http://localhost:3500/index.html
 echo.
 pause
-REM Fin de "lancer.cmd" version "2.1"
+REM Fin de "lancer.cmd" version "2.2"

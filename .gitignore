@@ -4,5 +4,6 @@
 **/__pycache__
 #
 # Fichiers à ignorer dans les transferts
-0.bak
+*.bak
+*.log
 #  ### FIN ###

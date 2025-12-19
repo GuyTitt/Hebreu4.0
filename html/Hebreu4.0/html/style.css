@@ -1,0 +1,139 @@
+/* style.css version "3.2" – Gamme bleu-vert élégante + table centrée 80% */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #e8f4f8;
+    color: #2c3e50;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.monTitre {
+    font-size: 58px;
+    color: #16a085;
+    text-align: center;
+    padding: 20px;
+}
+
+.monSousTitre {
+    font-size: 32px;
+    color: #1abc9c;
+    text-align: center;
+    margin: 20px 0;
+    border-bottom: 4px solid #16a085;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1abc9c;
+    padding: 15px 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.navigation .gauche, .navigation .droite {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.monbouton {
+    padding: 12px 26px;
+    background: #ecf0f1;
+    color: #2c3e50;
+    border: 3px solid #bdc3c7;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.monbouton:hover {
+    background: #1abc9c;
+    color: white;
+    border-color: #16a085;
+    transform: translateY(-2px);
+}
+
+/* Conteneur centré pour la table */
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+}
+
+/* Table centrée à 80% de largeur */
+table.dossiers {
+    width: 80%;                  /* 80% de la largeur du conteneur */
+    max-width: 1000px;           /* Largeur maximale raisonnable */
+    margin: 0 auto;              /* Centrage horizontal (redondant avec .table-container mais sûr) */
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+table.dossiers td {
+    padding: 18px 24px;
+    border-bottom: 1px solid #ecf0f1;
+    text-align: left;
+}
+
+table.dossiers tr:last-child td { border-bottom: none; }
+table.dossiers tr:hover { background: #f8fcfd; }
+
+.dossier-item a { color: #16a085; font-weight: bold; }
+.fichier-pdf a { color: #e74c3c; font-weight: bold; }
+
+footer { 
+    text-align: center; 
+    margin-top: 50px; 
+    color: #7f8c8d; 
+    font-size: 0.9em; 
+}
+
+/* Style du bouton mail */
+.btn-mail {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: 2px solid #388E3C;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px #666, 0 -2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-mail:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px #666, 0 -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-mail:hover {
+    background-color: #45a049;
+    border-color: #388E3C;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    table.dossiers {
+        width: 95%;
+    }
+    .monTitre { font-size: 42px; }
+    .monSousTitre { font-size: 26px; }
+}
+
+/* fin du "style.css" version "3.2" */
