@@ -1,6 +1,6 @@
-# genere_site.py — Version 19.7
+# genere_site.py — Version 19.8
 
-version = ("genere_site.py", "19.7")
+version = ("genere_site.py", "19.8")
 
 # Importation des librairies
 import os
@@ -117,12 +117,12 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
 
 def _generer_navigation(chemin_relatif: List[str]) -> str:
     """Génère la barre de navigation."""
-    nav = '<nav class="navigation"><div class="gauche"><a href="/index.html" class="monbouton">Accueil</a>'
+    nav = f'<nav class="navigation"><div class="gauche"><a href="{DOSSIER_REEL}index.html" class="monbouton">Accueil</a>'
     for i in range(len(chemin_relatif) - 1):
         lien_parts = [normaliser_nom(p) for p in chemin_relatif[:i+1]]
-        lien = "/" + "/".join(lien_parts)
+        lien = DOSSIER_REEL +( "/".join(lien_parts))
         nav += f' → <a href="{lien}/index.html" class="monbouton">{chemin_relatif[i]}</a>'
-    nav += '</div><div class="droite"><a href="/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+    nav += f'</div><div class="droite"><a href="{DOSSIER_REEL}TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
     return nav
@@ -407,4 +407,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# fin du "genere_site.py" version "19.7"
+# fin du "genere_site.py" version "19.8"

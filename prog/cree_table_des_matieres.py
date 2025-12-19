@@ -1,4 +1,4 @@
-# cree_table_des_matieres.py — Version 6.12 — TDM générée à partir de structure_site.json
+# cree_table_des_matieres.py — Version 6.13 — TDM générée à partir de structure_site.json
 
 import json
 from pathlib import Path
@@ -7,7 +7,7 @@ from datetime import datetime
 from lib1.options import DOSSIER_HTML, DOSSIER_REEL
 from lib1.config import CONFIG
 
-version = ("cree_table_des_matieres.py", "6.12")
+version = ("cree_table_des_matieres.py", "6.13")
 print(f"[Version] {version[0]} — {version[1]}")
 
 DOSSIER_TDM = CONFIG["dossier_tdm"]
@@ -129,4 +129,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Fin de "cree_table_des_matieres.py" version "6.12"
+# Fin de "cree_table_des_matieres.py" version "6.13"
