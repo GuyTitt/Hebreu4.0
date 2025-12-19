@@ -1,6 +1,6 @@
-# genere_site.py — Version 19.8
+# genere_site.py — Version 20.0
 
-version = ("genere_site.py", "19.8")
+version = ("genere_site.py", "20.0")
 
 # Importation des librairies
 import os
@@ -23,7 +23,7 @@ try:
 except ImportError:
     word_app = None
 
-from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, DOSSIER_REEL
+from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
 from lib1.config import CONFIG
 
 print(f"[Version] {version[0]} — {version[1]}")
@@ -84,8 +84,7 @@ def deb_html(titre: str) -> str:
 <head>
     <meta charset="utf-8"/>
     <title>{titre}</title>
-    <base href="{DOSSIER_REEL}">
-    <link href="{DOSSIER_REEL}style.css" rel="stylesheet"/>
+    <link href="{BASE_PATH}/style.css" rel="stylesheet"/>
 </head>
 <body>"""
 
@@ -116,13 +115,13 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
     return h
 
 def _generer_navigation(chemin_relatif: List[str]) -> str:
-    """Génère la barre de navigation."""
-    nav = f'<nav class="navigation"><div class="gauche"><a href="{DOSSIER_REEL}index.html" class="monbouton">Accueil</a>'
+    """Génère la barre de navigation avec BASE_PATH."""
+    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
     for i in range(len(chemin_relatif) - 1):
         lien_parts = [normaliser_nom(p) for p in chemin_relatif[:i+1]]
-        lien = DOSSIER_REEL +( "/".join(lien_parts))
+        lien = BASE_PATH + "/" + "/".join(lien_parts)
         nav += f' → <a href="{lien}/index.html" class="monbouton">{chemin_relatif[i]}</a>'
-    nav += f'</div><div class="droite"><a href="{DOSSIER_REEL}TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+    nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
     return nav
@@ -267,6 +266,7 @@ STRUCTURE = {json.dumps(struc, ensure_ascii=False, indent=4).replace("true", "Tr
 
 def copie_site(temp_dir: Path) -> None:
     """Copie /documents vers /html avec gestion .docx → .pdf."""
+    log(f"Création du dossier HTML : {DOSSIER_HTML}")
     if Path(DOSSIER_HTML).exists():
         shutil.rmtree(DOSSIER_HTML)
     Path(DOSSIER_HTML).mkdir(parents=True, exist_ok=True)
@@ -301,8 +301,11 @@ def copie_site(temp_dir: Path) -> None:
                 nom_pdf = normaliser_nom(Path(fichier).stem + ".pdf")
                 cible_pdf_documents = Path(racine) / nom_pdf
                 cible_pdf_html = cible / nom_pdf
-                shutil.copy2(cible_pdf_documents, cible_pdf_html)
-                log(f"PDF copié : {nom_pdf}")
+                if cible_pdf_documents.exists():
+                    shutil.copy2(cible_pdf_documents, cible_pdf_html)
+                    log(f"PDF copié : {nom_pdf}")
+                else:
+                    log(f"PDF manquant pour {fichier} — ignoré")
             elif fichier.lower().endswith(".html"):
                 nom_html = normaliser_nom(fichier)
                 shutil.copy2(src_file, cible / nom_html)
@@ -347,7 +350,7 @@ def table_index(liste_fils: List[Dict[str, Any]]) -> str:
     return "".join(h)
 
 def generer_page_index(dossier: Path, temp_dir: Path) -> None:
-    """Génère index.html avec BeautifulSoup prettify."""
+    """Génère index.html avec BeautifulSoup prettify et fallback pour entete/pied general."""
     log(f"Génération page : {dossier}")
     rel_path = dossier.relative_to(DOSSIER_DOCUMENTS)
     cible_rel_norm = Path(*(normaliser_nom(part) for part in rel_path.parts))
@@ -367,20 +370,36 @@ def generer_page_index(dossier: Path, temp_dir: Path) -> None:
     titre = struc.get("titre_dossier", dossier.name)
     html_parts.append(deb_html(titre))
 
+    # haut_page global (si configuré)
+    if struc.get("haut_page", False):
+        html_parts.append("".join(CONFIG.get("haut_page", [])))
+
     # entete_general avec fallback
     if struc.get("entete_general", False):
         html_parts.append(plage_html_avec_fallback(dossier, "entete_general.html", "début", "_général"))
 
-    html_parts.append(plage_html_avec_fallback(dossier, "entete.html", "début", ""))
+    # entete local
+    if struc.get("entete", False):
+        html_parts.append(plage_html_avec_fallback(dossier, "entete.html", "début", ""))
 
-    html_parts.append(_generer_navigation(list(rel_path.parts)))
+    # navigation
+    if struc.get("navigation", False):
+        html_parts.append(_generer_navigation(list(rel_path.parts)))
+
+    # table
     html_parts.append(f"<div class=\"table-container\"><table class=\"dossiers\"><tbody><tr><td>{table_index(liste_fils)}</td></tr></tbody></table></div>")
 
-    html_parts.append(plage_html_avec_fallback(dossier, "pied.html", "fin", ""))
+    # pied local
+    if struc.get("pied", False):
+        html_parts.append(plage_html_avec_fallback(dossier, "pied.html", "fin", ""))
 
     # pied_general avec fallback
     if struc.get("pied_general", False):
         html_parts.append(plage_html_avec_fallback(dossier, "pied_general.html", "fin", "_général"))
+
+    # bas_page global
+    if struc.get("bas_page", False):
+        html_parts.append("".join(CONFIG.get("bas_page", [])))
 
     html_parts.append(fin_html())
 
@@ -407,4 +426,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# fin du "genere_site.py" version "19.8"
+# fin du "genere_site.py" version "20.0"
