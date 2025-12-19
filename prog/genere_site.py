@@ -23,7 +23,7 @@ try:
 except ImportError:
     word_app = None
 
-from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML
+from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, DOSSIER_REEL
 from lib1.config import CONFIG
 
 print(f"[Version] {version[0]} — {version[1]}")
@@ -84,6 +84,7 @@ def deb_html(titre: str) -> str:
 <head>
     <meta charset="utf-8"/>
     <title>{titre}</title>
+    <base href="{DOSSIER_REEL}">
     <link href="/style.css" rel="stylesheet"/>
 </head>
 <body>"""

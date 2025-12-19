@@ -6,6 +6,7 @@ version = ("options.py", "1.0")
 DOSSIER_RACINE = r"C:\SiteGITHUB\hebreu4.0"
 DOSSIER_DOCUMENTS = f"{DOSSIER_RACINE}\\documents"
 DOSSIER_HTML = f"{DOSSIER_RACINE}\\html"
+DOSSIER_REEL = "https://guytitt.github.io/Hebreu4.0/html/"
 
 # Affichage de la version à l'import
 print(f"[Import] {version[0]} - Version {version[1]} chargé")

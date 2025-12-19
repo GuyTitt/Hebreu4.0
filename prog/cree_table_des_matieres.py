@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from lib1.options import DOSSIER_HTML
+from lib1.options import DOSSIER_HTML, DOSSIER_REEL
 from lib1.config import CONFIG
 
 version = ("cree_table_des_matieres.py", "6.12")
@@ -107,12 +107,13 @@ def main() -> None:
 
     html = f"""<!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Sommaire – Hébreu 4.0</title>
-<link rel="stylesheet" href="/style.css">
-<style>{css_tree}</style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Sommaire – Hébreu 4.0</title>
+        <base href="{DOSSIER_REEL}">
+        <link rel="stylesheet" href="/style.css">
+        <style>{css_tree}</style>
+    </head>
 <body>
 {haut_page}
 {navigation}
