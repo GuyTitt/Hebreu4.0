@@ -85,7 +85,7 @@ def deb_html(titre: str) -> str:
     <meta charset="utf-8"/>
     <title>{titre}</title>
     <base href="{DOSSIER_REEL}">
-    <link href="/style.css" rel="stylesheet"/>
+    <link href="{DOSSIER_REEL}style.css" rel="stylesheet"/>
 </head>
 <body>"""
 
