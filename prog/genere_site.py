@@ -183,7 +183,8 @@ def _generer_navigation(chemin_relatif: List[str]) -> str:
     Returns:
         str: HTML de la barre de navigation.
     """
-    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
+#    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
+    nav = f'<nav class="navigation"><div class="gauche"><a href="/index.html" class="monbouton">Accueil</a>'
     current_parent = Path(DOSSIER_DOCUMENTS)
     for i in range(len(chemin_relatif) - 1):
         nom_dossier = chemin_relatif[i]
@@ -192,10 +193,12 @@ def _generer_navigation(chemin_relatif: List[str]) -> str:
         lien = BASE_PATH + "/" + "/".join(lien_parts)
         nav += f' → <a href="{lien}/index.html" class="monbouton">{appliquer_style(nom_nav)}</a>'
         current_parent = current_parent / nom_dossier
-    nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+#    nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+    nav += f'</div><div class="droite"><a href="/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
     return nav
+
 
 def get_word_processes() -> List[Any]:
     """Retourne la liste des processus Word actifs."""

@@ -124,16 +124,17 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
     return h
 
 def _generer_navigation(chemin_relatif: list[str]) -> str:
-    """Génère la barre de navigation avec BASE_PATH.
+    """Génère la barre de navigation pour la page TDM.
 
-    Args:
-        chemin_relatif (list[str]): Liste des noms de dossiers depuis la racine (non utilisé ici car TDM est à la racine).
+    Sur la page TDM on n’affiche pas le bouton « Sommaire » (on y est déjà)
+    et le bouton Accueil pointe vers la racine du site.
 
     Returns:
         str: HTML de la barre de navigation.
     """
-    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
-    nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+#    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
+    nav = f'<nav class="navigation"><div class="gauche"><a href="/index.html" class="monbouton">Accueil</a>'
+    nav += f'</div><div class="droite"></div></nav>'  # Droite vide : pas de bouton Sommaire
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
     return nav
