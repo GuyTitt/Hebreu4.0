@@ -132,8 +132,7 @@ def _generer_navigation(chemin_relatif: list[str]) -> str:
     Returns:
         str: HTML de la barre de navigation.
     """
-#    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
-    nav = f'<nav class="navigation"><div class="gauche"><a href="/index.html" class="monbouton">Accueil</a>'
+    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
     nav += f'</div><div class="droite"></div></nav>'  # Droite vide : pas de bouton Sommaire
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
