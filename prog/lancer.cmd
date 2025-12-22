@@ -39,7 +39,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 rem créer /Hebreu4.0/html/Hebreu4.0/html/style.css
-xcopy html\style.css html\Hebreu4.0\html\style.css
+xcopy html\style.css html\Hebreu4.0\html\*.*
 
 echo.
 echo === Démarrage du serveur local ===

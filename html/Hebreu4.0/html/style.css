@@ -1,5 +1,6 @@
-/* style.css version "3.2" – Gamme bleu-vert élégante + table centrée 80% */
+/* style.css — Version 3.5 */
 
+/* Réinitialisation basique */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -75,7 +76,7 @@ body {
 table.dossiers {
     width: 80%;                  /* 80% de la largeur du conteneur */
     max-width: 1000px;           /* Largeur maximale raisonnable */
-    margin: 0 auto;              /* Centrage horizontal (redondant avec .table-container mais sûr) */
+    margin: 0 auto;              /* Centrage horizontal */
     border-collapse: collapse;
     background: white;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
@@ -92,8 +93,12 @@ table.dossiers td {
 table.dossiers tr:last-child td { border-bottom: none; }
 table.dossiers tr:hover { background: #f8fcfd; }
 
-.dossier-item a { color: #16a085; font-weight: bold; }
-.fichier-pdf a { color: #e74c3c; font-weight: bold; }
+.dossier-item a { 
+    color: #16a085; 
+    font-weight: bold; 
+    text-decoration: none; 
+}
+.fichier-pdf a { color: #e74c3c; font-weight: bold; text-decoration: none; }
 
 footer { 
     text-align: center; 
@@ -136,4 +141,100 @@ footer {
     .monSousTitre { font-size: 26px; }
 }
 
-/* fin du "style.css" version "3.2" */
+/* Styles TDM avec puces + / - élégantes */
+.tree {
+    --spacing: 1.8rem;
+    --radius: 12px;
+    line-height: 2.2rem;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.tree li {
+    display: block;
+    position: relative;
+    padding-left: calc(2 * var(--spacing) - var(--radius) - 2px);
+}
+
+.tree ul {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.tree ul li {
+    border-left: 2px solid #ddd;
+}
+
+.tree ul li:last-child {
+    border-color: transparent;
+}
+
+.tree ul li::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--spacing)/-2);
+    left: -2px;
+    width: calc(var(--spacing)+2px);
+    height: calc(var(--spacing)+1px);
+    border: solid #ddd;
+    border-width: 0 0 2px 2px;
+}
+
+.tree summary {
+    cursor: default;
+}
+
+.tree summary::marker,
+.tree summary::-webkit-details-marker {
+    display: none;
+}
+
+.tree li::after,
+.tree summary::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--spacing)/2 - var(--radius));
+    left: calc(var(--spacing) - var(--radius) - 1px);
+    width: calc(2*var(--radius));
+    height: calc(2*var(--radius));
+    border-radius: 50%;
+    background: #ddd;
+}
+
+.tree summary::before {
+    content: "+";
+    z-index: 1;
+    background: #2c3e50;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    line-height: calc(2*var(--radius));
+}
+
+.tree details[open] > summary::before {
+    content: "−";
+}
+
+.folder-link {
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.folder-link:hover {
+    background: #ecf0f1;
+}
+
+.tree a {
+    color: #2980b9;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.tree a:hover {
+    background: #ecf0f1;
+}
+
+/* fin du "style.css" version "3.5" */

@@ -342,24 +342,75 @@ Procédures courtes (<25 lignes), modulaires, pour maintenance facile.
 
 ### `options.py`
 ```python
-DOSSIER_DOCUMENTS = "documents"
-DOSSIER_HTML = "html"
+# options.py — Version 1.1
+
+version = ("options.py", "1.1")
+print(f"[Import] {version[0]} - Version {version[1]} chargé")
+
+# Chemins relatifs ou absolus selon ton environnement
+DOSSIER_RACINE = r"C:\SiteGITHUB\Hebreu4.0"
+DOSSIER_DOCUMENTS = f"{DOSSIER_RACINE}\\documents"
+DOSSIER_HTML = f"{DOSSIER_RACINE}\\html"
+
+# Base path pour les liens (GitHub Pages vs local)
+# "" pour test local (serveur sur /html)
+# "/hebreu4.0" pour GitHub Pages (repo à la racine du user site)
+BASE_PATH = "/Hebreu4.0/html"  # ← Modifier ici : "" pour local, "/Hebreu4.0" pour GitHub
+
+# fin du "options.py" version "1.1"
 ```
 
 ### `config.py`
 ```python
+# Début de "config.py" version "2.2"
+
 CONFIG = {
-    "titre_site": "Hébreu 4.0",
-    "dossier_tdm": "TDM",
+    "version": "2.2",
+    "titre_site": "Hébreu Biblique v4.0",
     "fichier_index": "index.html",
-    "classe_dossier": "dossier",
-    "classe_fichier": "fichier",
-    "ignorer": ["Thumbs.db"],
-    "ajout_affichage": ["📄 ", ""],
-    "haut_page": ['<div class="bandeau">Projet</div>'],
-    "bas_page": ['<footer>{date}</footer>'],
-    "logging": ["console";"log.log"]
+    "classe_dossier": "dossier-item",
+    "classe_fichier": "fichier-pdf",
+    "lien_souligné_index": False,    # False = pas de soulignement dans les pages index
+    "lien_souligné_TDM": False,      # False = pas de soulignement dans la TDM
+    "haut_page": [
+        "<div><!-- debut haut_page -->",
+#        "<div class=\"monTitre\">Hébreu biblique</div>",
+#        "<div class=\"monSousTitre\">Mes dossiers partagés</div>",
+        "<!-- fin haut_page --></div>",
+    ],
+    "bas_page": [
+        "<div><!-- debut bas_page -->",
+#        "<div>bas de la page</div>",
+        '<footer><a href="mailto:fraboulanger@orange.fr" class="btn-mail">Pour me joindre</a></footer>',
+        "<!-- fin bas_page --></div>",
+    ],
+    "navigation": {
+        "sous_dossiers_position": "gauche",
+        "afficher_sommaire": True
+    },
+    "affichage": {
+        "afficher_icones": True,
+        "table_align": "centre",
+        "table_largeur_max": "80%"
+    },
+    "couleurs": {
+        "dossiers": "#0066cc",
+        "pdf": "#c0392b",
+        "images": "#27ae60"
+    },
+    "ignorer": [
+        "nppBackup", ".git", ".gitignore", "Thumbs.db",
+        "entete_general.html", "pied_general.html",
+        "entete.html", "pied.html", "structure.json",
+        "index.html", "style.css","__pycache__"
+    ],
+    "extensions_acceptees": ["pdf"],
+    "dossier_tdm": "TDM",
+    "ajout_affichage": ["📁 ", "", "📘 ", ""],
+    "logging": ["console", "generation.log"]  # "console", "fichier.log", ou les deux
 }
+
+# Fin de "config.py" version "2.2"
 ```
 
 ### `structure.py` exemple
@@ -403,9 +454,9 @@ STRUCTURE = {
 ## XIII. genere_site.py  
   
 ```python
-# genere_site.py — Version 19.7
+# genere_site.py — Version 20.0
 
-version = ("genere_site.py", "19.7")
+version = ("genere_site.py", "20.0")
 
 # Importation des librairies
 import os
@@ -428,7 +479,7 @@ try:
 except ImportError:
     word_app = None
 
-from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML
+from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
 from lib1.config import CONFIG
 
 print(f"[Version] {version[0]} — {version[1]}")
@@ -489,7 +540,7 @@ def deb_html(titre: str) -> str:
 <head>
     <meta charset="utf-8"/>
     <title>{titre}</title>
-    <link href="/style.css" rel="stylesheet"/>
+    <link href="{BASE_PATH}/style.css" rel="stylesheet"/>
 </head>
 <body>"""
 
@@ -520,13 +571,13 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
     return h
 
 def _generer_navigation(chemin_relatif: List[str]) -> str:
-    """Génère la barre de navigation."""
-    nav = '<nav class="navigation"><div class="gauche"><a href="/index.html" class="monbouton">Accueil</a>'
+    """Génère la barre de navigation avec BASE_PATH."""
+    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
     for i in range(len(chemin_relatif) - 1):
         lien_parts = [normaliser_nom(p) for p in chemin_relatif[:i+1]]
-        lien = "/" + "/".join(lien_parts)
+        lien = BASE_PATH + "/" + "/".join(lien_parts)
         nav += f' → <a href="{lien}/index.html" class="monbouton">{chemin_relatif[i]}</a>'
-    nav += '</div><div class="droite"><a href="/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+    nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
     return nav
@@ -671,6 +722,7 @@ STRUCTURE = {json.dumps(struc, ensure_ascii=False, indent=4).replace("true", "Tr
 
 def copie_site(temp_dir: Path) -> None:
     """Copie /documents vers /html avec gestion .docx → .pdf."""
+    log(f"Création du dossier HTML : {DOSSIER_HTML}")
     if Path(DOSSIER_HTML).exists():
         shutil.rmtree(DOSSIER_HTML)
     Path(DOSSIER_HTML).mkdir(parents=True, exist_ok=True)
@@ -705,8 +757,11 @@ def copie_site(temp_dir: Path) -> None:
                 nom_pdf = normaliser_nom(Path(fichier).stem + ".pdf")
                 cible_pdf_documents = Path(racine) / nom_pdf
                 cible_pdf_html = cible / nom_pdf
-                shutil.copy2(cible_pdf_documents, cible_pdf_html)
-                log(f"PDF copié : {nom_pdf}")
+                if cible_pdf_documents.exists():
+                    shutil.copy2(cible_pdf_documents, cible_pdf_html)
+                    log(f"PDF copié : {nom_pdf}")
+                else:
+                    log(f"PDF manquant pour {fichier} — ignoré")
             elif fichier.lower().endswith(".html"):
                 nom_html = normaliser_nom(fichier)
                 shutil.copy2(src_file, cible / nom_html)
@@ -751,7 +806,7 @@ def table_index(liste_fils: List[Dict[str, Any]]) -> str:
     return "".join(h)
 
 def generer_page_index(dossier: Path, temp_dir: Path) -> None:
-    """Génère index.html avec BeautifulSoup prettify."""
+    """Génère index.html avec BeautifulSoup prettify et fallback pour entete/pied general."""
     log(f"Génération page : {dossier}")
     rel_path = dossier.relative_to(DOSSIER_DOCUMENTS)
     cible_rel_norm = Path(*(normaliser_nom(part) for part in rel_path.parts))
@@ -771,20 +826,36 @@ def generer_page_index(dossier: Path, temp_dir: Path) -> None:
     titre = struc.get("titre_dossier", dossier.name)
     html_parts.append(deb_html(titre))
 
+    # haut_page global (si configuré)
+    if struc.get("haut_page", False):
+        html_parts.append("".join(CONFIG.get("haut_page", [])))
+
     # entete_general avec fallback
     if struc.get("entete_general", False):
         html_parts.append(plage_html_avec_fallback(dossier, "entete_general.html", "début", "_général"))
 
-    html_parts.append(plage_html_avec_fallback(dossier, "entete.html", "début", ""))
+    # entete local
+    if struc.get("entete", False):
+        html_parts.append(plage_html_avec_fallback(dossier, "entete.html", "début", ""))
 
-    html_parts.append(_generer_navigation(list(rel_path.parts)))
+    # navigation
+    if struc.get("navigation", False):
+        html_parts.append(_generer_navigation(list(rel_path.parts)))
+
+    # table
     html_parts.append(f"<div class=\"table-container\"><table class=\"dossiers\"><tbody><tr><td>{table_index(liste_fils)}</td></tr></tbody></table></div>")
 
-    html_parts.append(plage_html_avec_fallback(dossier, "pied.html", "fin", ""))
+    # pied local
+    if struc.get("pied", False):
+        html_parts.append(plage_html_avec_fallback(dossier, "pied.html", "fin", ""))
 
     # pied_general avec fallback
     if struc.get("pied_general", False):
         html_parts.append(plage_html_avec_fallback(dossier, "pied_general.html", "fin", "_général"))
+
+    # bas_page global
+    if struc.get("bas_page", False):
+        html_parts.append("".join(CONFIG.get("bas_page", [])))
 
     html_parts.append(fin_html())
 
@@ -811,7 +882,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# fin du "genere_site.py" version "19.7"
+# fin du "genere_site.py" version "20.0"
 ```
 
 ---
@@ -819,137 +890,351 @@ if __name__ == "__main__":
 ## XIV. cree_table_des_matieres.py  
   
 ```python
-# cree_table_des_matieres.py — Version 6.12 — TDM générée à partir de structure_site.json
+# cree_table_des_matieres.py — Version 6.17
+
+version = ("cree_table_des_matieres.py", "6.17")
+print(f"[Version] {version[0]} — {version[1]}")
 
 import json
 from pathlib import Path
-from datetime import datetime
 
-from lib1.options import DOSSIER_HTML
-from lib1.config import CONFIG
-
-version = ("cree_table_des_matieres.py", "6.12")
-print(f"[Version] {version[0]} — {version[1]}")
-
-DOSSIER_TDM = CONFIG["dossier_tdm"]
-AJOUT = CONFIG["ajout_affichage"]  # [avant_dossier, après_dossier, avant_fichier, après_fichier]
+from lib1.options import DOSSIER_DOCUMENTS, BASE_PATH  # Utilise maintenant DOSSIER_DOCUMENTS
 
 def log(msg: str) -> None:
-    """Affiche un message de debug."""
-    print(msg)
+    """Affiche un message simple avec préfixe pour debug."""
+    print(f"[TDM DEBUG] {msg}")
 
-def construire_arbo(arbre: dict, prefixe: str = "") -> str:
-    """
-    Construit récursivement l'arborescence HTML de la TDM à partir de l'arbre JSON.
+def construire_arbo(dossier_sources: Path, prefixe_html: str = "") -> str:
+    """Construit récursivement l'arbre HTML de la TDM à partir des dossiers sources (documents)."""
+    log(f"Entrée dans construire_arbo pour dossier sources : {dossier_sources}")
+    log(f"Préfixe HTML actuel : {prefixe_html}")
 
-    Args:
-        arbre (dict): Noeud courant de structure_site.json
-        prefixe (str): Chemin relatif pour les liens
-
-    Returns:
-        str: Code HTML de l'arborescence
-    """
     html = ""
-    dossiers = sorted(arbre.get("dossiers", []), key=lambda x: x.get("position", 9999))
-    fichiers = sorted(arbre.get("fichiers", []), key=lambda x: x.get("position", 9999))
+    structure_path = dossier_sources / "STRUCTURE.py"
+    log(f"Recherche STRUCTURE.py à : {structure_path}")
 
-    entries = dossiers + fichiers
-    if not entries:
-        return ""
+    if structure_path.exists():
+        log("STRUCTURE.py trouvé")
+        try:
+            from importlib.machinery import SourceFileLoader
+            module = SourceFileLoader("STRUCTURE", str(structure_path)).load_module()
+            struc = module.STRUCTURE
+            log(f"STRUCTURE chargée : {len(struc.get('dossiers', []))} dossiers, {len(struc.get('fichiers', []))} fichiers")
+        except Exception as e:
+            log(f"ERREUR lecture STRUCTURE.py : {e}")
+            struc = {"dossiers": [], "fichiers": []}
+    else:
+        log("STRUCTURE.py NON trouvé → structure vide")
+        struc = {"dossiers": [], "fichiers": []}
 
-    html += "<ul class=\"tree\">\n"
+    # Tri par position
+    struc["dossiers"].sort(key=lambda x: x.get("position", 9999))
+    struc["fichiers"].sort(key=lambda x: x.get("position", 9999))
+    log(f"Après tri : {len(struc['dossiers'])} dossiers, {len(struc['fichiers'])} fichiers")
 
-    for entry in entries:
-        # Vérifie si l'entrée doit être affichée dans la TDM
-        if not entry.get("affiché_TDM", True):
+    for item in struc["dossiers"]:
+        if not item.get("affiché_TDM", True):
+            log(f"Dossier ignoré (affiché_TDM=False) : {item['nom_document']}")
             continue
+        nom_html = item["nom_html"]
+        nom_affiché = item.get("nom_affiché", item["nom_document"])
+        chemin_html = f"{prefixe_html}/{nom_html}/index.html"
+        lien = f"{BASE_PATH}{chemin_html}"
+        log(f"Ajout dossier : {nom_affiché} → {lien}")
+        sous_arbo = construire_arbo(dossier_sources / item["nom_document"], f"{prefixe_html}/{nom_html}")
+        if sous_arbo:
+            html += f'<li><details open><summary><a href="{lien}">{nom_affiché}</a></summary><ul>{sous_arbo}</ul></details></li>\n'
+        else:
+            html += f'<li><a href="{lien}">{nom_affiché}</a></li>\n'
 
-        nom_visible = entry.get("nom_TDM", entry.get("nom_affiché", entry["nom_html"]))
-        if entry.get("ajout_affichage", True):
-            if "dossiers" in arbre and entry in dossiers:  # c'est un dossier
-                nom_visible = f"{AJOUT[0]}{nom_visible}{AJOUT[1]}"
-            else:  # c'est un fichier
-                nom_visible = f"{AJOUT[2]}{nom_visible}{AJOUT[3]}"
+    for item in struc["fichiers"]:
+        if not item.get("affiché_TDM", True):
+            log(f"Fichier ignoré (affiché_TDM=False) : {item['nom_document']}")
+            continue
+        nom_html = item["nom_html"]
+        nom_affiché = item.get("nom_affiché", item["nom_document"])
+        chemin_html = f"{prefixe_html}/{nom_html}"
+        lien = f"{BASE_PATH}{chemin_html}"
+        log(f"Ajout fichier : {nom_affiché} → {lien}")
+        html += f'<li><a href="{lien}">{nom_affiché}</a></li>\n'
 
-        if "dossiers" in entry:  # c'est un dossier
-            lien = f"{prefixe}/{entry['nom_html']}/index.html"
-            sous_html = construire_arbo(entry, f"{prefixe}/{entry['nom_html']}")
-            html += f'  <li>\n    <details>\n      <summary><a href="{lien}" class="folder-link">{nom_visible}</a></summary>\n'
-            if sous_html:
-                html += sous_html
-            html += '    </details>\n  </li>\n'
-        else:  # c'est un fichier
-            lien = f"{prefixe}/{entry['nom_html']}"
-            html += f'  <li><a href="{lien}">{nom_visible}</a></li>\n'
-
-    html += "</ul>\n"
+    log(f"Sortie construire_arbo pour {dossier_sources} → {len(html.splitlines())} lignes générées")
     return html
 
-def main() -> None:
-    """Génère la TDM à partir de structure_site.json."""
-    tdm_path = Path(DOSSIER_HTML) / DOSSIER_TDM
-    json_path = tdm_path / "structure_site.json"
-
-    if not json_path.exists():
-        print("[ERREUR] Fichier structure_site.json introuvable — lance genere_site.py d'abord")
+def generer_tdm() -> None:
+    """Génère le fichier TDM/index.html sans style embarqué."""
+    log("=== DÉBUT GÉNÉRATION TDM ===")
+    racine_sources = Path(DOSSIER_DOCUMENTS)
+    log(f"Dossier sources racine : {racine_sources}")
+    log(f"Existe ? {racine_sources.exists()}")
+    if not racine_sources.exists():
+        log("ERREUR : dossier sources n'existe pas !")
         return
 
-    log("Lecture de structure_site.json")
-    with open(json_path, "r", encoding="utf-8") as f:
-        arbre_site = json.load(f)
+    tdm_path = Path(DOSSIER_HTML) / "TDM"
+    tdm_path.mkdir(parents=True, exist_ok=True)
+    log(f"Dossier TDM créé : {tdm_path}")
 
-    log("Génération de la table des matières à partir de l'arbre JSON...")
-    contenu = construire_arbo(arbre_site)
+    arbre_html = construire_arbo(racine_sources)
 
-    haut_page = "".join(CONFIG.get("haut_page", []))
-    bas_page = "".join(CONFIG.get("bas_page", [])).replace("{{date}}", datetime.now().strftime("%d/%m/%Y"))
-    navigation = '<nav class="navigation"><div class="gauche"><a href="/index.html" class="monbouton">Accueil</a></div><div class="droite"><a href="/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
+    if not arbre_html.strip():
+        log("ATTENTION : arbre HTML vide ! Vérifie les STRUCTURE.py et affiché_TDM dans les dossiers sources")
 
-    css_tree = """
-.tree { --spacing: 1.8rem; --radius: 12px; line-height: 2.2rem; font-family: "Segoe UI", sans-serif; }
-.tree li { display: block; position: relative; padding-left: calc(2 * var(--spacing) - var(--radius) - 2px); }
-.tree ul { margin-left: 0; padding-left: 0; }
-.tree ul li { border-left: 2px solid #ddd; }
-.tree ul li:last-child { border-color: transparent; }
-.tree ul li::before { content: ""; position: absolute; top: calc(var(--spacing)/-2); left: -2px; width: calc(var(--spacing)+2px); height: calc(var(--spacing)+1px); border: solid #ddd; border-width: 0 0 2px 2px; }
-.tree summary { cursor: default; }
-.tree summary::marker, .tree summary::-webkit-details-marker { display: none; }
-.tree li::after, .tree summary::before { content: ""; position: absolute; top: calc(var(--spacing)/2 - var(--radius)); left: calc(var(--spacing) - var(--radius) - 1px); width: calc(2*var(--radius)); height: calc(2*var(--radius)); border-radius: 50%; background: #ddd; }
-.tree summary::before { content: "+"; z-index: 1; background: #2c3e50; color: white; font-weight: bold; text-align: center; line-height: calc(2*var(--radius)); }
-.tree details[open] > summary::before { content: "−"; }
-.folder-link { color: #2c3e50; text-decoration: none; font-weight: 600; padding: 4px 8px; border-radius: 6px; }
-.folder-link:hover { background: #ecf0f1; }
-.tree a { color: #2980b9; text-decoration: none; padding: 4px 8px; border-radius: 6px; }
-.tree a:hover { background: #ecf0f1; }
-"""
-
-    if not CONFIG.get("lien_souligné_TDM", True):
-        css_tree += "\n.tree a, .folder-link, .tree a:hover, .folder-link:hover { text-decoration: none !important; }\n"
-
+    titre_site = "Site"
     html = f"""<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Sommaire – Hébreu 4.0</title>
-<link rel="stylesheet" href="/style.css">
-<style>{css_tree}</style>
+    <meta charset="utf-8"/>
+    <title>Table des matières - {titre_site}</title>
+    <link href="{BASE_PATH}/style.css" rel="stylesheet"/>
 </head>
 <body>
-{haut_page}
-{navigation}
-<h1>Sommaire du site</h1>
-<div class="tdm-content">{contenu}</div>
-{bas_page}
+    <h1>Table des matières</h1>
+    <ul class="tree">
+        {arbre_html}
+    </ul>
 </body>
 </html>"""
 
     (tdm_path / "index.html").write_text(html, encoding="utf-8")
-    print(f"[SUCCÈS] TDM générée à partir de structure_site.json — version {version[1]}")
+    log("TDM/index.html généré avec succès")
+    log("=== FIN GÉNÉRATION TDM ===")
 
 if __name__ == "__main__":
-    main()
+    generer_tdm()
 
-# Fin de "cree_table_des_matieres.py" version "6.12"
+# fin du "cree_table_des_matieres.py" version "6.17"
 ```
+
+### XV `style.css` 
+``` css
+/* style.css — Version 3.3 – Gamme bleu-vert élégante + table centrée 80% */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #e8f4f8;
+    color: #2c3e50;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.monTitre {
+    font-size: 58px;
+    color: #16a085;
+    text-align: center;
+    padding: 20px;
+}
+
+.monSousTitre {
+    font-size: 32px;
+    color: #1abc9c;
+    text-align: center;
+    margin: 20px 0;
+    border-bottom: 4px solid #16a085;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1abc9c;
+    padding: 15px 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.navigation .gauche, .navigation .droite {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.monbouton {
+    padding: 12px 26px;
+    background: #ecf0f1;
+    color: #2c3e50;
+    border: 3px solid #bdc3c7;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.monbouton:hover {
+    background: #1abc9c;
+    color: white;
+    border-color: #16a085;
+    transform: translateY(-2px);
+}
+
+/* Conteneur centré pour la table */
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+}
+
+/* Table centrée à 80% de largeur */
+table.dossiers {
+    width: 80%;                  /* 80% de la largeur du conteneur */
+    max-width: 1000px;           /* Largeur maximale raisonnable */
+    margin: 0 auto;              /* Centrage horizontal (redondant avec .table-container mais sûr) */
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+table.dossiers td {
+    padding: 18px 24px;
+    border-bottom: 1px solid #ecf0f1;
+    text-align: left;
+}
+
+table.dossiers tr:last-child td { border-bottom: none; }
+table.dossiers tr:hover { background: #f8fcfd; }
+
+.dossier-item a { color: #16a085; font-weight: bold; }
+.fichier-pdf a { color: #e74c3c; font-weight: bold; }
+
+footer { 
+    text-align: center; 
+    margin-top: 50px; 
+    color: #7f8c8d; 
+    font-size: 0.9em; 
+}
+
+/* Style du bouton mail */
+.btn-mail {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: 2px solid #388E3C;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px #666, 0 -2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-mail:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px #666, 0 -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-mail:hover {
+    background-color: #45a049;
+    border-color: #388E3C;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    table.dossiers {
+        width: 95%;
+    }
+    .monTitre { font-size: 42px; }
+    .monSousTitre { font-size: 26px; }
+}
+
+/* Styles spécifiques à la TDM */
+.tree ul {
+    margin-left: 20px;
+}
+.tree details {
+    margin: 5px 0;
+}
+.tree summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+.tree a {
+    text-decoration: none;
+    color: #0066cc;
+}
+.tree a:hover {
+    text-decoration: underline;
+}
+
+/* fin du "style.css" version "3.3" */
+```
+### XVI `lancer.cmd` 
+
+- Mettre le dossier courant dans hebreu4.0 
+
+``` bash
+cd C:\SiteGITHUB\Hebreu4.0
+```
+- Executer lancer.cmd
+
+``` bash
+prog\lancer.cmd
+```
+
+``` bash
+@echo off
+REM Début de "lancer.cmd" version "2.2"
+cls
+echo.
+echo lancer.cmd — Version 2.2
+echo.
+
+:: Activation de l'environnement virtuel si nécessaire
+where python | findstr /i "virPy13" >nul
+if %errorlevel% neq 0 (
+    echo Activation de l'environnement virtuel virPy13...
+    call C:\virPy13\Scripts\activate.bat
+    if %errorlevel% neq 0 (
+        echo [ERREUR] Impossible d'activer virPy13
+        pause
+        exit /b 1
+    )
+)
+
+:: Aller dans le répertoire du projet
+cd /d "%~dp0\.."
+
+echo.
+echo === Génération du site réel à partir du dossier documents ===
+
+:: 1. On lance d'abord genere_site.py (il crée html/ et tous les dossiers)
+python prog\genere_site.py
+if %errorlevel% neq 0 (
+    echo [ERREUR] genere_site.py a échoué
+    pause
+    exit /b 1
+)
+
+:: 2. Ensuite seulement on génère la TDM (html/ existe maintenant → plus d'erreur)
+python prog\cree_table_des_matieres.py
+if %errorlevel% neq 0 (
+    echo [ERREUR] cree_table_des_matieres.py a échoué
+    pause
+    exit /b 1
+)
+rem créer /Hebreu4.0/html/Hebreu4.0/html/style.css
+xcopy html\style.css html\Hebreu4.0\html\*.*
+
+echo.
+echo === Démarrage du serveur local ===
+npx http-server html -p 3500 --cors -c-1 -o "/index.html"
+
+echo.
+echo Site réel disponible sur : http://localhost:3500/index.html
+echo.
+pause
+REM Fin de "lancer.cmd" version "2.2"
+```
+
+
 ---
-_Généré  le 19 Decembre 2025_
+_Généré  le 20 Décembre 2025_

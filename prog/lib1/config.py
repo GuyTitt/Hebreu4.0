@@ -37,10 +37,10 @@ CONFIG = {
     "ignorer": [
         "nppBackup", ".git", ".gitignore", "Thumbs.db",
         "entete_general.html", "pied_general.html",
-        "entete.html", "pied.html", "structure.json",
+        "entete.html", "pied.html",
         "index.html", "style.css","__pycache__"
     ],
-    "extensions_acceptees": ["pdf"],
+    "extensions_acceptees": ["pdf","doc","docx","html","htm","txt",""],
     "dossier_tdm": "TDM",
     "ajout_affichage": ["📁 ", "", "📘 ", ""],
     "logging": ["console", "generation.log"]  # "console", "fichier.log", ou les deux

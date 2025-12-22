@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Temp/_MarkdownMonster_Preview.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--<base href="file:///C:/SiteGITHUB/hebreu4.0/">--><base href=".">
+    
+    
+
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="./methodologie_site_files/font-awesome.min.css" rel="stylesheet">
+
+    <link href="./methodologie_site_files/Theme.css" rel="stylesheet">
+
+    <script src="./methodologie_site_files/jquery.min.js"></script><style type="text/css" id="operaUserStyle"></style>
+    <link href="./methodologie_site_files/twilight.css" rel="stylesheet">
+    <script src="./methodologie_site_files/highlight.pack.js"></script>
+    <script src="./methodologie_site_files/highlightjs-badge.js"></script>
+    <script src="./methodologie_site_files/preview.js" id="PreviewScript"></script>
+    
+</head>
+<body>
+<div id="MainContent">
+    <!-- Markdown Monster Content -->
+    <h1 id="réalisation-du-site-de-compte-rendu-de-recherche">Réalisation du site de compte rendu de recherche</h1>
+<hr>
+<h2 id="i-présentation-du-projet">I. Présentation du projet</h2>
+<p>Ce projet vise à produire un <strong>site web statique professionnel</strong>, élégant et entièrement automatisé à partir d’une arborescence de documents (PDF, images, textes sources).</p>
+<p>Le site est généré localement dans le dossier <code>/html</code>, puis déployable immédiatement sur GitHub Pages, Netlify, Vercel, ou tout serveur statique.</p>
+<p><strong>Objectifs</strong></p>
+<ul>
+<li>Génération 100 % automatique de la structure du site à partir des dossiers et fichiers sources.</li>
+<li>Navigation fluide, cohérente et dynamique avec fil d’Ariane.</li>
+<li>Table des matières dynamique intelligente, pliable, avec filtrage personnalisé.</li>
+<li>Contrôle fin et granulaire via fichiers <code>structure.py</code> pour chaque dossier (visibilité, ordre, titres personnalisés, etc.).</li>
+<li>Design épuré, responsive, accessible, avec support de mises en forme Markdown-like.</li>
+<li>Zéro dépendance externe lourde (Python standard + http-server pour le local).</li>
+<li>Gestion des entêtes, pieds de page globaux et locaux.</li>
+<li>Personnalisation complète via fichiers de configuration (<code>options.py</code>, <code>config.py</code>, <code>style.css</code>).</li>
+<li>Log détaillé et nettoyage automatique des caches.</li>
+</ul>
+<p>Le système est conçu pour être extensible : ajout de nouveaux dossiers/fichiers régénère automatiquement le site sans effort.</p>
+<p>Le temps investi a permis de créer un système robuste, avec gestion des erreurs, logging, et personnalisation avancée, garantissant une maintenabilité à long terme et une scalabilité pour des projets similaires.</p>
+<hr>
+<h2 id="ii-structure-du-dossier-de-génération">II. Structure du dossier de génération</h2>
+<p>La structure globale du projet est conçue pour une clarté maximale, avec séparation claire entre sources, scripts et output.</p>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">text</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="hljs">hebreu4.0/
+├── documents/              ← Sources principales : dossiers, sous-dossiers, fichiers (PDF, images, etc.).
+│   ├── Annexes/            ← Exemple de dossier avec fichiers secondaires.
+│   ├── Dossier Principal/  ← Dossier racine des contenus principaux, avec sous-dossiers imbriqués.
+│   │   ├── Dossier secondaire1/
+│   │   ├── Dossier secondaire2/
+│   │   │   └── SousDossier secondaire21/
+│   ├── Références/         ← Dossier pour bibliographie ou références.
+│   ├── nppBackup/          ← Sauvegardes automatiques (ignorées par le générateur).
+│   └── TDM/                ← Dossier spécial pour la table des matières (géré automatiquement, non affiché).
+├── prog/                   ← Scripts de génération et librairies.
+│   ├── lib1/               ← Modules partagés.
+│   │   ├── config.py       ← Configuration globale (titres, classes CSS, etc.).
+│   │   ├── options.py      ← Chemins des dossiers sources/output.
+│   │   └── style.css       ← Fichier CSS central pour tout le site.
+│   ├── genere_site.py      ← Script principal : génère la structure HTML et copie les fichiers.
+│   ├── cree_table_des_matieres.py ← Script dédié à la génération de la TDM dynamique.
+│   ├── lancer.cmd          ← Batch Windows pour lancer la génération + serveur local.
+│   └── methode.py          ← Ce script : génère le rapport méthodologique.
+├── html/                   ← Output : site statique généré, prêt à déployer.
+│   ├── index.html          ← Page d'accueil.
+│   ├── style.css           ← Copie du CSS.
+│   ├── TDM/                ← Dossier de la table des matières.
+│   │   └── index.html      ← Page TDM dynamique.
+│   ├── annexes/            ← Dossiers générés avec leurs index.html et fichiers copiés.
+│   └── ...                 ← Tous les autres dossiers et fichiers.
+└── MÉTHODOLOGIE_SITE.md    ← Ce rapport (généré par methode.py).
+</code></pre>
+<p>Chaque dossier dans <code>documents/</code> peut contenir un <code>structure.py</code> personnalisé, un <code>entete.html</code> et/ou <code>pied.html</code> local.
+Le temps passé à structurer ainsi assure une organisation scalable, facile à maintenir pour des extensions futures.</p>
+<hr>
+<h2 id="iii-contenu-des-fichiers-de-génération">III. Contenu des fichiers de génération</h2>
+<h3 id="dossier-documents">Dossier <code>documents/</code></h3>
+<ul>
+<li>Contient tous les fichiers sources : PDF, images, textes.</li>
+<li>Arborescence libre : tout dossier/sous-dossier est reproduit dans <code>html/</code>.</li>
+<li>Fichiers spéciaux par dossier :
+<ul>
+<li><code>structure.py</code> : Configuration locale (visibilité, ordre, titres).</li>
+<li><code>entete.html</code> : Contenu ajouté en haut de la page index.html locale.</li>
+<li><code>pied.html</code> : Contenu ajouté en bas de la page index.html locale.</li>
+<li><code>entete_general.html</code> et <code>pied_general.html</code> à la racine : Appliqués à tout le site.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dossier-proglib1">Dossier <code>prog/lib1/</code></h3>
+<ul>
+<li><code>options.py</code> : Définit les chemins (DOSSIER_DOCUMENTS, DOSSIER_HTML).</li>
+<li><code>config.py</code> : Paramètres globaux (titre_site, classe_dossier, ignorer, etc.).</li>
+<li><code>style.css</code> : Définit le style global du site (voir détail ci-dessous).</li>
+</ul>
+<h3 id="dossier-prog">Dossier <code>prog/</code></h3>
+<ul>
+<li>Scripts Python principaux pour la génération.</li>
+<li>Batch <code>lancer.cmd</code> pour exécution facile.</li>
+</ul>
+<h3 id="dossier-html">Dossier <code>html/</code></h3>
+<ul>
+<li>Généré automatiquement : ne pas modifier manuellement (régénéré à chaque lancement).</li>
+</ul>
+<p>Le temps investi permet un contenu exhaustif, avec documentation interne (docstrings) et commentaires pour une compréhension immédiate.</p>
+<hr>
+<h2 id="iv-les-programmes">IV. Les programmes</h2>
+<h3 id="1-genere_sitepy-version-157">1. <code>genere_site.py</code> (version 15.7)</h3>
+<ul>
+<li><p><strong>Description détaillée</strong></p>
+<ul>
+<li>Suppression et recréation du dossier <code>html/</code> pour une génération propre.</li>
+<li>Création immédiate du dossier <code>TDM</code> pour éviter les erreurs de chemin.</li>
+<li>Nettoyage automatique des <code>__pycache__</code>.</li>
+<li>Génération/mise à jour récursive des <code>structure.py</code> dans chaque dossier source.</li>
+<li>Parcours récursif des dossiers : copie des fichiers, génération des <code>index.html</code>.</li>
+<li>Support des mises en forme Markdown-like dans les noms affichés.</li>
+<li>Gestion des paramètres globaux/locaux via <code>structure.py</code>.</li>
+<li>Log détaillé (console/fichier).</li>
+<li>Temps investi : optimisation pour une exécution rapide même sur de grandes arborescences.</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-cree_table_des_matierespy-version-64">2. <code>cree_table_des_matieres.py</code> (version 6.4)</h3>
+<ul>
+<li><p><strong>Description détaillée</strong></p>
+<ul>
+<li>Parcours récursif de <code>html/</code> pour construire l’arborescence.</li>
+<li>Génération d’une TDM pliable avec <code>&lt;details&gt;&lt;summary&gt;</code>.</li>
+<li>Filtrage intelligent : ignore les éléments si <code>"affiché_TDM": False</code> dans le <code>structure.py</code> du parent.</li>
+<li>Liens URL propres, noms normalisés.</li>
+<li>Style CSS embarqué pour un arbre visuel élégant (lignes, marqueurs +/−).</li>
+<li>Ne montre jamais TDM dans la TDM.</li>
+<li>Temps investi : algorithme efficace, gestion d’erreurs robuste.</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-lancercmd-version-21">3. <code>lancer.cmd</code> (version 2.1)</h3>
+<ul>
+<li><p><strong>Description détaillée</strong></p>
+<ul>
+<li>Activation de l’environnement virtuel si nécessaire.</li>
+<li>Exécution séquentielle : <code>genere_site.py</code> puis <code>cree_table_des_matieres.py</code>.</li>
+<li>Lancement d’un serveur local avec <code>npx http-server</code> (port 3500, CORS, no-cache).</li>
+<li>Gestion des erreurs avec pause.</li>
+<li>Temps investi : simplification pour une utilisation one-click.</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-methodepy-version-30">4. <code>methode.py</code> (version 3.0)</h3>
+<ul>
+<li><p><strong>Description détaillée</strong></p>
+<ul>
+<li>Génère ce rapport exhaustif au format Markdown.</li>
+<li>Utilise caractère spécial § pour formatage parfait.</li>
+<li>Temps investi : rendu complet, sans omission, pour une documentation de qualité.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="v-le-dossier-html">V. Le dossier <code>html</code></h2>
+<p>Le dossier <code>html/</code> est le résultat final de la génération : un site statique autonome.</p>
+<ul>
+<li><p><strong>Contenu exhaustif</strong></p>
+<ul>
+<li><code>index.html</code> à la racine et dans chaque dossier.</li>
+<li><code>style.css</code> central.</li>
+<li>Tous les fichiers sources copiés (PDF, images) dans leurs dossiers respectifs.</li>
+<li>Dossier <code>TDM/</code> avec son <code>index.html</code> (table des matières).</li>
+</ul>
+</li>
+<li><p><strong>Caractéristiques</strong></p>
+<ul>
+<li>URLs propres et normalisées (minuscules, sans espaces).</li>
+<li>Responsive et accessible (via CSS).</li>
+<li>Prêt pour déploiement : pas de dépendances dynamiques.</li>
+<li>Temps investi : optimisation pour chargement rapide, compatibilité browsers.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="vi-structure-des-fichiers-indexhtml">VI. Structure des fichiers <code>index.html</code></h2>
+<p>Chaque <code>index.html</code> est généré dynamiquement et suit une structure modulaire pour une personnalisation maximale.</p>
+<p><strong>Structure détaillée</strong></p>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">html</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-html hljs xml"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"fr"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>[Titre du dossier via structure.py ou config]<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/style.css"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    [haut_page global (config.py) : bandeau, logo, etc., si haut_page=True]
+    [entete_general.html (racine documents/) : entête site-wide, si entete_general=True]
+    [navigation dynamique : fil d’Ariane + lien Sommaire, si navigation=True]
+    [entete.html local : contenu spécifique au dossier, si entete=True]
+    <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"dossiers"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
+        [Liste des dossiers/fichiers triés par position, avec liens, styles, et mises en forme MD]
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+    [pied.html local : pied spécifique, si pied=True]
+    [pied_general.html : pied site-wide, si pied_general=True]
+    [bas_page global (config.py) : footer avec date, si bas_page=True]
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p><strong>Autorisations globales et locales</strong></p>
+<ul>
+<li><strong>Globales</strong> : <code>haut_page</code>, <code>bas_page</code> dans <code>config.py</code> ; <code>entete_general.html</code>, <code>pied_general.html</code> dans <code>documents/</code>.</li>
+<li><strong>Locales</strong> : <code>entete.html</code>, <code>pied.html</code> dans chaque dossier.</li>
+<li>Contrôles dans <code>structure.py</code> : True/False pour chaque.</li>
+</ul>
+<p><strong>Navigation</strong></p>
+<ul>
+<li>Fil d’Ariane : liens vers parents (Accueil → Dossier → Sous-dossier).</li>
+<li>Lien fixe "Sommaire" vers <code>/TDM/index.html</code>.</li>
+<li>Paramètres : <code>navigation=True/False</code> dans <code>structure.py</code> (par dossier).</li>
+<li>Style : classes <code>.navigation</code>, <code>.monbouton</code> pour personnalisation CSS.</li>
+</ul>
+<p><strong>Liste des éléments</strong></p>
+<ul>
+<li>Tri par <code>position</code>.</li>
+<li>Visibilité via <code>affiché_index</code>.</li>
+<li>Mises en forme dans <code>nom_affiché</code> (MD-like).</li>
+<li>Classes CSS personnalisables via <code>config.py</code>.</li>
+</ul>
+<p><strong>Temps investi</strong></p>
+<p>Structure flexible, facile à déboguer, pour une évolution rapide.</p>
+<hr>
+<h2 id="vii-le-fichier-stylecss-et-laction-de-ses-items">VII. Le fichier <code>style.css</code> et l’action de ses items</h2>
+<p><code>prog/lib1/style.css</code> définit le style global, copié dans <code>html/</code>.</p>
+<p><strong>Contenu exhaustif</strong></p>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">css</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-css hljs"><span class="hljs-selector-tag">body</span> { <span class="hljs-attribute">font-family</span>: Arial, sans-serif; <span class="hljs-attribute">margin</span>: <span class="hljs-number">20px</span>; <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#f9f9f9</span>; }  ← <span class="hljs-selector-tag">Base</span> : <span class="hljs-selector-tag">police</span>, <span class="hljs-selector-tag">marges</span>, <span class="hljs-selector-tag">fond</span> <span class="hljs-selector-tag">clair</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">lisibilit</span>é.
+
+<span class="hljs-selector-class">.navigation</span> { <span class="hljs-attribute">display</span>: flex; <span class="hljs-attribute">justify-content</span>: space-between; <span class="hljs-attribute">margin-bottom</span>: <span class="hljs-number">20px</span>; <span class="hljs-attribute">background</span>: <span class="hljs-number">#eee</span>; <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>; }  ← <span class="hljs-selector-tag">Barre</span> : <span class="hljs-selector-tag">flexbox</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">alignement</span> <span class="hljs-selector-tag">gauche</span>/<span class="hljs-selector-tag">droite</span>, <span class="hljs-selector-tag">fond</span> <span class="hljs-selector-tag">gris</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">s</span>é<span class="hljs-selector-tag">paration</span> <span class="hljs-selector-tag">visuelle</span>.
+
+<span class="hljs-selector-class">.gauche</span>, <span class="hljs-selector-class">.droite</span> { <span class="hljs-attribute">display</span>: flex; <span class="hljs-attribute">align-items</span>: center; }  ← <span class="hljs-selector-tag">Groupes</span> : <span class="hljs-selector-tag">alignement</span> <span class="hljs-selector-tag">vertical</span> <span class="hljs-selector-tag">des</span> <span class="hljs-selector-tag">boutons</span>.
+
+<span class="hljs-selector-class">.monbouton</span> { <span class="hljs-attribute">margin-right</span>: <span class="hljs-number">10px</span>; <span class="hljs-attribute">padding</span>: <span class="hljs-number">5px</span> <span class="hljs-number">10px</span>; <span class="hljs-attribute">background</span>: <span class="hljs-number">#007bff</span>; <span class="hljs-attribute">color</span>: white; <span class="hljs-attribute">text-decoration</span>: none; <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">5px</span>; }  ← <span class="hljs-selector-tag">Boutons</span> : <span class="hljs-selector-tag">bleu</span>, <span class="hljs-selector-tag">arrondis</span>, <span class="hljs-selector-tag">sans</span> <span class="hljs-selector-tag">soulignement</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">modernit</span>é.
+<span class="hljs-selector-class">.monbouton</span><span class="hljs-selector-pseudo">:hover</span> { <span class="hljs-attribute">background</span>: <span class="hljs-number">#0056b3</span>; }  ← <span class="hljs-selector-tag">Hover</span> : <span class="hljs-selector-tag">couleur</span> <span class="hljs-selector-tag">fonc</span>é<span class="hljs-selector-tag">e</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">feedback</span> <span class="hljs-selector-tag">interactif</span>.
+
+<span class="hljs-selector-class">.dossiers</span> { <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>; <span class="hljs-attribute">border-collapse</span>: collapse; }  ← <span class="hljs-selector-tag">Table</span> : <span class="hljs-selector-tag">pleine</span> <span class="hljs-selector-tag">largeur</span>, <span class="hljs-selector-tag">sans</span> <span class="hljs-selector-tag">bordures</span> <span class="hljs-selector-tag">internes</span>.
+<span class="hljs-selector-class">.dossiers</span> <span class="hljs-selector-tag">td</span> { <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>; <span class="hljs-attribute">border-bottom</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#ddd</span>; }  ← <span class="hljs-selector-tag">Cellules</span> : <span class="hljs-selector-tag">espacement</span>, <span class="hljs-selector-tag">lignes</span> <span class="hljs-selector-tag">s</span>é<span class="hljs-selector-tag">paratrices</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">clart</span>é.
+
+<span class="hljs-selector-class">.dossier</span> { <span class="hljs-attribute">font-weight</span>: bold; <span class="hljs-attribute">color</span>: <span class="hljs-number">#333</span>; }  ← <span class="hljs-selector-tag">Dossiers</span> : <span class="hljs-selector-tag">gras</span>, <span class="hljs-selector-tag">sombre</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">hi</span>é<span class="hljs-selector-tag">rarchie</span>.
+<span class="hljs-selector-class">.fichier</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#666</span>; }  ← <span class="hljs-selector-tag">Fichiers</span> : <span class="hljs-selector-tag">gris</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">distinction</span>.
+
+<span class="hljs-selector-tag">a</span> { <span class="hljs-attribute">text-decoration</span>: none; }  ← <span class="hljs-selector-tag">Liens</span> : <span class="hljs-selector-tag">sans</span> <span class="hljs-selector-tag">soulignement</span> <span class="hljs-selector-tag">par</span> <span class="hljs-selector-tag">d</span>é<span class="hljs-selector-tag">faut</span>.
+<span class="hljs-selector-tag">a</span><span class="hljs-selector-pseudo">:hover</span> { <span class="hljs-attribute">text-decoration</span>: underline; }  ← <span class="hljs-selector-tag">Hover</span> : <span class="hljs-selector-tag">soulignement</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">interactivit</span>é.
+
+<span class="hljs-selector-class">.tdm-content</span> { <span class="hljs-attribute">max-width</span>: <span class="hljs-number">800px</span>; <span class="hljs-attribute">margin</span>: auto; }  ← <span class="hljs-selector-tag">TDM</span> : <span class="hljs-selector-tag">centr</span>é<span class="hljs-selector-tag">e</span>, <span class="hljs-selector-tag">largeur</span> <span class="hljs-selector-tag">limit</span>é<span class="hljs-selector-tag">e</span> <span class="hljs-selector-tag">pour</span> <span class="hljs-selector-tag">lecture</span>.
+</code></pre>
+<p><strong>Actions des items</strong></p>
+<ul>
+<li>Améliore l’UX : responsive (flex), feedback (hover), hiérarchie (gras/gris).</li>
+<li>Personnalisable : modifie pour thèmes (dark mode, etc.).</li>
+<li>Temps investi : CSS minimal mais puissant, optimisé pour performance.</li>
+</ul>
+<hr>
+<h2 id="viii-structure-du-fichier-table-des-matières-tdmindexhtml">VIII. Structure du fichier table des matières (<code>/TDM/index.html</code>)</h2>
+<p>Page dédiée, générée par <code>cree_table_des_matieres.py</code>.</p>
+<p><strong>Structure détaillée</strong></p>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">html</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-html hljs xml">[haut_page]
+[navigation]
+<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Sommaire du site<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"tdm-content"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"tree"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">details</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">summary</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"..."</span>&gt;</span>[Dossier]<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">summary</span>&gt;</span>[Sous-arbo]<span class="hljs-tag">&lt;/<span class="hljs-name">details</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"..."</span>&gt;</span>[Fichier]<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+[bas_page]
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"><span class="hljs-selector-attr">[CSS arbre]</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+</code></pre>
+<p><strong>Filtrage</strong></p>
+<p>Seulement <code>affiché_TDM=True</code> (parent).</p>
+<p><strong>Temps investi</strong></p>
+<p>Algorithme récursif efficace, style immersif.</p>
+<hr>
+<h2 id="ix-les-procédures">IX. Les procédures</h2>
+<p>Liste exhaustive avec description détaillée :</p>
+<table>
+<thead>
+<tr>
+<th>Procédure</th>
+<th>Description détaillée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>log(msg)</code></td>
+<td>Log console/fichier avec flush. Utilisé pour debug, tracing complet.</td>
+</tr>
+<tr>
+<td><code>normaliser_nom(nom)</code></td>
+<td>Convertit en URL-safe. Ex : "Dossier Principal" → "dossier_principal".</td>
+</tr>
+<tr>
+<td><code>appliquer_style(texte)</code></td>
+<td>Parse MD-like : <strong>gras</strong>, <em>italic</em>, <del>barré</del>, [rouge] [/rouge], {grand} {/grand}. Regex avancées pour couleurs.</td>
+</tr>
+<tr>
+<td><code>_creer_structure_py(dossier)</code></td>
+<td>Génère <code>structure.py</code> récursif : liste, positions, visibilité. Gestion effacés.</td>
+</tr>
+<tr>
+<td><code>_lire_structure(dossier)</code></td>
+<td>Parse <code>structure.py</code> : retourne dict filtré. Gestion exceptions.</td>
+</tr>
+<tr>
+<td><code>_lire_fichier(chemin)</code></td>
+<td>Lit entete/pied. Retourne vide si absent.</td>
+</tr>
+<tr>
+<td><code>_generer_navigation(chemin_relatif)</code></td>
+<td>Fil d’Ariane + Sommaire. Flexible pour chemins longs.</td>
+</tr>
+<tr>
+<td><code>_generer_page(src, dst, chemin)</code></td>
+<td>Assemble HTML : globals/locaux, table triée avec styles.</td>
+</tr>
+<tr>
+<td><code>_traiter_dossier(src, dst, chemin)</code></td>
+<td>Récursif : mkdir, copie, génération pages.</td>
+</tr>
+<tr>
+<td><code>doit_afficher_dans_tdm(entry)</code></td>
+<td>Vérifie <code>affiché_TDM</code> dans parent. Robustesse erreurs.</td>
+</tr>
+<tr>
+<td><code>construire_arbo(dossier, prefixe)</code></td>
+<td>HTML récursif TDM : filtrage, liens normalisés.</td>
+</tr>
+</tbody>
+</table>
+<p>Procédures courtes (&lt;25 lignes), modulaires, pour maintenance facile.</p>
+<hr>
+<h2 id="x-syntaxe-dans-nom_affiché-de-structurepy">X. Syntaxe dans <code>nom_affiché</code> de structure.py</h2>
+<table>
+<thead>
+<tr>
+<th>Syntaxe</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>**texte**</code></td>
+<td><strong>gras</strong></td>
+</tr>
+<tr>
+<td><code>_texte_</code></td>
+<td><em>italique</em></td>
+</tr>
+<tr>
+<td><code>**_texte_**</code></td>
+<td><strong><em>gras italique</em></strong></td>
+</tr>
+<tr>
+<td><code>~~texte~~</code></td>
+<td><del>barré</del></td>
+</tr>
+<tr>
+<td><code>[rouge]texte[/rouge]</code></td>
+<td>texte en rouge</td>
+</tr>
+<tr>
+<td><code>[bleu]texte[/bleu]</code></td>
+<td>texte en bleu</td>
+</tr>
+<tr>
+<td><code>[couleur:#ff3366]texte[/couleur]</code></td>
+<td>couleur personnalisée</td>
+</tr>
+<tr>
+<td><code>{grand}texte{/grand}</code></td>
+<td>texte très gros</td>
+</tr>
+<tr>
+<td><code>{taille:2.5em}texte{/taille}</code></td>
+<td>taille personnalisée</td>
+</tr>
+</tbody>
+</table>
+<h2 id="xi-contenu-des-fichiers-générés-et-modification-possible">XI. Contenu des fichiers générés et modification possible</h2>
+<p><strong>Fichiers générés</strong></p>
+<ul>
+<li><code>index.html</code> : Pages navigables, modifiables via sources.</li>
+<li><code>structure.py</code> : Auto-générés, mais éditables (ajoute MD dans <code>nom_affiché</code>).</li>
+<li><code>TDM/index.html</code> : TDM filtrée.</li>
+</ul>
+<p><strong>Modifications</strong></p>
+<ul>
+<li>Sources : ajout → régénération.</li>
+<li><code>nom_affiché</code> : MD-like pour rich text.</li>
+<li>Visibilité : <code>affiché_index/TDM</code> = False masque.</li>
+</ul>
+<hr>
+<h2 id="xii-fichiers-de-configuration">XII. Fichiers de configuration</h2>
+<h3 id="optionspy"><code>options.py</code></h3>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">python</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-python hljs"><span class="hljs-comment"># options.py — Version 1.1</span>
+
+version = (<span class="hljs-string">"options.py"</span>, <span class="hljs-string">"1.1"</span>)
+print(<span class="hljs-string">f"[Import] <span class="hljs-subst">{version[<span class="hljs-number">0</span>]}</span> - Version <span class="hljs-subst">{version[<span class="hljs-number">1</span>]}</span> chargé"</span>)
+
+<span class="hljs-comment"># Chemins relatifs ou absolus selon ton environnement</span>
+DOSSIER_RACINE = <span class="hljs-string">r"C:\SiteGITHUB\Hebreu4.0"</span>
+DOSSIER_DOCUMENTS = <span class="hljs-string">f"<span class="hljs-subst">{DOSSIER_RACINE}</span>\\documents"</span>
+DOSSIER_HTML = <span class="hljs-string">f"<span class="hljs-subst">{DOSSIER_RACINE}</span>\\html"</span>
+
+<span class="hljs-comment"># Base path pour les liens (GitHub Pages vs local)</span>
+<span class="hljs-comment"># "" pour test local (serveur sur /html)</span>
+<span class="hljs-comment"># "/hebreu4.0" pour GitHub Pages (repo à la racine du user site)</span>
+BASE_PATH = <span class="hljs-string">"/Hebreu4.0/html"</span>  <span class="hljs-comment"># ← Modifier ici : "" pour local, "/Hebreu4.0" pour GitHub</span>
+
+<span class="hljs-comment"># fin du "options.py" version "1.1"</span>
+</code></pre>
+<h3 id="configpy"><code>config.py</code></h3>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">python</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-python hljs"><span class="hljs-comment"># Début de "config.py" version "2.2"</span>
+
+CONFIG = {
+    <span class="hljs-string">"version"</span>: <span class="hljs-string">"2.2"</span>,
+    <span class="hljs-string">"titre_site"</span>: <span class="hljs-string">"Hébreu Biblique v4.0"</span>,
+    <span class="hljs-string">"fichier_index"</span>: <span class="hljs-string">"index.html"</span>,
+    <span class="hljs-string">"classe_dossier"</span>: <span class="hljs-string">"dossier-item"</span>,
+    <span class="hljs-string">"classe_fichier"</span>: <span class="hljs-string">"fichier-pdf"</span>,
+    <span class="hljs-string">"lien_souligné_index"</span>: <span class="hljs-literal">False</span>,    <span class="hljs-comment"># False = pas de soulignement dans les pages index</span>
+    <span class="hljs-string">"lien_souligné_TDM"</span>: <span class="hljs-literal">False</span>,      <span class="hljs-comment"># False = pas de soulignement dans la TDM</span>
+    <span class="hljs-string">"haut_page"</span>: [
+        <span class="hljs-string">"&lt;div&gt;&lt;!-- debut haut_page --&gt;"</span>,
+<span class="hljs-comment">#        "&lt;div class=\"monTitre\"&gt;Hébreu biblique&lt;/div&gt;",</span>
+<span class="hljs-comment">#        "&lt;div class=\"monSousTitre\"&gt;Mes dossiers partagés&lt;/div&gt;",</span>
+        <span class="hljs-string">"&lt;!-- fin haut_page --&gt;&lt;/div&gt;"</span>,
+    ],
+    <span class="hljs-string">"bas_page"</span>: [
+        <span class="hljs-string">"&lt;div&gt;&lt;!-- debut bas_page --&gt;"</span>,
+<span class="hljs-comment">#        "&lt;div&gt;bas de la page&lt;/div&gt;",</span>
+        <span class="hljs-string">'&lt;footer&gt;&lt;a href="mailto:fraboulanger@orange.fr" class="btn-mail"&gt;Pour me joindre&lt;/a&gt;&lt;/footer&gt;'</span>,
+        <span class="hljs-string">"&lt;!-- fin bas_page --&gt;&lt;/div&gt;"</span>,
+    ],
+    <span class="hljs-string">"navigation"</span>: {
+        <span class="hljs-string">"sous_dossiers_position"</span>: <span class="hljs-string">"gauche"</span>,
+        <span class="hljs-string">"afficher_sommaire"</span>: <span class="hljs-literal">True</span>
+    },
+    <span class="hljs-string">"affichage"</span>: {
+        <span class="hljs-string">"afficher_icones"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"table_align"</span>: <span class="hljs-string">"centre"</span>,
+        <span class="hljs-string">"table_largeur_max"</span>: <span class="hljs-string">"80%"</span>
+    },
+    <span class="hljs-string">"couleurs"</span>: {
+        <span class="hljs-string">"dossiers"</span>: <span class="hljs-string">"#0066cc"</span>,
+        <span class="hljs-string">"pdf"</span>: <span class="hljs-string">"#c0392b"</span>,
+        <span class="hljs-string">"images"</span>: <span class="hljs-string">"#27ae60"</span>
+    },
+    <span class="hljs-string">"ignorer"</span>: [
+        <span class="hljs-string">"nppBackup"</span>, <span class="hljs-string">".git"</span>, <span class="hljs-string">".gitignore"</span>, <span class="hljs-string">"Thumbs.db"</span>,
+        <span class="hljs-string">"entete_general.html"</span>, <span class="hljs-string">"pied_general.html"</span>,
+        <span class="hljs-string">"entete.html"</span>, <span class="hljs-string">"pied.html"</span>, <span class="hljs-string">"structure.json"</span>,
+        <span class="hljs-string">"index.html"</span>, <span class="hljs-string">"style.css"</span>,<span class="hljs-string">"__pycache__"</span>
+    ],
+    <span class="hljs-string">"extensions_acceptees"</span>: [<span class="hljs-string">"pdf"</span>],
+    <span class="hljs-string">"dossier_tdm"</span>: <span class="hljs-string">"TDM"</span>,
+    <span class="hljs-string">"ajout_affichage"</span>: [<span class="hljs-string">"📁 "</span>, <span class="hljs-string">""</span>, <span class="hljs-string">"📘 "</span>, <span class="hljs-string">""</span>],
+    <span class="hljs-string">"logging"</span>: [<span class="hljs-string">"console"</span>, <span class="hljs-string">"generation.log"</span>]  <span class="hljs-comment"># "console", "fichier.log", ou les deux</span>
+}
+
+<span class="hljs-comment"># Fin de "config.py" version "2.2"</span>
+</code></pre>
+<h3 id="structurepy-exemple"><code>structure.py</code> exemple</h3>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">python</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-python hljs">STRUCTURE = {
+    <span class="hljs-string">"entete_general"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"pied_general"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"entete"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"pied"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"navigation"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"haut_page"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"bas_page"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"ajout_affichage"</span>: <span class="hljs-literal">True</span>,
+    <span class="hljs-string">"dossiers"</span>: [
+        {<span class="hljs-string">"nom_document"</span>: <span class="hljs-string">"Secondaire1"</span>, 
+         <span class="hljs-string">"nom_html"</span>: <span class="hljs-string">"Secondaire1"</span>,
+         <span class="hljs-string">"nom_affiché"</span>: <span class="hljs-string">"**Secondaire** [rouge]1[/rouge]"</span>,
+         <span class="hljs-string">"nom_TDM"</span>: <span class="hljs-string">"Secondaire 1"</span>,
+         <span class="hljs-string">"affiché_index"</span>: <span class="hljs-literal">True</span>,
+         <span class="hljs-string">"affiché_TDM"</span>: <span class="hljs-literal">True</span>,
+         <span class="hljs-string">"position"</span>: <span class="hljs-number">2</span>  
+        }
+    ],
+    <span class="hljs-string">"fichiers"</span>: [
+        {<span class="hljs-string">"nom_document"</span>: <span class="hljs-string">"Introduction sujet.pdf"</span>,
+         <span class="hljs-string">"nom_html"</span>: <span class="hljs-string">"introduction_sujet.pdf"</span>,
+         <span class="hljs-string">"nom_affiché"</span>: <span class="hljs-string">"_Introduction_ {grand}PDF{/grand}"</span>,
+         <span class="hljs-string">"nom_TDM"</span>: <span class="hljs-string">"Introduction"</span>,
+         <span class="hljs-string">"affiché_index"</span>: <span class="hljs-literal">True</span>,
+         <span class="hljs-string">"ajout_affichage"</span>: <span class="hljs-literal">True</span>,
+         <span class="hljs-string">"affiché_index"</span>: <span class="hljs-literal">True</span>,
+         <span class="hljs-string">"affiché_TDM"</span>: <span class="hljs-literal">True</span>,
+         <span class="hljs-string">"position"</span>: <span class="hljs-number">1</span>
+         }
+    ]
+}
+</code></pre>
+<hr>
+<h2 id="xiii-genere_sitepy">XIII. genere_site.py</h2>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">python</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-python hljs"><span class="hljs-comment"># genere_site.py — Version 20.0</span>
+
+version = (<span class="hljs-string">"genere_site.py"</span>, <span class="hljs-string">"20.0"</span>)
+
+<span class="hljs-comment"># Importation des librairies</span>
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> json
+<span class="hljs-keyword">import</span> shutil
+<span class="hljs-keyword">import</span> unicodedata
+<span class="hljs-keyword">import</span> re
+<span class="hljs-keyword">import</span> psutil
+<span class="hljs-keyword">import</span> tempfile
+<span class="hljs-keyword">from</span> pathlib <span class="hljs-keyword">import</span> Path
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List, Dict, Any
+<span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup  <span class="hljs-comment"># Pour prettify des index.html</span>
+
+<span class="hljs-comment"># Conversion .doc/.docx → .pdf via Microsoft Word (Windows uniquement)</span>
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-keyword">from</span> win32com.client <span class="hljs-keyword">import</span> Dispatch
+    word_app = Dispatch(<span class="hljs-string">"Word.Application"</span>)
+    word_app.Visible = <span class="hljs-literal">False</span>
+<span class="hljs-keyword">except</span> ImportError:
+    word_app = <span class="hljs-literal">None</span>
+
+<span class="hljs-keyword">from</span> lib1.options <span class="hljs-keyword">import</span> DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
+<span class="hljs-keyword">from</span> lib1.config <span class="hljs-keyword">import</span> CONFIG
+
+print(<span class="hljs-string">f"[Version] <span class="hljs-subst">{version[<span class="hljs-number">0</span>]}</span> — <span class="hljs-subst">{version[<span class="hljs-number">1</span>]}</span>"</span>)
+
+<span class="hljs-comment"># Acquisition des constantes</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lire</span><span class="hljs-params">(variable: dict, element: str, defaut: Any)</span> -&gt; Any:</span>
+    <span class="hljs-string">"""Lit une valeur dans un dictionnaire, retourne la valeur par défaut sinon."""</span>
+    <span class="hljs-keyword">return</span> variable.get(element, defaut)
+
+STYLE_CSS_SRC = Path(__file__).parent / <span class="hljs-string">"lib1"</span> / <span class="hljs-string">"style.css"</span>
+IGNORER = set(lire(CONFIG, <span class="hljs-string">"ignorer"</span>, [])) | {<span class="hljs-string">"__pycache__"</span>, <span class="hljs-string">".pyc"</span>, <span class="hljs-string">"structure.py"</span>, <span class="hljs-string">r"~\$"</span>}
+FICHIERS_ENTETE_PIED = {<span class="hljs-string">"entete.html"</span>, <span class="hljs-string">"entete_general.html"</span>, <span class="hljs-string">"pied.html"</span>, <span class="hljs-string">"pied_general.html"</span>}
+EXTENSIONS_ACCEPTEES = {<span class="hljs-string">".html"</span>, <span class="hljs-string">".htm"</span>, <span class="hljs-string">".pdf"</span>, <span class="hljs-string">".txt"</span>}
+DOSSIER_TDM = lire(CONFIG, <span class="hljs-string">"dossier_tdm"</span>, <span class="hljs-string">"TDM"</span>)
+AJOUT = lire(CONFIG, <span class="hljs-string">"ajout_affichage"</span>, [<span class="hljs-string">""</span>, <span class="hljs-string">""</span>, <span class="hljs-string">""</span>, <span class="hljs-string">""</span>])
+voir_structure = lire(CONFIG, <span class="hljs-string">"voir_structure"</span>, <span class="hljs-literal">False</span>)
+
+log_file = Path(<span class="hljs-string">"generation.log"</span>)
+log_file.write_text(<span class="hljs-string">f"--- DÉBUT GÉNÉRATION — <span class="hljs-subst">{datetime.now().strftime(<span class="hljs-string">'%d/%m/%Y %H:%M:%S'</span>)}</span> ---\n"</span>, encoding=<span class="hljs-string">"utf-8"</span>)
+
+<span class="hljs-comment"># Fonctions utilitaires</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">log</span><span class="hljs-params">(msg: str)</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Écrit un message dans la console et dans generation.log."""</span>
+    print(msg)
+    <span class="hljs-keyword">with</span> open(log_file, <span class="hljs-string">"a"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> f:
+        f.write(msg + <span class="hljs-string">"\n"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">normaliser_nom</span><span class="hljs-params">(nom: str)</span> -&gt; str:</span>
+    <span class="hljs-string">"""Normalise un nom pour URL (minuscules, underscore, sans accent)."""</span>
+    nom = unicodedata.normalize(<span class="hljs-string">'NFD'</span>, nom)
+    nom = <span class="hljs-string">''</span>.join(c <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> nom <span class="hljs-keyword">if</span> unicodedata.category(c) != <span class="hljs-string">'Mn'</span>)
+    <span class="hljs-keyword">return</span> nom.replace(<span class="hljs-string">" "</span>, <span class="hljs-string">"_"</span>).lower()
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">appliquer_style</span><span class="hljs-params">(texte: str)</span> -&gt; str:</span>
+    <span class="hljs-string">"""Applique les balises Markdown-like au texte pour coloration, gras, etc."""</span>
+    texte = re.sub(<span class="hljs-string">r'\*\*(.*?)\*\*'</span>, <span class="hljs-string">r'&lt;strong&gt;\1&lt;/strong&gt;'</span>, texte)
+    texte = re.sub(<span class="hljs-string">r'_(.*?)_'</span>, <span class="hljs-string">r'&lt;em&gt;\1&lt;/em&gt;'</span>, texte)
+    texte = re.sub(<span class="hljs-string">r'~~(.*?)~~'</span>, <span class="hljs-string">r'&lt;del&gt;\1&lt;/del&gt;'</span>, texte)
+
+    couleurs = {<span class="hljs-string">"rouge"</span>: <span class="hljs-string">"red"</span>, <span class="hljs-string">"bleu"</span>: <span class="hljs-string">"blue"</span>, <span class="hljs-string">"vert"</span>: <span class="hljs-string">"green"</span>, <span class="hljs-string">"jaune"</span>: <span class="hljs-string">"gold"</span>,
+                <span class="hljs-string">"violet"</span>: <span class="hljs-string">"purple"</span>, <span class="hljs-string">"orange"</span>: <span class="hljs-string">"orange"</span>, <span class="hljs-string">"gris"</span>: <span class="hljs-string">"gray"</span>, <span class="hljs-string">"noir"</span>: <span class="hljs-string">"black"</span>}
+    <span class="hljs-keyword">for</span> nom, code <span class="hljs-keyword">in</span> couleurs.items():
+        texte = texte.replace(<span class="hljs-string">f"[<span class="hljs-subst">{nom}</span>]"</span>, <span class="hljs-string">f'&lt;span style="color:<span class="hljs-subst">{code}</span>"&gt;'</span>)
+        texte = texte.replace(<span class="hljs-string">f"[/<span class="hljs-subst">{nom}</span>]"</span>, <span class="hljs-string">"&lt;/span&gt;"</span>)
+
+    texte = re.sub(<span class="hljs-string">r'\[couleur:(#[0-9a-fA-F]{6}|rgba?\([^)]+\))\]'</span>, <span class="hljs-keyword">lambda</span> m: <span class="hljs-string">f'&lt;span style="color:<span class="hljs-subst">{m.group(<span class="hljs-number">1</span>)}</span>"&gt;'</span>, texte)
+    texte = texte.replace(<span class="hljs-string">"[/couleur]"</span>, <span class="hljs-string">"&lt;/span&gt;"</span>)
+    texte = texte.replace(<span class="hljs-string">"{grand}"</span>, <span class="hljs-string">'&lt;span style="font-size:1.8em"&gt;'</span>).replace(<span class="hljs-string">"{/grand}"</span>, <span class="hljs-string">"&lt;/span&gt;"</span>)
+    texte = texte.replace(<span class="hljs-string">"{petit}"</span>, <span class="hljs-string">'&lt;span style="font-size:0.8em"&gt;'</span>).replace(<span class="hljs-string">"{/petit}"</span>, <span class="hljs-string">"&lt;/span&gt;"</span>)
+    texte = re.sub(<span class="hljs-string">r'\{taille:([^}]+)\}'</span>, <span class="hljs-keyword">lambda</span> m: <span class="hljs-string">f'&lt;span style="font-size:<span class="hljs-subst">{m.group(<span class="hljs-number">1</span>)}</span>"&gt;'</span>, texte)
+    texte = texte.replace(<span class="hljs-string">"{/taille}"</span>, <span class="hljs-string">"&lt;/span&gt;"</span>)
+    <span class="hljs-keyword">return</span> texte
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">deb_html</span><span class="hljs-params">(titre: str)</span> -&gt; str:</span>
+    <span class="hljs-string">"""Générateur départ html."""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">f"""&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"/&gt;
+    &lt;title&gt;<span class="hljs-subst">{titre}</span>&lt;/title&gt;
+    &lt;link href="<span class="hljs-subst">{BASE_PATH}</span>/style.css" rel="stylesheet"/&gt;
+&lt;/head&gt;
+&lt;body&gt;"""</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fin_html</span><span class="hljs-params">()</span> -&gt; str:</span>
+    <span class="hljs-string">"""Générateur fin html."""</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"""&lt;/body&gt;
+&lt;/html&gt;"""</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">plage_html_avec_fallback</span><span class="hljs-params">(dossier: Path, fichier: str, position: str, commun: str)</span> -&gt; str:</span>
+    <span class="hljs-string">"""Lit un fichier HTML avec fallback à la racine pour entete_general et pied_general."""</span>
+    local = dossier / fichier
+    <span class="hljs-keyword">if</span> local.exists():
+        modele = local
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">if</span> fichier <span class="hljs-keyword">in</span> (<span class="hljs-string">"entete_general.html"</span>, <span class="hljs-string">"pied_general.html"</span>):
+            racine = Path(DOSSIER_DOCUMENTS)
+            modele = racine / fichier
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> modele.exists():
+                <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>
+
+    <span class="hljs-keyword">with</span> open(modele, <span class="hljs-string">"r"</span>, encoding=<span class="hljs-string">"utf-8"</span>) <span class="hljs-keyword">as</span> f:
+        h = f.read()
+
+    <span class="hljs-keyword">if</span> voir_structure:
+        h = <span class="hljs-string">f"&lt;div&gt;&lt;!-- début <span class="hljs-subst">{position}</span><span class="hljs-subst">{commun}</span> --&gt;<span class="hljs-subst">{h}</span>&lt;!-- fin <span class="hljs-subst">{position}</span><span class="hljs-subst">{commun}</span> --&gt;&lt;/div&gt;"</span>
+    <span class="hljs-keyword">return</span> h
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_generer_navigation</span><span class="hljs-params">(chemin_relatif: List[str])</span> -&gt; str:</span>
+    <span class="hljs-string">"""Génère la barre de navigation avec BASE_PATH."""</span>
+    nav = <span class="hljs-string">f'&lt;nav class="navigation"&gt;&lt;div class="gauche"&gt;&lt;a href="<span class="hljs-subst">{BASE_PATH}</span>/index.html" class="monbouton"&gt;Accueil&lt;/a&gt;'</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(chemin_relatif) - <span class="hljs-number">1</span>):
+        lien_parts = [normaliser_nom(p) <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> chemin_relatif[:i+<span class="hljs-number">1</span>]]
+        lien = BASE_PATH + <span class="hljs-string">"/"</span> + <span class="hljs-string">"/"</span>.join(lien_parts)
+        nav += <span class="hljs-string">f' → &lt;a href="<span class="hljs-subst">{lien}</span>/index.html" class="monbouton"&gt;<span class="hljs-subst">{chemin_relatif[i]}</span>&lt;/a&gt;'</span>
+    nav += <span class="hljs-string">f'&lt;/div&gt;&lt;div class="droite"&gt;&lt;a href="<span class="hljs-subst">{BASE_PATH}</span>/TDM/index.html" class="monbouton"&gt;Sommaire&lt;/a&gt;&lt;/div&gt;&lt;/nav&gt;'</span>
+    <span class="hljs-keyword">if</span> voir_structure:
+        nav = <span class="hljs-string">f"&lt;div&gt;&lt;!-- début navigation --&gt;<span class="hljs-subst">{nav}</span>&lt;!-- fin navigation --&gt;&lt;/div&gt;"</span>
+    <span class="hljs-keyword">return</span> nav
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_word_processes</span><span class="hljs-params">()</span> -&gt; List[Any]:</span>
+    <span class="hljs-string">"""Retourne la liste des processus Word actifs."""</span>
+    <span class="hljs-keyword">return</span> [proc <span class="hljs-keyword">for</span> proc <span class="hljs-keyword">in</span> psutil.process_iter([<span class="hljs-string">'pid'</span>, <span class="hljs-string">'name'</span>]) <span class="hljs-keyword">if</span> proc.info[<span class="hljs-string">'name'</span>] <span class="hljs-keyword">and</span> proc.info[<span class="hljs-string">'name'</span>].upper() == <span class="hljs-string">'WINWORD.EXE'</span>]
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">kill_word_processes</span><span class="hljs-params">(processes: List[Any])</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Ferme proprement les processus Word."""</span>
+    <span class="hljs-keyword">for</span> proc <span class="hljs-keyword">in</span> processes:
+        print(<span class="hljs-string">"."</span>, end=<span class="hljs-string">" "</span>)
+        <span class="hljs-keyword">try</span>:
+            proc.terminate()
+            proc.wait(timeout=<span class="hljs-number">5</span>)
+        <span class="hljs-keyword">except</span> Exception:
+            proc.kill()
+    print(<span class="hljs-string">" !"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">traiter_docx</span><span class="hljs-params">(dossier: Path, temp_dir: Path)</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Traite tous les .doc/.docx du dossier : crée PDF au début si nécessaire."""</span>
+    log(<span class="hljs-string">f"Traitement .doc/.docx dans <span class="hljs-subst">{dossier}</span>"</span>)
+    entries = list(dossier.iterdir())
+    nb_conversions = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> entries:
+        <span class="hljs-keyword">if</span> entry.is_file() <span class="hljs-keyword">and</span> entry.suffix.lower() <span class="hljs-keyword">in</span> (<span class="hljs-string">".doc"</span>, <span class="hljs-string">".docx"</span>):
+            nom_pdf = normaliser_nom(entry.stem + <span class="hljs-string">".pdf"</span>)
+            cible_pdf = dossier / nom_pdf
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> cible_pdf.exists() <span class="hljs-keyword">or</span> entry.stat().st_mtime &gt; cible_pdf.stat().st_mtime:
+                log(<span class="hljs-string">f"Conversion : <span class="hljs-subst">{entry.name}</span> → <span class="hljs-subst">{nom_pdf}</span>"</span>)
+                cree_pdf(dossier, entry.name, cible_pdf, temp_dir)
+                nb_conversions += <span class="hljs-number">1</span>
+    <span class="hljs-keyword">if</span> nb_conversions == <span class="hljs-number">0</span>:
+        log(<span class="hljs-string">"Aucune conversion nécessaire"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">cree_pdf</span><span class="hljs-params">(chemin_doc: Path, fichier_doc: str, cible_pdf: Path, temp_dir: Path)</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Convertit un .doc/.docx en .pdf via Word sans modifier la date du .docx original."""</span>
+    processes = get_word_processes()
+    <span class="hljs-keyword">if</span> processes:
+        log(<span class="hljs-string">"Fermeture processus Word"</span>)
+        kill_word_processes(processes)
+
+    temp_doc = temp_dir / fichier_doc
+    shutil.copy2(chemin_doc / fichier_doc, temp_doc)
+
+    <span class="hljs-keyword">if</span> word_app <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+        log(<span class="hljs-string">"Word non disponible — copie simple"</span>)
+        shutil.copy2(temp_doc, cible_pdf)
+        <span class="hljs-keyword">return</span>
+
+    <span class="hljs-keyword">try</span>:
+        full_path = str(temp_doc.resolve())
+        doc = word_app.Documents.Open(full_path)
+        doc.SaveAs(str(cible_pdf.resolve()), FileFormat=<span class="hljs-number">17</span>)
+        doc.Close()
+        log(<span class="hljs-string">f"PDF créé : <span class="hljs-subst">{cible_pdf.name}</span>"</span>)
+    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+        log(<span class="hljs-string">f"Conversion échouée <span class="hljs-subst">{fichier_doc}</span> : <span class="hljs-subst">{e}</span>"</span>)
+        shutil.copy2(temp_doc, cible_pdf)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_creer_structure_complete</span><span class="hljs-params">(dossier: Path, temp_dir: Path)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""Crée ou complète structure.py : source de vérité unique pour index.html et TDM."""</span>
+    log(<span class="hljs-string">f"Traitement dossier : <span class="hljs-subst">{dossier}</span>"</span>)
+    <span class="hljs-comment"># Création PDF au début</span>
+    traiter_docx(dossier, temp_dir)
+
+    struc = {
+        <span class="hljs-string">"titre_dossier"</span>: dossier.name <span class="hljs-keyword">if</span> dossier != Path(DOSSIER_DOCUMENTS) <span class="hljs-keyword">else</span> CONFIG.get(<span class="hljs-string">"titre_site"</span>, <span class="hljs-string">"Site"</span>),
+        <span class="hljs-string">"entete_general"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"pied_general"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"entete"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"pied"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"navigation"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"haut_page"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"bas_page"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"ajout_affichage"</span>: <span class="hljs-literal">True</span>,
+        <span class="hljs-string">"dossiers"</span>: [],
+        <span class="hljs-string">"fichiers"</span>: []
+    }
+
+    existing = {}
+    p = dossier / <span class="hljs-string">"STRUCTURE.py"</span>
+    <span class="hljs-keyword">if</span> p.exists():
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">from</span> importlib.machinery <span class="hljs-keyword">import</span> SourceFileLoader
+            module = SourceFileLoader(<span class="hljs-string">"STRUCTURE"</span>, str(p)).load_module()
+            existing = module.STRUCTURE
+        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:
+            log(<span class="hljs-string">f"Erreur lecture STRUCTURE.py : <span class="hljs-subst">{e}</span>"</span>)
+    struc.update(existing)
+
+    entries = list(dossier.iterdir())
+    <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> sorted(entries, key=<span class="hljs-keyword">lambda</span> x: x.name.lower()):
+        <span class="hljs-keyword">if</span> entry.name <span class="hljs-keyword">in</span> IGNORER <span class="hljs-keyword">or</span> entry.name <span class="hljs-keyword">in</span> FICHIERS_ENTETE_PIED:
+            <span class="hljs-keyword">continue</span>
+
+        <span class="hljs-keyword">if</span> entry.suffix.lower() <span class="hljs-keyword">in</span> (<span class="hljs-string">".doc"</span>, <span class="hljs-string">".docx"</span>, <span class="hljs-string">".py"</span>):
+            <span class="hljs-keyword">continue</span>
+
+        <span class="hljs-keyword">if</span> entry.suffix.lower() <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> EXTENSIONS_ACCEPTEES <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> entry.is_dir():
+            <span class="hljs-keyword">continue</span>
+
+        nom_html = normaliser_nom(entry.name)
+
+        item_defaults = {
+            <span class="hljs-string">"nom_document"</span>: entry.name,
+            <span class="hljs-string">"nom_html"</span>: nom_html,
+            <span class="hljs-string">"nom_affiché"</span>: entry.stem <span class="hljs-keyword">if</span> entry.is_file() <span class="hljs-keyword">else</span> entry.name,
+            <span class="hljs-string">"nom_TDM"</span>: entry.stem <span class="hljs-keyword">if</span> entry.is_file() <span class="hljs-keyword">else</span> entry.name,
+            <span class="hljs-string">"ajout_affichage"</span>: <span class="hljs-literal">True</span>
+        }
+
+        found = <span class="hljs-literal">False</span>
+        <span class="hljs-keyword">for</span> cat <span class="hljs-keyword">in</span> [struc[<span class="hljs-string">"dossiers"</span>], struc[<span class="hljs-string">"fichiers"</span>]]:
+            <span class="hljs-keyword">for</span> existing_item <span class="hljs-keyword">in</span> cat:
+                <span class="hljs-keyword">if</span> existing_item[<span class="hljs-string">"nom_document"</span>] == entry.name:
+                    existing_item.update({k: v <span class="hljs-keyword">for</span> k, v <span class="hljs-keyword">in</span> item_defaults.items() <span class="hljs-keyword">if</span> k <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> existing_item})
+                    found = <span class="hljs-literal">True</span>
+                    <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> found:
+            max_pos = max((it.get(<span class="hljs-string">"position"</span>, <span class="hljs-number">0</span>) <span class="hljs-keyword">for</span> it <span class="hljs-keyword">in</span> struc[<span class="hljs-string">"dossiers"</span>] + struc[<span class="hljs-string">"fichiers"</span>]), default=<span class="hljs-number">0</span>)
+            item = item_defaults.copy()
+            item.update({
+                <span class="hljs-string">"affiché_index"</span>: <span class="hljs-literal">True</span>,
+                <span class="hljs-string">"affiché_TDM"</span>: <span class="hljs-literal">True</span>,
+                <span class="hljs-string">"position"</span>: max_pos + <span class="hljs-number">1</span>
+            })
+            (struc[<span class="hljs-string">"dossiers"</span>] <span class="hljs-keyword">if</span> entry.is_dir() <span class="hljs-keyword">else</span> struc[<span class="hljs-string">"fichiers"</span>]).append(item)
+
+    <span class="hljs-comment"># Tri des listes par position croissante avant sauvegarde</span>
+    struc[<span class="hljs-string">"dossiers"</span>].sort(key=<span class="hljs-keyword">lambda</span> x: x.get(<span class="hljs-string">"position"</span>, <span class="hljs-number">9999</span>))
+    struc[<span class="hljs-string">"fichiers"</span>].sort(key=<span class="hljs-keyword">lambda</span> x: x.get(<span class="hljs-string">"position"</span>, <span class="hljs-number">9999</span>))
+
+    <span class="hljs-comment"># Sauvegarde</span>
+    content = <span class="hljs-string">f"""# STRUCTURE.py – Généré automatiquement
+STRUCTURE = <span class="hljs-subst">{json.dumps(struc, ensure_ascii=<span class="hljs-literal">False</span>, indent=<span class="hljs-number">4</span>).replace(<span class="hljs-string">"true"</span>, <span class="hljs-string">"True"</span>).replace(<span class="hljs-string">"false"</span>, <span class="hljs-string">"False"</span>)}</span>
+"""</span>
+    p.write_text(content, encoding=<span class="hljs-string">"utf-8"</span>)
+    log(<span class="hljs-string">f"STRUCTURE.py mis à jour : <span class="hljs-subst">{dossier}</span>"</span>)
+
+    <span class="hljs-keyword">return</span> struc
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">copie_site</span><span class="hljs-params">(temp_dir: Path)</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Copie /documents vers /html avec gestion .docx → .pdf."""</span>
+    log(<span class="hljs-string">f"Création du dossier HTML : <span class="hljs-subst">{DOSSIER_HTML}</span>"</span>)
+    <span class="hljs-keyword">if</span> Path(DOSSIER_HTML).exists():
+        shutil.rmtree(DOSSIER_HTML)
+    Path(DOSSIER_HTML).mkdir(parents=<span class="hljs-literal">True</span>, exist_ok=<span class="hljs-literal">True</span>)
+
+    <span class="hljs-keyword">if</span> STYLE_CSS_SRC.exists():
+        shutil.copy2(STYLE_CSS_SRC, Path(DOSSIER_HTML) / <span class="hljs-string">"style.css"</span>)
+        log(<span class="hljs-string">"style.css copié"</span>)
+
+    arbre_site = _construire_arbre_complet(Path(DOSSIER_DOCUMENTS), temp_dir)
+    tdm_path = Path(DOSSIER_HTML) / DOSSIER_TDM
+    tdm_path.mkdir(parents=<span class="hljs-literal">True</span>, exist_ok=<span class="hljs-literal">True</span>)
+    (tdm_path / <span class="hljs-string">"structure_site.json"</span>).write_text(json.dumps(arbre_site, ensure_ascii=<span class="hljs-literal">False</span>, indent=<span class="hljs-number">4</span>), encoding=<span class="hljs-string">"utf-8"</span>)
+    log(<span class="hljs-string">"structure_site.json généré"</span>)
+
+    <span class="hljs-keyword">for</span> racine, dirs, files <span class="hljs-keyword">in</span> os.walk(DOSSIER_DOCUMENTS):
+        dirs[:] = [d <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> dirs <span class="hljs-keyword">if</span> d <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> IGNORER]
+
+        rel_path = Path(racine).relative_to(DOSSIER_DOCUMENTS)
+        cible_rel_norm = Path(*(normaliser_nom(part) <span class="hljs-keyword">for</span> part <span class="hljs-keyword">in</span> rel_path.parts))
+        cible = Path(DOSSIER_HTML) / cible_rel_norm
+        cible.mkdir(parents=<span class="hljs-literal">True</span>, exist_ok=<span class="hljs-literal">True</span>)
+
+        _creer_structure_complete(Path(racine), temp_dir)
+
+        <span class="hljs-keyword">for</span> fichier <span class="hljs-keyword">in</span> files:
+            <span class="hljs-keyword">if</span> any(re.search(pattern, fichier) <span class="hljs-keyword">for</span> pattern <span class="hljs-keyword">in</span> IGNORER):
+                <span class="hljs-keyword">continue</span>
+
+            src_file = Path(racine) / fichier
+
+            <span class="hljs-keyword">if</span> fichier.lower().endswith((<span class="hljs-string">".doc"</span>, <span class="hljs-string">".docx"</span>)):
+                nom_pdf = normaliser_nom(Path(fichier).stem + <span class="hljs-string">".pdf"</span>)
+                cible_pdf_documents = Path(racine) / nom_pdf
+                cible_pdf_html = cible / nom_pdf
+                <span class="hljs-keyword">if</span> cible_pdf_documents.exists():
+                    shutil.copy2(cible_pdf_documents, cible_pdf_html)
+                    log(<span class="hljs-string">f"PDF copié : <span class="hljs-subst">{nom_pdf}</span>"</span>)
+                <span class="hljs-keyword">else</span>:
+                    log(<span class="hljs-string">f"PDF manquant pour <span class="hljs-subst">{fichier}</span> — ignoré"</span>)
+            <span class="hljs-keyword">elif</span> fichier.lower().endswith(<span class="hljs-string">".html"</span>):
+                nom_html = normaliser_nom(fichier)
+                shutil.copy2(src_file, cible / nom_html)
+            <span class="hljs-keyword">else</span>:
+                nom_html = normaliser_nom(fichier)
+                shutil.copy2(src_file, cible / nom_html)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_construire_arbre_complet</span><span class="hljs-params">(dossier: Path, temp_dir: Path)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">"""Construit l’arbre pour structure_site.json."""</span>
+    arbre = {
+        <span class="hljs-string">"titre_dossier"</span>: dossier.name <span class="hljs-keyword">if</span> dossier != Path(DOSSIER_DOCUMENTS) <span class="hljs-keyword">else</span> CONFIG.get(<span class="hljs-string">"titre_site"</span>, <span class="hljs-string">"Site"</span>),
+        <span class="hljs-string">"nom_html"</span>: normaliser_nom(dossier.name) <span class="hljs-keyword">if</span> dossier != Path(DOSSIER_DOCUMENTS) <span class="hljs-keyword">else</span> <span class="hljs-string">""</span>,
+        <span class="hljs-string">"dossiers"</span>: [],
+        <span class="hljs-string">"fichiers"</span>: []
+    }
+
+    struc = _creer_structure_complete(dossier, temp_dir)
+
+    <span class="hljs-keyword">for</span> cat <span class="hljs-keyword">in</span> [<span class="hljs-string">"dossiers"</span>, <span class="hljs-string">"fichiers"</span>]:
+        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> struc.get(cat, []):
+            arbre[cat].append(item.copy())
+
+    <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> arbre[<span class="hljs-string">"dossiers"</span>]:
+        entry.update(_construire_arbre_complet(dossier / entry[<span class="hljs-string">"nom_document"</span>], temp_dir))
+
+    <span class="hljs-keyword">return</span> arbre
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">table_index</span><span class="hljs-params">(liste_fils: List[Dict[str, Any]])</span> -&gt; str:</span>
+    <span class="hljs-string">"""Génère le HTML de la table des éléments avec &lt;br&gt; après chaque lien et style appliqué."""</span>
+    h = []
+    <span class="hljs-keyword">for</span> fils <span class="hljs-keyword">in</span> liste_fils:
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> fils.get(<span class="hljs-string">"affiché_index"</span>, <span class="hljs-literal">True</span>):
+            <span class="hljs-keyword">continue</span>
+        nom_affiché = fils.get(<span class="hljs-string">"nom_affiché"</span>, Path(fils.get(<span class="hljs-string">"nom_document"</span>, <span class="hljs-string">"inconnu"</span>)).stem)
+        nom_stylé = appliquer_style(nom_affiché)
+        <span class="hljs-keyword">if</span> fils.get(<span class="hljs-string">"genre"</span>) == <span class="hljs-string">"dossier"</span>:
+            nom = <span class="hljs-string">f"<span class="hljs-subst">{AJOUT[<span class="hljs-number">0</span>]}</span><span class="hljs-subst">{nom_stylé}</span><span class="hljs-subst">{AJOUT[<span class="hljs-number">1</span>]}</span>"</span> <span class="hljs-keyword">if</span> fils.get(<span class="hljs-string">"ajout_affichage"</span>, <span class="hljs-literal">True</span>) <span class="hljs-keyword">else</span> nom_stylé
+            h.append(<span class="hljs-string">f'&lt;a class="dossier-item" href="<span class="hljs-subst">{fils[<span class="hljs-string">"nom_html"</span>]}</span>/index.html"&gt;<span class="hljs-subst">{nom}</span>&lt;/a&gt;&lt;br&gt;'</span>)
+        <span class="hljs-keyword">else</span>:
+            nom = <span class="hljs-string">f"<span class="hljs-subst">{AJOUT[<span class="hljs-number">2</span>]}</span><span class="hljs-subst">{nom_stylé}</span><span class="hljs-subst">{AJOUT[<span class="hljs-number">3</span>]}</span>"</span> <span class="hljs-keyword">if</span> fils.get(<span class="hljs-string">"ajout_affichage"</span>, <span class="hljs-literal">True</span>) <span class="hljs-keyword">else</span> nom_stylé
+            h.append(<span class="hljs-string">f'&lt;a class="dossier-item" href="<span class="hljs-subst">{fils[<span class="hljs-string">"nom_html"</span>]}</span>"&gt;<span class="hljs-subst">{nom}</span>&lt;/a&gt;&lt;br&gt;'</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>.join(h)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">generer_page_index</span><span class="hljs-params">(dossier: Path, temp_dir: Path)</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Génère index.html avec BeautifulSoup prettify et fallback pour entete/pied general."""</span>
+    log(<span class="hljs-string">f"Génération page : <span class="hljs-subst">{dossier}</span>"</span>)
+    rel_path = dossier.relative_to(DOSSIER_DOCUMENTS)
+    cible_rel_norm = Path(*(normaliser_nom(part) <span class="hljs-keyword">for</span> part <span class="hljs-keyword">in</span> rel_path.parts))
+    cible = Path(DOSSIER_HTML) / cible_rel_norm
+    cible.mkdir(parents=<span class="hljs-literal">True</span>, exist_ok=<span class="hljs-literal">True</span>)
+
+    struc = _creer_structure_complete(dossier, temp_dir)
+
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> struc.get(<span class="hljs-string">"dossiers"</span>, []):
+        item[<span class="hljs-string">"genre"</span>] = <span class="hljs-string">"dossier"</span>
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> struc.get(<span class="hljs-string">"fichiers"</span>, []):
+        item[<span class="hljs-string">"genre"</span>] = <span class="hljs-string">"fichier"</span>
+
+    liste_fils = sorted(struc.get(<span class="hljs-string">"dossiers"</span>, []) + struc.get(<span class="hljs-string">"fichiers"</span>, []), key=<span class="hljs-keyword">lambda</span> x: x.get(<span class="hljs-string">"position"</span>, <span class="hljs-number">9999</span>))
+
+    html_parts = []
+    titre = struc.get(<span class="hljs-string">"titre_dossier"</span>, dossier.name)
+    html_parts.append(deb_html(titre))
+
+    <span class="hljs-comment"># haut_page global (si configuré)</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"haut_page"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(<span class="hljs-string">""</span>.join(CONFIG.get(<span class="hljs-string">"haut_page"</span>, [])))
+
+    <span class="hljs-comment"># entete_general avec fallback</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"entete_general"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(plage_html_avec_fallback(dossier, <span class="hljs-string">"entete_general.html"</span>, <span class="hljs-string">"début"</span>, <span class="hljs-string">"_général"</span>))
+
+    <span class="hljs-comment"># entete local</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"entete"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(plage_html_avec_fallback(dossier, <span class="hljs-string">"entete.html"</span>, <span class="hljs-string">"début"</span>, <span class="hljs-string">""</span>))
+
+    <span class="hljs-comment"># navigation</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"navigation"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(_generer_navigation(list(rel_path.parts)))
+
+    <span class="hljs-comment"># table</span>
+    html_parts.append(<span class="hljs-string">f"&lt;div class=\"table-container\"&gt;&lt;table class=\"dossiers\"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;<span class="hljs-subst">{table_index(liste_fils)}</span>&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;"</span>)
+
+    <span class="hljs-comment"># pied local</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"pied"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(plage_html_avec_fallback(dossier, <span class="hljs-string">"pied.html"</span>, <span class="hljs-string">"fin"</span>, <span class="hljs-string">""</span>))
+
+    <span class="hljs-comment"># pied_general avec fallback</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"pied_general"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(plage_html_avec_fallback(dossier, <span class="hljs-string">"pied_general.html"</span>, <span class="hljs-string">"fin"</span>, <span class="hljs-string">"_général"</span>))
+
+    <span class="hljs-comment"># bas_page global</span>
+    <span class="hljs-keyword">if</span> struc.get(<span class="hljs-string">"bas_page"</span>, <span class="hljs-literal">False</span>):
+        html_parts.append(<span class="hljs-string">""</span>.join(CONFIG.get(<span class="hljs-string">"bas_page"</span>, [])))
+
+    html_parts.append(fin_html())
+
+    html_brut = <span class="hljs-string">""</span>.join(html_parts)
+    html_prettify = BeautifulSoup(html_brut, <span class="hljs-string">'html.parser'</span>).prettify()
+    (cible / <span class="hljs-string">"index.html"</span>).write_text(html_prettify, encoding=<span class="hljs-string">"utf-8"</span>)
+    log(<span class="hljs-string">f"Page générée : <span class="hljs-subst">{cible / <span class="hljs-string">'index.html'</span>}</span>"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    <span class="hljs-string">"""Lance la génération complète du site."""</span>
+    log(<span class="hljs-string">"=== DÉBUT GÉNÉRATION ==="</span>)
+    <span class="hljs-keyword">with</span> tempfile.TemporaryDirectory() <span class="hljs-keyword">as</span> tmpdirname:
+        temp_dir = Path(tmpdirname)
+        copie_site(temp_dir)
+        <span class="hljs-keyword">for</span> racine, dirs, files <span class="hljs-keyword">in</span> os.walk(DOSSIER_DOCUMENTS):
+            dirs[:] = [d <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> dirs <span class="hljs-keyword">if</span> d <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> IGNORER]
+            generer_page_index(Path(racine), temp_dir)
+    processes = get_word_processes()
+    <span class="hljs-keyword">if</span> processes:
+        log(<span class="hljs-string">"Fermeture processus Word résiduels"</span>)
+        kill_word_processes(processes)
+    log(<span class="hljs-string">"=== FIN GÉNÉRATION ==="</span>)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+    main()
+
+<span class="hljs-comment"># fin du "genere_site.py" version "20.0"</span>
+</code></pre>
+<hr>
+<h2 id="xiv-cree_table_des_matierespy">XIV. cree_table_des_matieres.py</h2>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">python</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-python hljs"><span class="hljs-comment"># cree_table_des_matieres.py — Version 6.14</span>
+
+version = (<span class="hljs-string">"cree_table_des_matieres.py"</span>, <span class="hljs-string">"6.14"</span>)
+print(<span class="hljs-string">f"[Version] <span class="hljs-subst">{version[<span class="hljs-number">0</span>]}</span> — <span class="hljs-subst">{version[<span class="hljs-number">1</span>]}</span>"</span>)
+
+<span class="hljs-keyword">import</span> json
+<span class="hljs-keyword">from</span> pathlib <span class="hljs-keyword">import</span> Path
+
+<span class="hljs-keyword">from</span> lib1.options <span class="hljs-keyword">import</span> DOSSIER_HTML, BASE_PATH
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">log</span><span class="hljs-params">(msg: str)</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    print(msg)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">construire_arbo</span><span class="hljs-params">(dossier: Path, prefixe: str = <span class="hljs-string">""</span>)</span> -&gt; str:</span>
+    html = <span class="hljs-string">""</span>
+    structure_path = dossier / <span class="hljs-string">"STRUCTURE.py"</span>
+    <span class="hljs-keyword">if</span> structure_path.exists():
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">from</span> importlib.machinery <span class="hljs-keyword">import</span> SourceFileLoader
+            module = SourceFileLoader(<span class="hljs-string">"STRUCTURE"</span>, str(structure_path)).load_module()
+            struc = module.STRUCTURE
+        <span class="hljs-keyword">except</span> Exception:
+            struc = {<span class="hljs-string">"dossiers"</span>: [], <span class="hljs-string">"fichiers"</span>: []}
+    <span class="hljs-keyword">else</span>:
+        struc = {<span class="hljs-string">"dossiers"</span>: [], <span class="hljs-string">"fichiers"</span>: []}
+
+    struc[<span class="hljs-string">"dossiers"</span>].sort(key=<span class="hljs-keyword">lambda</span> x: x.get(<span class="hljs-string">"position"</span>, <span class="hljs-number">9999</span>))
+    struc[<span class="hljs-string">"fichiers"</span>].sort(key=<span class="hljs-keyword">lambda</span> x: x.get(<span class="hljs-string">"position"</span>, <span class="hljs-number">9999</span>))
+
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> struc[<span class="hljs-string">"dossiers"</span>]:
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> item.get(<span class="hljs-string">"affiché_TDM"</span>, <span class="hljs-literal">True</span>):
+            <span class="hljs-keyword">continue</span>
+        nom_html = item[<span class="hljs-string">"nom_html"</span>]
+        nom_affiché = item.get(<span class="hljs-string">"nom_affiché"</span>, item[<span class="hljs-string">"nom_document"</span>])
+        chemin = <span class="hljs-string">f"<span class="hljs-subst">{prefixe}</span>/<span class="hljs-subst">{nom_html}</span>/index.html"</span>
+        lien = <span class="hljs-string">f"<span class="hljs-subst">{BASE_PATH}</span><span class="hljs-subst">{chemin}</span>"</span>
+        sous_arbo = construire_arbo(dossier / item[<span class="hljs-string">"nom_document"</span>], <span class="hljs-string">f"<span class="hljs-subst">{prefixe}</span>/<span class="hljs-subst">{nom_html}</span>"</span>)
+        <span class="hljs-keyword">if</span> sous_arbo:
+            html += <span class="hljs-string">f'&lt;li&gt;&lt;details open&gt;&lt;summary&gt;&lt;a href="<span class="hljs-subst">{lien}</span>"&gt;<span class="hljs-subst">{nom_affiché}</span>&lt;/a&gt;&lt;/summary&gt;&lt;ul&gt;<span class="hljs-subst">{sous_arbo}</span>&lt;/ul&gt;&lt;/details&gt;&lt;/li&gt;\n'</span>
+        <span class="hljs-keyword">else</span>:
+            html += <span class="hljs-string">f'&lt;li&gt;&lt;a href="<span class="hljs-subst">{lien}</span>"&gt;<span class="hljs-subst">{nom_affiché}</span>&lt;/a&gt;&lt;/li&gt;\n'</span>
+
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> struc[<span class="hljs-string">"fichiers"</span>]:
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> item.get(<span class="hljs-string">"affiché_TDM"</span>, <span class="hljs-literal">True</span>):
+            <span class="hljs-keyword">continue</span>
+        nom_html = item[<span class="hljs-string">"nom_html"</span>]
+        nom_affiché = item.get(<span class="hljs-string">"nom_affiché"</span>, item[<span class="hljs-string">"nom_document"</span>])
+        chemin = <span class="hljs-string">f"<span class="hljs-subst">{prefixe}</span>/<span class="hljs-subst">{nom_html}</span>"</span>
+        lien = <span class="hljs-string">f"<span class="hljs-subst">{BASE_PATH}</span><span class="hljs-subst">{chemin}</span>"</span>
+        html += <span class="hljs-string">f'&lt;li&gt;&lt;a href="<span class="hljs-subst">{lien}</span>"&gt;<span class="hljs-subst">{nom_affiché}</span>&lt;/a&gt;&lt;/li&gt;\n'</span>
+
+    <span class="hljs-keyword">return</span> html
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">generer_tdm</span><span class="hljs-params">()</span> -&gt; <span class="hljs-keyword">None</span>:</span>
+    log(<span class="hljs-string">"Génération de la Table des Matières"</span>)
+    racine = Path(DOSSIER_HTML)
+    tdm_path = racine / <span class="hljs-string">"TDM"</span>
+    tdm_path.mkdir(parents=<span class="hljs-literal">True</span>, exist_ok=<span class="hljs-literal">True</span>)
+
+    arbre_html = construire_arbo(racine)
+
+    titre_site = <span class="hljs-string">"Site"</span>  <span class="hljs-comment"># Peut être amélioré si besoin</span>
+    html = <span class="hljs-string">f"""&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"/&gt;
+    &lt;title&gt;Table des matières - <span class="hljs-subst">{titre_site}</span>&lt;/title&gt;
+    &lt;link href="<span class="hljs-subst">{BASE_PATH}</span>/style.css" rel="stylesheet"/&gt;
+    &lt;style&gt;
+        .tree ul <span class="hljs-subst">{{ margin-left: <span class="hljs-number">20</span>px; }</span>}
+        .tree details <span class="hljs-subst">{{ margin: <span class="hljs-number">5</span>px <span class="hljs-number">0</span>; }</span>}
+        .tree summary <span class="hljs-subst">{{ cursor: pointer; font-weight: bold; }</span>}
+        .tree a <span class="hljs-subst">{{ text-decoration: none; color: #<span class="hljs-number">0066</span>cc; }</span>}
+        .tree a:hover <span class="hljs-subst">{{ text-decoration: underline; }</span>}
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Table des matières&lt;/h1&gt;
+    &lt;ul class="tree"&gt;
+        <span class="hljs-subst">{arbre_html}</span>
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;"""</span>
+
+    (tdm_path / <span class="hljs-string">"index.html"</span>).write_text(html, encoding=<span class="hljs-string">"utf-8"</span>)
+    log(<span class="hljs-string">"TDM/index.html généré"</span>)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+    generer_tdm()
+
+<span class="hljs-comment"># fin du "cree_table_des_matieres.py" version "6.14"</span>
+</code></pre>
+<h3 id="lancercmd"><code>lancer.cmd</code></h3>
+<pre class="code-badge-pre"><div class="code-badge">
+        <div class="code-badge-language">bash</div>
+        <div title="Copy to clipboard">
+            <i class="fa fa-copy code-badge-copy-icon"></i>
+        </div>
+     </div><code class="language-bash hljs">@<span class="hljs-built_in">echo</span> off
+REM Début de <span class="hljs-string">"lancer.cmd"</span> version <span class="hljs-string">"2.2"</span>
+cls
+<span class="hljs-built_in">echo</span>.
+<span class="hljs-built_in">echo</span> lancer.cmd — Version 2.2
+<span class="hljs-built_in">echo</span>.
+
+:: Activation de l<span class="hljs-string">'environnement virtuel si nécessaire
+where python | findstr /i "virPy13" &gt;nul
+if %errorlevel% neq 0 (
+    echo Activation de l'</span>environnement virtuel virPy13...
+    call C:\virPy13\Scripts\activate.bat
+    <span class="hljs-keyword">if</span> %errorlevel% neq 0 (
+        <span class="hljs-built_in">echo</span> [ERREUR] Impossible d<span class="hljs-string">'activer virPy13
+        pause
+        exit /b 1
+    )
+)
+
+:: Aller dans le répertoire du projet
+cd /d "%~dp0\.."
+
+echo.
+echo === Génération du site réel à partir du dossier documents ===
+
+:: 1. On lance d'</span>abord genere_site.py (il crée html/ et tous les dossiers)
+python prog\genere_site.py
+<span class="hljs-keyword">if</span> %errorlevel% neq 0 (
+    <span class="hljs-built_in">echo</span> [ERREUR] genere_site.py a échoué
+    pause
+    <span class="hljs-built_in">exit</span> /b 1
+)
+
+:: 2. Ensuite seulement on génère la TDM (html/ existe maintenant → plus d<span class="hljs-string">'erreur)
+python prog\cree_table_des_matieres.py
+if %errorlevel% neq 0 (
+    echo [ERREUR] cree_table_des_matieres.py a échoué
+    pause
+    exit /b 1
+)
+rem créer /Hebreu4.0/html/Hebreu4.0/html/style.css
+xcopy html\style.css html\Hebreu4.0\html\style.css
+
+echo.
+echo === Démarrage du serveur local ===
+npx http-server html -p 3500 --cors -c-1 -o "/index.html"
+
+echo.
+echo Site réel disponible sur : http://localhost:3500/index.html
+echo.
+pause
+REM Fin de "lancer.cmd" version "2.2"
+</span></code></pre>
+<hr>
+<p><em>Généré  le 19 Decembre 2025</em></p>
+
+    <!-- End Markdown Monster Content -->
+</div>
+
+
+<style>
+@media print {
+   .code-badge { display: none; }
+}
+    .code-badge-pre {
+        position: relative;
+    }
+    .code-badge {
+        display: flex;
+        flex-direction: row;
+        white-space: normal;
+        background: transparent;
+        background: #333;
+        color: white;
+        font-size: 0.875em;
+        opacity: 0.5;
+        transition: opacity linear 0.5s;
+        border-radius: 0 0 0 7px;
+        padding: 5px 8px 5px 8px;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .code-badge.active {
+        opacity: 0.8;
+    }
+
+    .code-badge:hover {
+        opacity: .95;
+    }
+
+    .code-badge a,
+    .code-badge a:hover {
+        text-decoration: none;
+    }
+
+    .code-badge-language {
+        margin-right: 10px;
+        font-weight: 600;
+        color: goldenrod;
+    }
+    .code-badge-copy-icon {
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 0 7px;
+        margin-top:2;
+    }
+    .fa.text-success:{ color: limegreen !important }
+</style><div id="CodeBadgeTemplate" style="display:none">
+    <div class="code-badge">
+        <div class="code-badge-language">{{language}}</div>
+        <div title="Copy to clipboard">
+            <i class="{{copyIconClass}} code-badge-copy-icon"></i>
+        </div>
+     </div>
+</div></body></html>
