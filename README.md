@@ -1,10 +1,10 @@
-Mise à jour de la version au 19 Décembre 2025
+Mise à jour de la version au 22 Décembre 2025
 
-adaptés pour github.
+adaptés pour github et local.
 
 Pour voir le résultat :
 
-https://guytitt.github.io/hebreu4.0
+https://guytitt.github.io/Hebreu4.0
 
 Bonne lecture.
 
