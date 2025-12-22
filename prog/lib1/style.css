@@ -1,16 +1,36 @@
 /* style.css — Version 3.5 */
 
-/* Réinitialisation basique */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #e8f4f8;
-    color: #2c3e50;
-    padding: 20px;
-    line-height: 1.6;
+/* ==============================================================
+   RÉINITIALISATION GLOBALE
+   ============================================================== */
+/* Cette règle remet à zéro les marges et paddings de tous les éléments
+   et utilise box-sizing: border-box pour que les paddings et borders
+   soient inclus dans la largeur/hauteur définie. */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
 }
 
+/* ==============================================================
+   POLICE ET FOND DE PAGE
+   ============================================================== */
+/* Définit la police principale, la couleur du texte et le fond de la page.
+   Vous pouvez changer la couleur de fond (#e8f4f8 est un bleu très clair)
+   ou la police (Segoe UI est moderne sur Windows, fallback sur Arial). */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #e8f4f8;          /* Fond général du site */
+    color: #2c3e50;               /* Couleur du texte principal */
+    padding: 20px;                /* Espacement autour du contenu */
+    line-height: 1.6;             /* Hauteur de ligne pour lisibilité */
+}
+
+/* ==============================================================
+   TITRES PRINCIPAUX
+   ============================================================== */
+/* Titre très grand utilisé pour le nom du site ou une page importante.
+   Modifiez la taille (58px) ou la couleur (#16a085 est un turquoise). */
 .monTitre {
     font-size: 58px;
     color: #16a085;
@@ -18,27 +38,34 @@ body {
     padding: 20px;
 }
 
+/* Sous-titre utilisé sous le titre principal.
+   La bordure inférieure donne un effet de séparation. */
 .monSousTitre {
     font-size: 32px;
     color: #1abc9c;
     text-align: center;
     margin: 20px 0;
-    border-bottom: 4px solid #16a085;
+    border-bottom: 4px solid #16a085;   /* Ligne décorative sous le titre */
 }
 
+/* ==============================================================
+   BARRE DE NAVIGATION
+   ============================================================== */
+/* Conteneur principal de la navigation (fil d’Ariane + Sommaire). */
 .navigation {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between;    /* Espacement entre gauche et droite */
     align-items: center;
-    background: #1abc9c;
+    background: #1abc9c;               /* Fond turquoise */
     padding: 15px 30px;
-    border-radius: 15px;
+    border-radius: 15px;               /* Coins arrondis */
     margin: 30px 0;
-    box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
-    flex-wrap: wrap;
+    box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3); /* Ombre douce */
+    flex-wrap: wrap;                   /* Passe à la ligne sur petits écrans */
     gap: 10px;
 }
 
+/* Parties gauche et droite de la navigation */
 .navigation .gauche, .navigation .droite {
     display: flex;
     align-items: center;
@@ -46,60 +73,75 @@ body {
     flex-wrap: wrap;
 }
 
+/* Boutons de navigation (Accueil, dossiers, Sommaire) */
 .monbouton {
     padding: 12px 26px;
-    background: #ecf0f1;
-    color: #2c3e50;
-    border: 3px solid #bdc3c7;
-    border-radius: 30px;
+    background: #ecf0f1;               /* Fond clair */
+    color: #2c3e50;                    /* Texte sombre */
+    border: 3px solid #bdc3c7;         /* Bordure grise */
+    border-radius: 30px;               /* Très arrondi */
     text-decoration: none;
     font-weight: bold;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease;         /* Animation au survol */
 }
 
 .monbouton:hover {
-    background: #1abc9c;
+    background: #1abc9c;               /* Fond turquoise au survol */
     color: white;
     border-color: #16a085;
-    transform: translateY(-2px);
+    transform: translateY(-2px);       /* Légère élévation */
 }
 
-/* Conteneur centré pour la table */
+/* ==============================================================
+   CONTENEUR DE TABLE (pages index et TDM)
+   ============================================================== */
+/* Centre le contenu de la table */
 .table-container {
     display: flex;
     justify-content: center;
     margin: 40px 0;
 }
 
-/* Table centrée à 80% de largeur */
+/* Table qui contient la liste des dossiers/fichiers ou l’arbre TDM */
 table.dossiers {
-    width: 80%;                  /* 80% de la largeur du conteneur */
-    max-width: 1000px;           /* Largeur maximale raisonnable */
-    margin: 0 auto;              /* Centrage horizontal */
+    width: 80%;                        /* Largeur 80% du conteneur */
+    max-width: 1000px;                 /* Largeur maximale */
+    margin: 0 auto;
     border-collapse: collapse;
     background: white;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     border-radius: 12px;
-    overflow: hidden;
+    overflow: hidden;                  /* Pour les coins arrondis */
 }
 
 table.dossiers td {
     padding: 18px 24px;
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ecf0f1;  /* Ligne de séparation */
     text-align: left;
 }
 
-table.dossiers tr:last-child td { border-bottom: none; }
-table.dossiers tr:hover { background: #f8fcfd; }
+table.dossiers tr:last-child td { 
+    border-bottom: none;               /* Pas de ligne sur la dernière ligne */
+}
 
+table.dossiers tr:hover { 
+    background: #f8fcfd;               /* Légère surbrillance au survol */
+}
+
+/* Liens dossiers et fichiers dans les pages index */
 .dossier-item a { 
     color: #16a085; 
     font-weight: bold; 
-    text-decoration: none; 
+    text-decoration: none;             /* Pas de soulignement par défaut */
 }
-.fichier-pdf a { color: #e74c3c; font-weight: bold; text-decoration: none; }
 
+/* Vous pouvez ajouter d’autres classes si vous voulez des couleurs différentes
+   pour les PDF, images, etc. */
+
+/* ==============================================================
+   PIED DE PAGE
+   ============================================================== */
 footer { 
     text-align: center; 
     margin-top: 50px; 
@@ -107,7 +149,7 @@ footer {
     font-size: 0.9em; 
 }
 
-/* Style du bouton mail */
+/* Bouton mail (si vous en avez un) */
 .btn-mail {
     padding: 15px 30px;
     font-size: 16px;
@@ -132,19 +174,23 @@ footer {
     border-color: #388E3C;
 }
 
-/* Responsive */
+/* ==============================================================
+   RESPONSIVE (adaptation aux petits écrans)
+   ============================================================== */
 @media (max-width: 768px) {
     table.dossiers {
-        width: 95%;
+        width: 95%;                    /* Plus large sur mobile */
     }
     .monTitre { font-size: 42px; }
     .monSousTitre { font-size: 26px; }
 }
 
-/* Styles TDM avec puces + / - élégantes */
+/* ==============================================================
+   TABLE DES MATIÈRES (TDM) – Arbre pliable avec puces + / -
+   ============================================================== */
 .tree {
-    --spacing: 1.8rem;
-    --radius: 12px;
+    --spacing: 1.8rem;                 /* Espacement horizontal entre niveaux */
+    --radius: 12px;                    /* Taille du cercle + / - */
     line-height: 2.2rem;
     font-family: "Segoe UI", sans-serif;
 }
@@ -161,11 +207,11 @@ footer {
 }
 
 .tree ul li {
-    border-left: 2px solid #ddd;
+    border-left: 2px solid #ddd;       /* Ligne verticale de connexion */
 }
 
 .tree ul li:last-child {
-    border-color: transparent;
+    border-color: transparent;         /* Pas de ligne après le dernier */
 }
 
 .tree ul li::before {
@@ -176,16 +222,16 @@ footer {
     width: calc(var(--spacing)+2px);
     height: calc(var(--spacing)+1px);
     border: solid #ddd;
-    border-width: 0 0 2px 2px;
+    border-width: 0 0 2px 2px;         /* Coin en L pour connecter */
 }
 
 .tree summary {
-    cursor: default;
+    cursor: default;                   /* Pas de curseur pointeur par défaut */
 }
 
 .tree summary::marker,
 .tree summary::-webkit-details-marker {
-    display: none;
+    display: none;                     /* Masque la flèche native */
 }
 
 .tree li::after,
@@ -197,13 +243,13 @@ footer {
     width: calc(2*var(--radius));
     height: calc(2*var(--radius));
     border-radius: 50%;
-    background: #ddd;
+    background: #ddd;                  /* Cercle gris */
 }
 
 .tree summary::before {
-    content: "+";
+    content: "+";                      /* Signe + quand fermé */
     z-index: 1;
-    background: #2c3e50;
+    background: #2c3e50;               /* Fond sombre pour le + / - */
     color: white;
     font-weight: bold;
     text-align: center;
@@ -211,7 +257,7 @@ footer {
 }
 
 .tree details[open] > summary::before {
-    content: "−";
+    content: "−";                      /* Signe - quand ouvert */
 }
 
 .folder-link {
@@ -223,7 +269,7 @@ footer {
 }
 
 .folder-link:hover {
-    background: #ecf0f1;
+    background: #ecf0f1;               /* Surbrillance au survol */
 }
 
 .tree a {
@@ -236,5 +282,16 @@ footer {
 .tree a:hover {
     background: #ecf0f1;
 }
+
+/* ==============================================================
+   FIN DU FICHIER
+   ============================================================== */
+/* Vous pouvez ajouter vos propres règles à la fin du fichier.
+   Pour changer les couleurs principales :
+   - Turquoise clair : #1abc9c
+   - Turquoise foncé : #16a085
+   - Gris foncé texte : #2c3e50
+   - Fond page : #e8f4f8
+*/
 
 /* fin du "style.css" version "3.5" */
