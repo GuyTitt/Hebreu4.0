@@ -1,6 +1,6 @@
-# genere_site.py — Version 21.6
+# genere_site.py — Version 21.7
 
-version = ("genere_site.py", "21.6")
+version = ("genere_site.py", "21.7")
 
 # Importation des librairies
 import os
@@ -120,9 +120,9 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
         h = f"<div><!-- début {position}{commun} -->{h}<!-- fin {position}{commun} --></div>"
     return h
 
-def _trouver_nom_navigation(dossier: Path, nom_dossier: str) -> str:
-    """Retourne le nom_navigation du dossier si disponible dans son STRUCTURE.py, sinon le nom du dossier."""
-    p = dossier / "STRUCTURE.py"
+def _trouver_nom_navigation(dossier_parent: Path, nom_dossier: str) -> str:
+    """Retourne le nom_navigation du dossier si disponible dans le STRUCTURE.py du parent, sinon le nom du dossier."""
+    p = dossier_parent / "STRUCTURE.py"
     if p.exists():
         try:
             from importlib.machinery import SourceFileLoader
@@ -138,14 +138,14 @@ def _trouver_nom_navigation(dossier: Path, nom_dossier: str) -> str:
 def _generer_navigation(chemin_relatif: List[str]) -> str:
     """Génère la barre de navigation avec nom_navigation si disponible."""
     nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
-    current_dossier = Path(DOSSIER_DOCUMENTS)
+    current_parent = Path(DOSSIER_DOCUMENTS)
     for i in range(len(chemin_relatif) - 1):
         nom_dossier = chemin_relatif[i]
-        current_dossier = current_dossier / nom_dossier
-        nom_nav = _trouver_nom_navigation(current_dossier.parent, nom_dossier)
+        nom_nav = _trouver_nom_navigation(current_parent, nom_dossier)
         lien_parts = [normaliser_nom(p) for p in chemin_relatif[:i+1]]
         lien = BASE_PATH + "/" + "/".join(lien_parts)
         nav += f' → <a href="{lien}/index.html" class="monbouton">{appliquer_style(nom_nav)}</a>'
+        current_parent = current_parent / nom_dossier
     nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
     if voir_structure:
         nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
@@ -325,7 +325,7 @@ STRUCTURE = {json.dumps(struc, ensure_ascii=False, indent=4).replace("true", "Tr
 
 
 def copie_site(temp_dir: Path) -> None:
-    """Copie /documents vers /html avec gestion .docx → .pdf."""
+    """Copie /documents vers /html avec gestion .docx → .pdf, sans copier structure.py."""
     log(f"Création du dossier HTML : {DOSSIER_HTML}")
     if Path(DOSSIER_HTML).exists():
         shutil.rmtree(DOSSIER_HTML)
@@ -352,8 +352,8 @@ def copie_site(temp_dir: Path) -> None:
         _creer_structure_complete(Path(racine), temp_dir)
 
         for fichier in files:
-            if any(re.search(pattern, fichier) for pattern in IGNORER):
-                continue
+            if any(re.search(pattern, fichier) for pattern in IGNORER) or fichier == "STRUCTURE.py":
+                continue  # Ne pas copier STRUCTURE.py dans html
 
             src_file = Path(racine) / fichier
 
