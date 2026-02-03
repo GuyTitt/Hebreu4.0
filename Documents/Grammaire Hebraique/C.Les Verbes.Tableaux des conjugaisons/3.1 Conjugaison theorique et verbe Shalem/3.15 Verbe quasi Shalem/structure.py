@@ -5,8 +5,8 @@ STRUCTURE = {
         {
             "nom_document": "3.151 vb quasi shalem Lamed nun.pdf",
             "nom_html": "3.151_vb_quasi_shalem_lamed_nun.pdf",
-            "nom_affiché": "3.151 vb quasi shalem Lamed nun",
-            "nom_TDM": "3.151 vb quasi shalem Lamed nun",
+            "nom_affiché": "Le verbe quasi-shalém avec Nun final __(parfois assimilé)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -15,15 +15,15 @@ STRUCTURE = {
         {
             "nom_document": "3.152 vb quasi shalem Lamed taw.pdf",
             "nom_html": "3.152_vb_quasi_shalem_lamed_taw.pdf",
-            "nom_affiché": "3.152 vb quasi shalem Lamed taw",
-            "nom_TDM": "3.152 vb quasi shalem Lamed taw",
+            "nom_affiché": "Le verbe quasi-shalém avec Taw final __(parfois assimilé)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 2
         }
     ],
-    "titre_dossier": "3.15 Verbe quasi Shalem",
+    "titre_dossier": "Le verbe quasi Shalem",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
@@ -31,5 +31,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

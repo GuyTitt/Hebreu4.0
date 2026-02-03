@@ -1,4 +1,6 @@
-# STRUCTURE.py – Généré automatiquement
+# STRUCTURE.py – Corrigé automatiquement
+# Templates {{variable}} pour flexibilité
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -84,7 +86,7 @@ STRUCTURE = {
         },
         {
             "nom_document": "3.72.51 vb Pe gut.Ayin waw.Lamed gut.type ruA'.pdf",
-            "nom_html": "3.72.51_vb_pe_gut.ayin_waw.lamed_gut.type_rua'.pdf",
+            "nom_html": "3.72.51_vb_pe_gut.ayin_waw.lamed_gut.type_rua_.pdf",
             "nom_affiché": "3.72.51 vb Pe gut.Ayin waw.Lamed gut.type ruA'",
             "nom_TDM": "3.72.51 vb Pe gut.Ayin waw.Lamed gut.type ruA'",
             "ajout_affichage": True,
@@ -104,7 +106,7 @@ STRUCTURE = {
         },
         {
             "nom_document": "3.72.61 vb Pe resh et Ayin Ayin gutt.rA'A'.pdf",
-            "nom_html": "3.72.61_vb_pe_resh_et_ayin_ayin_gutt.ra'a'.pdf",
+            "nom_html": "3.72.61_vb_pe_resh_et_ayin_ayin_gutt.ra_a_.pdf",
             "nom_affiché": "3.72.61 vb Pe resh et Ayin Ayin gutt.rA'A'",
             "nom_TDM": "3.72.61 vb Pe resh et Ayin Ayin gutt.rA'A'",
             "ajout_affichage": True,

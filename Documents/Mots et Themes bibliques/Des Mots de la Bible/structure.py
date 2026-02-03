@@ -1,56 +1,33 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [
         {
             "nom_document": "Homme-Femme.Les mots de la Bible",
             "nom_html": "homme-femme.les_mots_de_la_bible",
-            "nom_affiché": "Homme-Femme.Les mots de la Bible",
-            "nom_navigation": "Homme-Femme.Les mots de la Bible",
-            "nom_TDM": "Homme-Femme.Les mots de la Bible",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 1
-        },
-        {
-            "nom_document": "Je Suis",
-            "nom_html": "je_suis",
-            "nom_affiché": "Je Suis",
-            "nom_navigation": "Je Suis",
-            "nom_TDM": "Je Suis",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 2
-        },
-        {
-            "nom_document": "L'assemblée  Qahal et Edah",
-            "nom_html": "l'assemblee__qahal_et_edah",
-            "nom_affiché": "L'assemblée  Qahal et Edah",
-            "nom_navigation": "L'assemblée  Qahal et Edah",
-            "nom_TDM": "L'assemblée  Qahal et Edah",
+            "nom_affiché": "Homme-Femme - Les mots de la bible",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 3
         },
         {
-            "nom_document": "L'Etranger. Les mots de la Bible",
-            "nom_html": "l'etranger._les_mots_de_la_bible",
-            "nom_affiché": "L'Etranger. Les mots de la Bible",
-            "nom_navigation": "L'Etranger. Les mots de la Bible",
-            "nom_TDM": "L'Etranger. Les mots de la Bible",
+            "nom_document": "L'assemblée  Qahal et Edah",
+            "nom_html": "l_assemblee__qahal_et_edah",
+            "nom_affiché": "L'Assemblée : קָהָל et עֵדָה",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 4
         },
         {
-            "nom_document": "Les Entrailles et leurs mystères",
-            "nom_html": "les_entrailles_et_leurs_mysteres",
-            "nom_affiché": "Les Entrailles et leurs mystères",
-            "nom_navigation": "Les Entrailles et leurs mystères",
-            "nom_TDM": "Les Entrailles et leurs mystères",
+            "nom_document": "L'Etranger. Les mots de la Bible",
+            "nom_html": "l_etranger._les_mots_de_la_bible",
+            "nom_affiché": "L'Étranger - Les mots de la bible",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -59,9 +36,8 @@ STRUCTURE = {
         {
             "nom_document": "Les mots du Silence",
             "nom_html": "les_mots_du_silence",
-            "nom_affiché": "Les mots du Silence",
-            "nom_navigation": "Les mots du Silence",
-            "nom_TDM": "Les mots du Silence",
+            "nom_affiché": "Les mots du silence dans la bible",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -70,78 +46,114 @@ STRUCTURE = {
         {
             "nom_document": "Les Noms de Dieu dans la Bible",
             "nom_html": "les_noms_de_dieu_dans_la_bible",
-            "nom_affiché": "Les Noms de Dieu dans la Bible",
-            "nom_navigation": "Les Noms de Dieu dans la Bible",
-            "nom_TDM": "Les Noms de Dieu dans la Bible",
+            "nom_affiché": "Les noms de Dieu dans la bible",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 7
         },
         {
-            "nom_document": "Miseriorde",
-            "nom_html": "miseriorde",
-            "nom_affiché": "Miseriorde",
-            "nom_navigation": "Miseriorde",
-            "nom_TDM": "Miseriorde",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 9
-        },
-        {
-            "nom_document": "Pantocrator",
-            "nom_html": "pantocrator",
-            "nom_affiché": "Pantocrator",
-            "nom_navigation": "Pantocrator",
-            "nom_TDM": "Pantocrator",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 11
-        },
-        {
-            "nom_document": "Philon",
-            "nom_html": "philon",
-            "nom_affiché": "Philon",
-            "nom_navigation": "Philon",
-            "nom_TDM": "Philon",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 13
-        }
-    ],
-    "fichiers": [
-        {
-            "nom_document": "Misericorde et compassion, un ensemble riche mais confus.pdf",
-            "nom_html": "misericorde_et_compassion,_un_ensemble_riche_mais_confus.pdf",
-            "nom_affiché": "Misericorde et compassion, un ensemble riche mais confus",
-            "nom_TDM": "Misericorde et compassion, un ensemble riche mais confus",
+            "nom_document": "Je Suis, auxiliaire banal ou identite divine",
+            "nom_html": "je_suis,_auxiliaire_banal_ou_identite_divine",
+            "nom_affiché": "&laquo; Je Suis &raquo;, - auxiliaire banal ou identité divine",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 8
         },
         {
-            "nom_document": "Noms Pluriels avec Sens abstrait.pdf",
-            "nom_html": "noms_pluriels_avec_sens_abstrait.pdf",
-            "nom_affiché": "Noms Pluriels avec Sens abstrait",
-            "nom_TDM": "Noms Pluriels avec Sens abstrait",
+            "nom_document": "Pantocrator. Un Dieu Tout-Puissant",
+            "nom_html": "pantocrator._un_dieu_tout-puissant",
+            "nom_affiché": "Pantocrator - un Dieu tout-puissant",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 9
+        },
+        {
+            "nom_document": "Philon d'Alexandrie  et les Noms de Dieu",
+            "nom_html": "philon_d_alexandrie__et_les_noms_de_dieu",
+            "nom_affiché": "Philon d'Alexandrie et les noms de Dieu",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 10
         },
         {
-            "nom_document": "Petit lexique abstrait-concret.pdf",
-            "nom_html": "petit_lexique_abstrait-concret.pdf",
-            "nom_affiché": "Petit lexique abstrait-concret",
-            "nom_TDM": "Petit lexique abstrait-concret",
+            "nom_document": "Miséricorde et compassion.Un portrait de Dieu",
+            "nom_html": "misericorde_et_compassion.un_portrait_de_dieu",
+            "nom_affiché": "Miséricorde et compassion - un portrait de Dieu ?",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 11
+        },
+        {
+            "nom_document": "Les Entrailles, Objet Biblique Mal Identifie",
+            "nom_html": "les_entrailles,_objet_biblique_mal_identifie",
+            "nom_affiché": "Les entrailles - objet biblique mal identifié",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 12
+        },
+        {
+            "nom_document": "Les Entrailles et leurs mystères",
+            "nom_html": "les_entrailles_et_leurs_mysteres",
+            "nom_affiché": "Les entrailles et leurs mystères",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 13
+        },
+        {
+            "nom_document": "Le Message de Qohelet",
+            "nom_html": "le_message_de_qohelet",
+            "nom_affiché": "Le message de Qohélet",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 15
+        }
+    ],
+    "fichiers": [
+        {
+            "nom_document": "Chair Corps Ame. Tableau resume.docx",
+            "nom_html": "chair_corps_ame._tableau_resume.pdf",
+            "nom_affiché": "Chair, Corps, Âme __(Tableau résumé)__",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 14
+        },
+        {
+            "nom_document": "Noms au pluriel avec sens abstrait.docx",
+            "nom_html": "noms_au_pluriel_avec_sens_abstrait.pdf",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 2
+        },
+        {
+            "nom_document": "Petit lexique abstrait-concret.docx",
+            "nom_html": "petit_lexique_abstrait-concret.pdf",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 1
         }
     ],
     "titre_dossier": "Des Mots de la Bible",
@@ -152,5 +164,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

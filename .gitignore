@@ -2,6 +2,8 @@
 /ancien
 **/nppBackup
 **/__pycache__
+/test
+/Documents
 #
 # Fichiers à ignorer dans les transferts
 *.bak

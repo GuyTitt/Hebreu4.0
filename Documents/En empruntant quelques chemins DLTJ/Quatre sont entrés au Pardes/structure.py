@@ -1,49 +1,31 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
         {
             "nom_document": "Hagiga 14b.Talmud de W.Davidson.docx",
-            "nom_html": "hagiga_14b.talmud_de_w.davidson.docx",
-            "nom_affiché": "Hagiga 14b.Talmud de W.Davidson",
-            "nom_TDM": "Hagiga 14b.Talmud de W.Davidson",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 1
-        },
-        {
-            "nom_document": "Hagiga 14b.Traduction Steinsaltz.docx",
-            "nom_html": "hagiga_14b.traduction_steinsaltz.docx",
-            "nom_affiché": "Hagiga 14b.Traduction Steinsaltz",
-            "nom_TDM": "Hagiga 14b.Traduction Steinsaltz",
+            "nom_html": "hagiga_14b.talmud_de_w.davidson.pdf",
+            "nom_affiché": "Hagiga 14b __(Talmud de W.Davidson)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 2
         },
         {
-            "nom_document": "hagiga_14b.talmud_de_w.davidson.pdf",
-            "nom_html": "hagiga_14b.talmud_de_w.davidson.pdf",
-            "nom_affiché": "hagiga_14b.talmud_de_w.davidson",
-            "nom_TDM": "hagiga_14b.talmud_de_w.davidson",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 3
-        },
-        {
-            "nom_document": "hagiga_14b.traduction_steinsaltz.pdf",
+            "nom_document": "Hagiga 14b.Traduction Steinsaltz.docx",
             "nom_html": "hagiga_14b.traduction_steinsaltz.pdf",
-            "nom_affiché": "hagiga_14b.traduction_steinsaltz",
-            "nom_TDM": "hagiga_14b.traduction_steinsaltz",
+            "nom_affiché": "Hagiga 14b __(Traduction Steinsaltz)__",
+            "nom_TDM": "{{nom_document_sans_ext}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 4
+            "position": 1
         }
     ],
-    "titre_dossier": "Quatre sont entrés au Pardes",
+    "titre_dossier": "Quatre sont entrés au Pardès",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
@@ -51,5 +33,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

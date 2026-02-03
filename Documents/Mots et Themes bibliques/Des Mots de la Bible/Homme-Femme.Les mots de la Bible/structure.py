@@ -5,18 +5,18 @@ STRUCTURE = {
         {
             "nom_document": "Femme.Lecture du  tableau.pdf",
             "nom_html": "femme.lecture_du__tableau.pdf",
-            "nom_affiché": "Femme.Lecture du  tableau",
-            "nom_TDM": "Femme.Lecture du  tableau",
+            "nom_affiché": "Femme. Lecture du tableau",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 1
+            "position": 4
         },
         {
             "nom_document": "Homme.Lecture du tableau.pdf",
             "nom_html": "homme.lecture_du_tableau.pdf",
-            "nom_affiché": "Homme.Lecture du tableau",
-            "nom_TDM": "Homme.Lecture du tableau",
+            "nom_affiché": "Homme. Lecture du tableau",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -25,8 +25,8 @@ STRUCTURE = {
         {
             "nom_document": "Tableau Femme.Les mots.pdf",
             "nom_html": "tableau_femme.les_mots.pdf",
-            "nom_affiché": "Tableau Femme.Les mots",
-            "nom_TDM": "Tableau Femme.Les mots",
+            "nom_affiché": "Femme. Les mots de la Bible__(Tableau)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -35,12 +35,12 @@ STRUCTURE = {
         {
             "nom_document": "Tableau Homme.Les mots.pdf",
             "nom_html": "tableau_homme.les_mots.pdf",
-            "nom_affiché": "Tableau Homme.Les mots",
-            "nom_TDM": "Tableau Homme.Les mots",
+            "nom_affiché": "Homme. Les mots de la Bible__(Tableau)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 4
+            "position": 1
         }
     ],
     "titre_dossier": "Homme-Femme.Les mots de la Bible",
@@ -51,5 +51,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

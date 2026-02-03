@@ -5,8 +5,8 @@ STRUCTURE = {
         {
             "nom_document": "1 Rois 19.12.Elie=brise ou silence.pdf",
             "nom_html": "1_rois_19.12.elie=brise_ou_silence.pdf",
-            "nom_affiché": "1 Rois 19.12.Elie=brise ou silence",
-            "nom_TDM": "1 Rois 19.12.Elie=brise ou silence",
+            "nom_affiché": "1 Rois 19.12. Élie = brise ou silence ?",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -16,7 +16,7 @@ STRUCTURE = {
             "nom_document": "Le vocabulaire du silence.pdf",
             "nom_html": "le_vocabulaire_du_silence.pdf",
             "nom_affiché": "Le vocabulaire du silence",
-            "nom_TDM": "Le vocabulaire du silence",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -25,8 +25,8 @@ STRUCTURE = {
         {
             "nom_document": "Les mots du silence.Resume.pdf",
             "nom_html": "les_mots_du_silence.resume.pdf",
-            "nom_affiché": "Les mots du silence.Resume",
-            "nom_TDM": "Les mots du silence.Resume",
+            "nom_affiché": "Les mots du silence. __(Résumé)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -41,5 +41,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

@@ -1,14 +1,10 @@
-# STRUCTURE.py – Généré automatiquement
 STRUCTURE = {
-    "dossiers": [],
-    "fichiers": [],
-    "titre_dossier": "TDM",
+    "titre_dossier": "Table des matières",
+    "titre_table": "",
     "entete_general": True,
-    "pied_general": True,
     "entete": True,
     "pied": True,
-    "navigation": True,
-    "haut_page": True,
-    "bas_page": True,
-    "ajout_affichage": True
+    "navigation": False,
+    "dossiers": [],
+    "fichiers": []
 }

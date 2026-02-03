@@ -1,52 +1,24 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
         {
-            "nom_document": "Adam comme nom propre dans la Septante.pdf",
-            "nom_html": "adam_comme_nom_propre_dans_la_septante.pdf",
-            "nom_affiché": "Adam comme nom propre dans la Septante",
-            "nom_TDM": "Adam comme nom propre dans la Septante",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 1
-        },
-        {
-            "nom_document": "Almah (et Alamot) des jeunes filles ou des instruments de musique.pdf",
-            "nom_html": "almah_(et_alamot)_des_jeunes_filles_ou_des_instruments_de_musique.pdf",
-            "nom_affiché": "Almah (et Alamot) des jeunes filles ou des instruments de musique",
-            "nom_TDM": "Almah (et Alamot) des jeunes filles ou des instruments de musique",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 2
-        },
-        {
             "nom_document": "anokhi et ani dans la Torah.pdf",
             "nom_html": "anokhi_et_ani_dans_la_torah.pdf",
-            "nom_affiché": "anokhi et ani dans la Torah",
-            "nom_TDM": "anokhi et ani dans la Torah",
+            "nom_affiché": "&laquo; אֲנֹכִי et אֲנִי  &raquo; dans la Torah. Qui est le sujet ?",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 3
         },
         {
-            "nom_document": "des mots avec un sens abstrait au pluriel.pdf",
-            "nom_html": "des_mots_avec_un_sens_abstrait_au_pluriel.pdf",
-            "nom_affiché": "des mots avec un sens abstrait au pluriel",
-            "nom_TDM": "des mots avec un sens abstrait au pluriel",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 4
-        },
-        {
             "nom_document": "La formule Waw.HYH.Ke.pdf",
             "nom_html": "la_formule_waw.hyh.ke.pdf",
-            "nom_affiché": "La formule Waw.HYH.Ke",
-            "nom_TDM": "La formule Waw.HYH.Ke",
+            "nom_affiché": "La formule &laquo; Waw+Hayah+Ke- &raquo; : וַיְהִי, וְהָיָה __(et diverses autres)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -55,38 +27,78 @@ STRUCTURE = {
         {
             "nom_document": "Le vocabulaire du betail.pdf",
             "nom_html": "le_vocabulaire_du_betail.pdf",
-            "nom_affiché": "Le vocabulaire du betail",
-            "nom_TDM": "Le vocabulaire du betail",
+            "nom_affiché": "Le vocabulaire du bétail",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 6
         },
         {
-            "nom_document": "Les buissons dans la Bible.pdf",
-            "nom_html": "les_buissons_dans_la_bible.pdf",
-            "nom_affiché": "Les buissons dans la Bible",
-            "nom_TDM": "Les buissons dans la Bible",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 7
-        },
-        {
             "nom_document": "petit B.A.BA du vocabulaire biblique.pdf",
             "nom_html": "petit_b.a.ba_du_vocabulaire_biblique.pdf",
-            "nom_affiché": "petit B.A.BA du vocabulaire biblique",
-            "nom_TDM": "petit B.A.BA du vocabulaire biblique",
+            "nom_affiché": "Petit &laquo; B. A. BA &raquo; du vocabulaire biblique",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 8
         },
         {
-            "nom_document": "Yobel – Jubile petite histoire du mot.pdf",
-            "nom_html": "yobel_–_jubile_petite_histoire_du_mot.pdf",
-            "nom_affiché": "Yobel – Jubile petite histoire du mot",
-            "nom_TDM": "Yobel – Jubile petite histoire du mot",
+            "nom_document": "Adam comme Nom propre selon LXX.docx",
+            "nom_html": "adam_comme_nom_propre_selon_lxx.pdf",
+            "nom_affiché": "Adam (אדם) comme nom propre (Ἀδάμ) dans la Septante",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 1
+        },
+        {
+            "nom_document": "Almah et Alamot  des jeunes filles ou des instruments de musique.docx",
+            "nom_html": "almah_et_alamot__des_jeunes_filles_ou_des_instruments_de_musique.pdf",
+            "nom_affiché": "&laquo; Almah (et Alamot) &raquo; des jeunes filles ou des instruments de musique",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 2
+        },
+        {
+            "nom_document": "Buissons et épineux dans la Bible.docx",
+            "nom_html": "buissons_et_epineux_dans_la_bible.pdf",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 7
+        },
+        {
+            "nom_document": "des mots avec un sens abstrait au pluriel.docx",
+            "nom_html": "des_mots_avec_un_sens_abstrait_au_pluriel.pdf",
+            "nom_affiché": "Des mots avec un sens abstrait au pluriel",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 4
+        },
+        {
+            "nom_document": "Larmes et pleurs.Les mots de la Bible.docx",
+            "nom_html": "larmes_et_pleurs.les_mots_de_la_bible.pdf",
+            "nom_affiché": "Larmes et pleurs - Les mots de la Bible",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 10
+        },
+        {
+            "nom_document": "Yobel-Jubilé.Petite histoire du mot.docx",
+            "nom_html": "yobel-jubile.petite_histoire_du_mot.pdf",
+            "nom_affiché": "Yobel-Jubilé - Petite histoire du mot",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -101,5 +113,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

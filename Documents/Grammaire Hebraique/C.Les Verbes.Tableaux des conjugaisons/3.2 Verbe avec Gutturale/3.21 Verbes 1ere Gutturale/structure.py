@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -43,16 +45,6 @@ STRUCTURE = {
             "position": 4
         },
         {
-            "nom_document": "3.211.a1 vb 1ere gutt. type Avad.pdf",
-            "nom_html": "3.211.a1_vb_1ere_gutt._type_avad.pdf",
-            "nom_affiché": "3.211.a1 vb 1ere gutt. type Avad",
-            "nom_TDM": "3.211.a1 vb 1ere gutt. type Avad",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 5
-        },
-        {
             "nom_document": "3.211.a1+ vb 1ere gutt. type Avad detaille.pdf",
             "nom_html": "3.211.a1+_vb_1ere_gutt._type_avad_detaille.pdf",
             "nom_affiché": "3.211.a1+ vb 1ere gutt. type Avad detaille",
@@ -60,7 +52,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 6
+            "position": 5
         },
         {
             "nom_document": "3.211.a2 vb 1ere gutt. type Hamal.pdf",
@@ -133,16 +125,6 @@ STRUCTURE = {
             "position": 13
         },
         {
-            "nom_document": "3.214.ab vb 1ere Resh. type radaf rakev.pdf",
-            "nom_html": "3.214.ab_vb_1ere_resh._type_radaf_rakev.pdf",
-            "nom_affiché": "3.214.ab vb 1ere Resh. type radaf rakev",
-            "nom_TDM": "3.214.ab vb 1ere Resh. type radaf rakev",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 14
-        },
-        {
             "nom_document": "3.214.R1 Repertoire des vb avec 1ere resh.pdf",
             "nom_html": "3.214.r1_repertoire_des_vb_avec_1ere_resh.pdf",
             "nom_affiché": "3.214.R1 Repertoire des vb avec 1ere resh",
@@ -151,6 +133,26 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 15
+        },
+        {
+            "nom_document": "3.211.a1 vb 1ere gutt. type Avad.docx",
+            "nom_html": "3.211.a1_vb_1ere_gutt._type_avad.pdf",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 16
+        },
+        {
+            "nom_document": "3.214.ab vb 1ere Resh. type radaf rakev.docx",
+            "nom_html": "3.214.ab_vb_1ere_resh._type_radaf_rakev.pdf",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 17
         }
     ],
     "titre_dossier": "3.21 Verbes 1ere Gutturale",
@@ -161,5 +163,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

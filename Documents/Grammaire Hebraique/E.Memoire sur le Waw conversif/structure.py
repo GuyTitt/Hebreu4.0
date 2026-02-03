@@ -5,8 +5,8 @@ STRUCTURE = {
         {
             "nom_document": "Memoire corrige 2006.Encart 1.pdf",
             "nom_html": "memoire_corrige_2006.encart_1.pdf",
-            "nom_affiché": "Memoire corrige 2006.Encart 1",
-            "nom_TDM": "Memoire corrige 2006.Encart 1",
+            "nom_affiché": "Mémoire - Encart pour tome 1",
+            "nom_TDM": "Mémoire - Encart pour tome 1",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -15,8 +15,8 @@ STRUCTURE = {
         {
             "nom_document": "Memoire corrige 2006.Encart 2.pdf",
             "nom_html": "memoire_corrige_2006.encart_2.pdf",
-            "nom_affiché": "Memoire corrige 2006.Encart 2",
-            "nom_TDM": "Memoire corrige 2006.Encart 2",
+            "nom_affiché": "Mémoire - Encart pour tome 2",
+            "nom_TDM": "Mémoire - Encart pour tome 2",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -25,8 +25,8 @@ STRUCTURE = {
         {
             "nom_document": "Memoire corrige 2006.Tome 1.pdf",
             "nom_html": "memoire_corrige_2006.tome_1.pdf",
-            "nom_affiché": "Memoire corrige 2006.Tome 1",
-            "nom_TDM": "Memoire corrige 2006.Tome 1",
+            "nom_affiché": "Memoire - Tome 1",
+            "nom_TDM": "Memoire - Tome 1",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -35,15 +35,15 @@ STRUCTURE = {
         {
             "nom_document": "Memoire corrige 2006.Tome 2.pdf",
             "nom_html": "memoire_corrige_2006.tome_2.pdf",
-            "nom_affiché": "Memoire corrige 2006.Tome 2",
-            "nom_TDM": "Memoire corrige 2006.Tome 2",
+            "nom_affiché": "Memoire - Tome 2",
+            "nom_TDM": "Memoire - Tome 2",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 4
         }
     ],
-    "titre_dossier": "E.Memoire sur le Waw conversif",
+    "titre_dossier": "Mémoire sur le Waw conversif",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
@@ -51,5 +51,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

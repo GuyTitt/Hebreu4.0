@@ -4,9 +4,9 @@ STRUCTURE = {
         {
             "nom_document": "3.51 Verbes Pe Yod ou Waw",
             "nom_html": "3.51_verbes_pe_yod_ou_waw",
-            "nom_affiché": "3.51 Verbes Pe Yod ou Waw",
-            "nom_navigation": "3.51 Verbes Pe Yod ou Waw",
-            "nom_TDM": "3.51 Verbes Pe Yod ou Waw",
+            "nom_affiché": "Le verbe avec 1<sup>ère</sup> radicale Yod ou Waw (= פ״י ou פ״ו)",
+            "nom_navigation": "{{nom_affiché}}",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -15,9 +15,9 @@ STRUCTURE = {
         {
             "nom_document": "3.52 Verbes Ayin Yod ou Waw",
             "nom_html": "3.52_verbes_ayin_yod_ou_waw",
-            "nom_affiché": "3.52 Verbes Ayin Yod ou Waw",
-            "nom_navigation": "3.52 Verbes Ayin Yod ou Waw",
-            "nom_TDM": "3.52 Verbes Ayin Yod ou Waw",
+            "nom_affiché": "Le verbe avec 2<sup>ème</sup> radicale Yod ou Waw (= עי ou ע״ו)",
+            "nom_navigation": "{{nom_affiché}}",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -26,9 +26,9 @@ STRUCTURE = {
         {
             "nom_document": "3.53 Verbes Lamed Yod ou Waw",
             "nom_html": "3.53_verbes_lamed_yod_ou_waw",
-            "nom_affiché": "3.53 Verbes Lamed Yod ou Waw",
-            "nom_navigation": "3.53 Verbes Lamed Yod ou Waw",
-            "nom_TDM": "3.53 Verbes Lamed Yod ou Waw",
+            "nom_affiché": "Le verbe avec 3<sup>ème</sup> radicale Yod ou Waw = ל״ה (quiescent)",
+            "nom_navigation": "{{nom_affiché}}",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -44,5 +44,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

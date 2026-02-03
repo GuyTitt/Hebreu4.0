@@ -1,89 +1,61 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
         {
             "nom_document": "Amorces de la Trinité dans le N.T.docx",
-            "nom_html": "amorces_de_la_trinite_dans_le_n.t.docx",
-            "nom_affiché": "Amorces de la Trinité dans le N.T",
-            "nom_TDM": "Amorces de la Trinité dans le N.T",
+            "nom_html": "amorces_de_la_trinite_dans_le_n.t.pdf",
+            "nom_affiché": "Amorces de la Trinit&eacute; dans le &laquo; Nouveau testament &raquo;",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 1
         },
         {
-            "nom_document": "amorces_de_la_trinite_dans_le_n.t.pdf",
-            "nom_html": "amorces_de_la_trinite_dans_le_n.t.pdf",
-            "nom_affiché": "amorces_de_la_trinite_dans_le_n.t",
-            "nom_TDM": "amorces_de_la_trinite_dans_le_n.t",
+            "nom_document": "Credo baptismal dialogué.docx",
+            "nom_html": "credo_baptismal_dialogue.pdf",
+            "nom_affiché": "Credo baptismal dialogué",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 2
         },
         {
-            "nom_document": "Credo baptismal dialogué.docx",
-            "nom_html": "credo_baptismal_dialogue.docx",
-            "nom_affiché": "Credo baptismal dialogué",
-            "nom_TDM": "Credo baptismal dialogué",
+            "nom_document": "Credo de Nicee-Constantinople.trilingue.docx",
+            "nom_html": "credo_de_nicee-constantinople.trilingue.pdf",
+            "nom_affiché": "Credo de Nic&eacute;e-Constantinople__(trilingue)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 3
         },
         {
-            "nom_document": "Credo de Nicee-Constantinople.trilingue.docx",
-            "nom_html": "credo_de_nicee-constantinople.trilingue.docx",
-            "nom_affiché": "Credo de Nicee-Constantinople.trilingue",
-            "nom_TDM": "Credo de Nicee-Constantinople.trilingue",
+            "nom_document": "Credo liturgiques français.Synopse.docx",
+            "nom_html": "credo_liturgiques_francais.synopse.pdf",
+            "nom_affiché": "Credo liturgiques français __(Synopse)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 4
         },
         {
-            "nom_document": "Credo liturgiques français.Synopse.docx",
-            "nom_html": "credo_liturgiques_francais.synopse.docx",
-            "nom_affiché": "Credo liturgiques français.Synopse",
-            "nom_TDM": "Credo liturgiques français.Synopse",
+            "nom_document": "Définition de Chalcédoine sur les deux natures du Christ.docx",
+            "nom_html": "definition_de_chalcedoine_sur_les_deux_natures_du_christ.pdf",
+            "nom_affiché": "Définition de Chalcédoine sur les deux natures du Christ",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 5
-        },
-        {
-            "nom_document": "credo_baptismal_dialogue.pdf",
-            "nom_html": "credo_baptismal_dialogue.pdf",
-            "nom_affiché": "credo_baptismal_dialogue",
-            "nom_TDM": "credo_baptismal_dialogue",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 6
-        },
-        {
-            "nom_document": "credo_de_nicee-constantinople.trilingue.pdf",
-            "nom_html": "credo_de_nicee-constantinople.trilingue.pdf",
-            "nom_affiché": "credo_de_nicee-constantinople.trilingue",
-            "nom_TDM": "credo_de_nicee-constantinople.trilingue",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 7
-        },
-        {
-            "nom_document": "credo_liturgiques_francais.synopse.pdf",
-            "nom_html": "credo_liturgiques_francais.synopse.pdf",
-            "nom_affiché": "credo_liturgiques_francais.synopse",
-            "nom_TDM": "credo_liturgiques_francais.synopse",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 8
         }
     ],
-    "titre_dossier": "L'elaboration du Credo à partir du NT",
+    "titre_dossier": "L'&eacute;laboration du Credo à partir du &laquo; Nouveau testament &raquo;",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
@@ -91,5 +63,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}",
 }

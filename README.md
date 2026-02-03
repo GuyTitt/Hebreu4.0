@@ -1,6 +1,6 @@
-Mise à jour de la version au 22 Décembre 2025
+Mise à jour de la version au 4 Février 2026
 
-adaptés pour github et local.
+Adaptés pour github et local.
 
 Pour voir le résultat :
 

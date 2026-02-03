@@ -1,4 +1,6 @@
-# STRUCTURE.py – Généré automatiquement
+# STRUCTURE.py – Corrigé automatiquement
+# Templates {{variable}} pour flexibilité
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -94,7 +96,7 @@ STRUCTURE = {
         },
         {
             "nom_document": "3.71.251 vb Pe gut. 2 resh. 3 He.'arah.pdf",
-            "nom_html": "3.71.251_vb_pe_gut._2_resh._3_he.'arah.pdf",
+            "nom_html": "3.71.251_vb_pe_gut._2_resh._3_he._arah.pdf",
             "nom_affiché": "3.71.251 vb Pe gut. 2 resh. 3 He.'arah",
             "nom_TDM": "3.71.251 vb Pe gut. 2 resh. 3 He.'arah",
             "ajout_affichage": True,

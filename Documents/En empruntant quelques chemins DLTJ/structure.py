@@ -1,96 +1,88 @@
-# STRUCTURE.py – Généré automatiquement
+# STRUCTURE.py – Corrigé automatiquement v2.0
+# Templates {{variable}} pour flexibilité
+
 STRUCTURE = {
     "dossiers": [
         {
-            "nom_document": "Chants hebreux et Yiddish. Partitions",
-            "nom_html": "chants_hebreux_et_yiddish._partitions",
-            "nom_affiché": "Chants hebreux et Yiddish. Partitions",
-            "nom_navigation": "Chants hebreux et Yiddish. Partitions",
-            "nom_TDM": "Chants hebreux et Yiddish. Partitions",
+            "nom_document": "petit guide pour les eventuels egares",
+            "nom_html": "petit_guide_pour_les_eventuels_egares",
+            "nom_affiché": "Petit guide pour les éventuels égarés",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 1
+            "position": 1,
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Le four d'Aknai",
-            "nom_html": "le_four_d'aknai",
-            "nom_affiché": "Le four d'Aknai",
-            "nom_navigation": "Le four d'Aknai",
-            "nom_TDM": "Le four d'Aknai",
+            "nom_html": "le_four_d_aknai",
+            "nom_affiché": "Le four d'Aknaï",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 2
+            "position": 2,
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Na'aseh we-Nishma'. Midrash",
-            "nom_html": "na'aseh_we-nishma'._midrash",
-            "nom_affiché": "Na'aseh we-Nishma'. Midrash",
-            "nom_navigation": "Na'aseh we-Nishma'. Midrash",
-            "nom_TDM": "Na'aseh we-Nishma'. Midrash",
+            "nom_html": "na_aseh_we-nishma_._midrash",
+            "nom_affiché": "Na'aseh we-Nishma' __(Midrash)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 3
-        },
-        {
-            "nom_document": "petit guide pour les eventuels egares",
-            "nom_html": "petit_guide_pour_les_eventuels_egares",
-            "nom_affiché": "petit guide pour les eventuels egares",
-            "nom_navigation": "petit guide pour les eventuels egares",
-            "nom_TDM": "petit guide pour les eventuels egares",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 4
+            "position": 3,
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Quatre sont entrés au Pardes",
             "nom_html": "quatre_sont_entres_au_pardes",
-            "nom_affiché": "Quatre sont entrés au Pardes",
-            "nom_navigation": "Quatre sont entrés au Pardes",
-            "nom_TDM": "Quatre sont entrés au Pardes",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 7
+            "position": 4,
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Sujets en vrac",
             "nom_html": "sujets_en_vrac",
-            "nom_affiché": "Sujets en vrac",
-            "nom_navigation": "Sujets en vrac",
-            "nom_TDM": "Sujets en vrac",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 8
+            "position": 5,
+            "nom_navigation": "{{nom_document}}"
+        },
+        {
+            "nom_document": "Chants hebreux et Yiddish. Partitions",
+            "nom_html": "chants_hebreux_et_yiddish._partitions",
+            "nom_affiché": "Chants hébreux et Yiddish__(Partitions)__",
+            "nom_TDM": "Chants hébreux et Yiddish",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 6,
+            "nom_navigation": "Chants hebreux et Yiddish __(Partitions)__"
         }
     ],
     "fichiers": [
         {
             "nom_document": "Petit équipement de l'emprunteur novice.docx",
-            "nom_html": "petit_equipement_de_l'emprunteur_novice.docx",
+            "nom_html": "petit_equipement_de_l_emprunteur_novice.pdf",
             "nom_affiché": "Petit équipement de l'emprunteur novice",
-            "nom_TDM": "Petit équipement de l'emprunteur novice",
-            "ajout_affichage": True,
-            "affiché_index": True,
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": False,
+            "affiché_index": False,
             "affiché_TDM": True,
-            "position": 5
-        },
-        {
-            "nom_document": "petit_equipement_de_l'emprunteur_novice.pdf",
-            "nom_html": "petit_equipement_de_l'emprunteur_novice.pdf",
-            "nom_affiché": "petit_equipement_de_l'emprunteur_novice",
-            "nom_TDM": "petit_equipement_de_l'emprunteur_novice",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 6
+            "position": 7
         }
     ],
-    "titre_dossier": "En empruntant quelques chemins DLTJ",
+    "titre_dossier": "En empruntant quelques chemins dans la tradition juive",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
@@ -98,5 +90,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

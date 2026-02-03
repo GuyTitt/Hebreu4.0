@@ -1,49 +1,53 @@
-# Début de "config.py" version "2.2"
+# config.py — Version 3.0
+# Configuration globale du générateur de site
 
 CONFIG = {
-    "version": "2.2",
-    "titre_site": "Hébreu Biblique v4.0",
-    "fichier_index": "index.html",
-    "classe_dossier": "dossier-item",
-    "classe_fichier": "fichier-pdf",
-    "lien_souligné_index": False,    # False = pas de soulignement dans les pages index
-    "lien_souligné_TDM": False,      # False = pas de soulignement dans la TDM
-    "haut_page": [
-        "<div><!-- debut haut_page -->",
-#        "<div class=\"monTitre\">Hébreu biblique</div>",
-#        "<div class=\"monSousTitre\">Mes dossiers partagés</div>",
-        "<!-- fin haut_page --></div>",
-    ],
-    "bas_page": [
-        "<div><!-- debut bas_page -->",
-#        "<div>bas de la page</div>",
-        '<footer><a href="mailto:fraboulanger@orange.fr" class="btn-mail">Pour me joindre</a></footer>',
-        "<!-- fin bas_page --></div>",
-    ],
-    "navigation": {
-        "sous_dossiers_position": "gauche",
-        "afficher_sommaire": True
-    },
-    "affichage": {
-        "afficher_icones": True,
-        "table_align": "centre",
-        "table_largeur_max": "80%"
-    },
-    "couleurs": {
-        "dossiers": "#0066cc",
-        "pdf": "#c0392b",
-        "images": "#27ae60"
-    },
-    "ignorer": [
-        "nppBackup", ".git", ".gitignore", "Thumbs.db",
-        "entete_general.html", "pied_general.html",
-        "entete.html", "pied.html",
-        "index.html", "style.css","__pycache__"
-    ],
-    "extensions_acceptees": ["pdf","doc","docx","html","htm","txt",""],
-    "dossier_tdm": "TDM",
+    # ========================================
+    # TITRES ET LABELS
+    # ========================================
+    "titre_site": "Hébreu biblique",
+    
+    # ========================================
+    # AFFICHAGE DOSSIERS/FICHIERS
+    # ========================================
+    # Format : [préfixe_dossier, suffixe_dossier, préfixe_fichier, suffixe_fichier]
     "ajout_affichage": ["📁 ", "", "📘 ", ""],
-    "logging": ["console", "generation.log"]  # "console", "fichier.log", ou les deux
+    
+    # ========================================
+    # STRUCTURE ET NAVIGATION
+    # ========================================
+    "dossier_tdm": "TDM",
+    "voir_structure": False,  # Ajoute commentaires HTML structure
+    "lien_souligné_index": False,
+    
+    # ========================================
+    # EXTENSIONS ACCEPTÉES
+    # ========================================
+    "extensions_acceptees": ["pdf", "doc", "docx", "html", "htm", "txt", "jpg", "jpeg", "png", "gif"],
+    
+    # ========================================
+    # DOSSIERS À IGNORER
+    # ========================================
+    "ignorer": ["nppBackup", ".git", ".github", "__pycache__"],
+    
+    # ========================================
+    # CONVERSION PDF (v23.1)
+    # ========================================
+    # Options :
+    # - True : Regénérer TOUS les PDF
+    # - "JJ/MM/AAAA" : Regénérer si DOCX modifié après cette date
+    # - False : Comportement normal (PDF absent ou DOCX plus récent)
+    "regeneration": False,
+    
+    # Regénérer PDF créés aujourd'hui (erreurs possibles)
+    "regenerer_pdf_aujourd_hui": False,
+    
+    # ========================================
+    # CONTENU GLOBAL HAUT/BAS PAGE
+    # ========================================
+    "haut_page": [],
+    
+    "bas_page": [],
 }
 
-# Fin de "config.py" version "2.2"
+# Fin config.py v3.0

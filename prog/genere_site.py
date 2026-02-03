@@ -1,526 +1,545 @@
-# genere_site.py — Version 21.9
+# genere_site.py — Version 23.4
 
-version = ("genere_site.py", "21.9")
+version = ("genere_site.py", "23.4")
 
-# Importation des librairies
+"""
+Générateur de site statique - Version 23.4
+
+Correction MAJEURE v23.4:
+- Ordre exécution corrigé :
+  1. Scanner DOCUMENTS → Générer PDF manquants
+  2. Mettre à jour STRUCTURE.py
+  3. Générer index.html dans HTML
+  4. Copier fichiers vers HTML
+  
+WORKFLOW CORRECT:
+Pour chaque dossier dans DOCUMENTS:
+  1. Lister fichiers DOCX et PDF
+  2. Générer PDF manquants (DOCX→PDF dans DOCUMENTS)
+  3. Scanner dossier et mettre à jour STRUCTURE.py
+  4. Générer index.html dans HTML
+  
+Ensuite:
+  5. Copier tous fichiers (PDF, images, etc.) vers HTML
+"""
+
 import os
-import json
 import shutil
 import unicodedata
-import re
-import psutil
 import tempfile
+import psutil
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Any
-from bs4 import BeautifulSoup  # Pour prettify des index.html
+from bs4 import BeautifulSoup
 
-# Conversion .doc/.docx → .pdf via Microsoft Word (Windows uniquement)
+# Import module conversion PDF
 try:
-    from win32com.client import Dispatch
-    word_app = Dispatch("Word.Application")
-    word_app.Visible = False
+    from docx2pdf import convertir_docx_vers_pdf, HAS_WIN32COM
+    DOCX2PDF_DISPONIBLE = True
 except ImportError:
-    word_app = None
+    DOCX2PDF_DISPONIBLE = False
+    HAS_WIN32COM = False
+    print("AVERTISSEMENT : docx2pdf.py non trouvé")
 
+# Import configuration et modules
 from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
 from lib1.config import CONFIG
+from lib1 import html_utils as html
+from lib1 import structure_utils as struct
+from lib1 import pdf_utils as pdf
 
 print(f"[Version] {version[0]} — {version[1]}")
 
-# Acquisition des constantes
-def lire(variable: dict, element: str, defaut: Any) -> Any:
-    """Lit une valeur dans un dictionnaire, retourne la valeur par défaut sinon.
+# ============================================================================
+# CONSTANTES
+# ============================================================================
 
-    Args:
-        variable (dict): Dictionnaire source.
-        element (str): Clé recherchée.
-        defaut (Any): Valeur retournée si la clé est absente.
-
-    Returns:
-        Any: Valeur trouvée ou valeur par défaut.
-    """
-    return variable.get(element, defaut)
-
-STYLE_CSS_SRC = Path(__file__).parent / "lib1" / "style.css"
-IGNORER = set(lire(CONFIG, "ignorer", [])) | {"__pycache__", ".pyc", "structure.py", r"~\$"}
+IGNORER = set(CONFIG.get("ignorer", [])) | {"__pycache__", ".pyc", "STRUCTURE.py", r"~\$"}
 FICHIERS_ENTETE_PIED = {"entete.html", "entete_general.html", "pied.html", "pied_general.html"}
-EXTENSIONS_ACCEPTEES = set(lire(CONFIG, "extensions_acceptees", ["pdf", "doc", "docx", "html", "htm", "txt"]))
-DOSSIER_TDM = lire(CONFIG, "dossier_tdm", "TDM")
-AJOUT = lire(CONFIG, "ajout_affichage", ["", "", "", ""])
-voir_structure = lire(CONFIG, "voir_structure", False)
-lien_souligné_index = lire(CONFIG, "lien_souligné_index", False)
+EXTENSIONS_ACCEPTEES = set(CONFIG.get("extensions_acceptees", ["pdf", "html", "htm", "txt"]))
+EXTENSIONS_COPIABLES = {"pdf", "html", "htm", "jpg", "jpeg", "png", "gif", "css", "js"}
+DOSSIER_TDM = CONFIG.get("dossier_tdm", "TDM")
+AJOUT_AFFICHAGE = CONFIG.get("ajout_affichage", ["", "", "", ""])
+VOIR_STRUCTURE = CONFIG.get("voir_structure", False)
+LIEN_SOULIGNÉ = CONFIG.get("lien_souligné_index", False)
 
 log_file = Path("generation.log")
-log_file.write_text(f"--- DÉBUT GÉNÉRATION — {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ---\n", encoding="utf-8")
+log_file.write_text(
+    f"--- GÉNÉRATION v{version[1]} — {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ---\n",
+    encoding="utf-8"
+)
 
-# Fonctions utilitaires
+# ============================================================================
+# UTILITAIRES
+# ============================================================================
+
 def log(msg: str) -> None:
-    """Écrit un message dans la console et dans generation.log.
-
-    Args:
-        msg (str): Message à afficher.
-    """
+    """Log console + fichier."""
     print(msg)
     with open(log_file, "a", encoding="utf-8") as f:
         f.write(msg + "\n")
 
 def normaliser_nom(nom: str) -> str:
-    """Normalise un nom pour URL (minuscules, underscore, sans accent).
-
-    Args:
-        nom (str): Nom original.
-
-    Returns:
-        str: Nom normalisé.
-    """
+    """Normalise nom pour URL."""
     nom = unicodedata.normalize('NFD', nom)
     nom = ''.join(c for c in nom if unicodedata.category(c) != 'Mn')
-    return nom.replace(" ", "_").lower()
-
-def appliquer_style(texte: str) -> str:
-    """Applique les balises Markdown-like au texte.
-
-    Supporte :
-    - **gras**
-    - __italique__
-    - --souligné--
-    - ~~barré~~
-    - [couleur]texte[/couleur]
-
-    Args:
-        texte (str): Texte brut contenant les balises.
-
-    Returns:
-        str: Texte converti en HTML.
-    """
-    texte = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', texte)
-    texte = re.sub(r'__(.*?)__', r'<em>\1</em>', texte)
-    texte = re.sub(r'--(.*?--)', r'<u>\1</u>', texte)
-    texte = re.sub(r'~~(.*?)~~', r'<del>\1</del>', texte)
-
-    couleurs = {"rouge": "red", "bleu": "blue", "vert": "green", "jaune": "gold",
-                "violet": "purple", "orange": "orange", "gris": "gray", "noir": "black"}
-    for nom, code in couleurs.items():
-        texte = texte.replace(f"[{nom}]", f'<span style="color:{code}">')
-        texte = texte.replace(f"[/{nom}]", "</span>")
-
-    texte = re.sub(r'\[couleur:(#[0-9a-fA-F]{6}|rgba?\([^)]+\))\]', lambda m: f'<span style="color:{m.group(1)}">', texte)
-    texte = texte.replace("[/couleur]", "</span>")
-    return texte
-
-def deb_html(titre: str) -> str:
-    """Générateur départ html."""
-    return f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8"/>
-    <title>{titre}</title>
-    <link href="{BASE_PATH}/style.css" rel="stylesheet"/>
-</head>
-<body>"""
-
-def fin_html() -> str:
-    """Générateur fin html."""
-    return """</body>
-</html>"""
-
-def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun: str) -> str:
-    """Lit un fichier HTML avec fallback à la racine pour entete_general et pied_general."""
-    local = dossier / fichier
-    if local.exists():
-        modele = local
-    else:
-        if fichier in ("entete_general.html", "pied_general.html"):
-            racine = Path(DOSSIER_DOCUMENTS)
-            modele = racine / fichier
-            if not modele.exists():
-                return ""
-        else:
-            return ""
-
-    with open(modele, "r", encoding="utf-8") as f:
-        h = f.read()
-
-    if voir_structure:
-        h = f"<div><!-- début {position}{commun} -->{h}<!-- fin {position}{commun} --></div>"
-    return h
-
-def charger_structure(dossier: Path) -> Dict[str, Any]:
-    """Charge le fichier STRUCTURE.py d'un dossier s'il existe."""
-    p = dossier / "STRUCTURE.py"
-    if p.exists():
-        try:
-            from importlib.machinery import SourceFileLoader
-            module = SourceFileLoader("STRUCTURE", str(p)).load_module()
-            return module.STRUCTURE
-        except Exception as e:
-            log(f"Erreur lecture STRUCTURE.py dans {dossier} : {e}")
-    return {"dossiers": [], "fichiers": []}
-
-def trouver_nom_navigation(parent_dossier: Path, nom_dossier: str) -> str:
-    """Retourne le nom_navigation du dossier depuis le STRUCTURE.py du parent.
-
-    Args:
-        parent_dossier (Path): Dossier parent contenant le STRUCTURE.py.
-        nom_dossier (str): Nom du dossier enfant.
-
-    Returns:
-        str: nom_navigation ou nom_dossier si absent.
-    """
-    struc = charger_structure(parent_dossier)
-    for item in struc.get("dossiers", []):
-        if item["nom_document"] == nom_dossier:
-            return item.get("nom_navigation", nom_dossier)
-    return nom_dossier
-
-def _generer_navigation(chemin_relatif: List[str]) -> str:
-    """Génère la barre de navigation avec nom_navigation des dossiers parents.
-
-    Args:
-        chemin_relatif (List[str]): Liste des noms de dossiers depuis la racine.
-
-    Returns:
-        str: HTML de la barre de navigation.
-    """
-    nav = f'<nav class="navigation"><div class="gauche"><a href="{BASE_PATH}/index.html" class="monbouton">Accueil</a>'
-    current_parent = Path(DOSSIER_DOCUMENTS)
-    for i in range(len(chemin_relatif) - 1):
-        nom_dossier = chemin_relatif[i]
-        nom_nav = trouver_nom_navigation(current_parent, nom_dossier)
-        lien_parts = [normaliser_nom(p) for p in chemin_relatif[:i+1]]
-        lien = BASE_PATH + "/" + "/".join(lien_parts)
-        nav += f' → <a href="{lien}/index.html" class="monbouton">{appliquer_style(nom_nav)}</a>'
-        current_parent = current_parent / nom_dossier
-    nav += f'</div><div class="droite"><a href="{BASE_PATH}/TDM/index.html" class="monbouton">Sommaire</a></div></nav>'
-    if voir_structure:
-        nav = f"<div><!-- début navigation -->{nav}<!-- fin navigation --></div>"
-    return nav
-
+    nom = nom.replace("'", "_").replace("'", "_")
+    nom = nom.replace(" ", "_")
+    return nom.lower()
 
 def get_word_processes() -> List[Any]:
-    """Retourne la liste des processus Word actifs."""
-    return [proc for proc in psutil.process_iter(['pid', 'name']) if proc.info['name'] and proc.info['name'].upper() == 'WINWORD.EXE']
+    """Retourne processus Word actifs."""
+    return [
+        proc for proc in psutil.process_iter(['pid', 'name'])
+        if proc.info['name'] and proc.info['name'].upper() == 'WINWORD.EXE'
+    ]
 
 def kill_word_processes(processes: List[Any]) -> None:
-    """Ferme proprement les processus Word."""
+    """Ferme processus Word."""
     for proc in processes:
         print(".", end=" ")
         try:
             proc.terminate()
             proc.wait(timeout=5)
         except Exception:
-            proc.kill()
+            try:
+                proc.kill()
+            except:
+                pass
     print(" !")
 
-def traiter_docx(dossier: Path, temp_dir: Path) -> None:
-    """Traite tous les .doc/.docx du dossier : crée PDF au début si nécessaire."""
-    log(f"Traitement .doc/.docx dans {dossier}")
-    entries = list(dossier.iterdir())
-    nb_conversions = 0
-    for entry in entries:
-        if entry.is_file() and entry.suffix.lower() in (".doc", ".docx"):
-            nom_pdf = normaliser_nom(entry.stem + ".pdf")
-            cible_pdf = dossier / nom_pdf
-            if not cible_pdf.exists() or entry.stat().st_mtime > cible_pdf.stat().st_mtime:
-                log(f"Conversion : {entry.name} → {nom_pdf}")
-                cree_pdf(dossier, entry.name, cible_pdf, temp_dir)
-                nb_conversions += 1
-    if nb_conversions == 0:
-        log("Aucune conversion nécessaire")
+def fichier_docx_existe(fichier_pdf: Path, dossier: Path) -> bool:
+    """Vérifie si DOCX correspondant au PDF existe."""
+    stem = fichier_pdf.stem
+    
+    for f in dossier.iterdir():
+        if f.suffix.lower() in ['.doc', '.docx']:
+            docx_stem_norm = normaliser_nom(f.stem)
+            pdf_stem_norm = normaliser_nom(stem)
+            
+            if docx_stem_norm == pdf_stem_norm:
+                return True
+    
+    return False
 
-def cree_pdf(chemin_doc: Path, fichier_doc: str, cible_pdf: Path, temp_dir: Path) -> None:
-    """Convertit un .doc/.docx en .pdf via Word sans modifier la date du .docx original."""
-    processes = get_word_processes()
-    if processes:
-        log("Fermeture processus Word")
-        kill_word_processes(processes)
+# ============================================================================
+# TEMPLATES ET NAVIGATION
+# ============================================================================
 
-    temp_doc = temp_dir / fichier_doc
-    shutil.copy2(chemin_doc / fichier_doc, temp_doc)
+def charger_fichier_html_avec_fallback(dossier: Path, fichier: str, 
+                                       position: str = "", commun: str = "") -> str:
+    """Charge fichier HTML avec templates {{BASE_PATH}} interprétés."""
+    local = dossier / fichier
+    
+    if local.exists():
+        return html.charger_template_html(
+            local,
+            {"BASE_PATH": BASE_PATH},
+            VOIR_STRUCTURE,
+            position,
+            commun
+        )
+    
+    if fichier in ("entete_general.html", "pied_general.html"):
+        racine = Path(DOSSIER_DOCUMENTS) / fichier
+        if racine.exists():
+            return html.charger_template_html(
+                racine,
+                {"BASE_PATH": BASE_PATH},
+                VOIR_STRUCTURE,
+                position,
+                commun
+            )
+    
+    return ""
 
-    if word_app is None:
-        log("Word non disponible — copie simple")
-        shutil.copy2(temp_doc, cible_pdf)
+def trouver_nom_navigation(parent_dossier: Path, nom_dossier: str) -> str:
+    """Retourne nom_navigation depuis STRUCTURE.py parent."""
+    structure = struct.charger_structure(parent_dossier)
+    
+    for item in structure.get("dossiers", []):
+        if item["nom_document"] == nom_dossier:
+            variables = {
+                "nom_document": item["nom_document"],
+                "titre_dossier": structure.get("titre_dossier", "")
+            }
+            resolved = struct.resoudre_templates_runtime(item, variables)
+            return resolved.get("nom_navigation", nom_dossier)
+    
+    return nom_dossier
+
+def generer_navigation_ariane(chemin_relatif: List[str], dossier_documents: Path) -> str:
+    """Génère navigation fil d'Ariane."""
+    if len(chemin_relatif) <= 1:
+        return ""
+    
+    nav_html = f'<nav class="navigation"><div class="gauche">'
+    
+    current_parent = dossier_documents
+    for i in range(len(chemin_relatif) - 1):
+        nom_dossier = chemin_relatif[i]
+        nom_nav = trouver_nom_navigation(current_parent, nom_dossier)
+        
+        lien_parts = [normaliser_nom(p) for p in chemin_relatif[:i+1]]
+        lien = BASE_PATH + "/" + "/".join(lien_parts)
+        
+        nom_nav_html = html.appliquer_mini_markdown(nom_nav)
+        
+        if i > 0:
+            nav_html += ' → '
+        
+        nav_html += f'<a href="{lien}/index.html" class="monbouton">{nom_nav_html}</a>'
+        
+        current_parent = current_parent / nom_dossier
+    
+    nav_html += f'</div></nav>'
+    
+    if VOIR_STRUCTURE:
+        nav_html = f'<div><!-- début navigation -->{nav_html}<!-- fin navigation --></div>'
+    
+    return nav_html
+
+# ============================================================================
+# TRAITEMENT DOSSIERS - STRUCTURE.py
+# ============================================================================
+
+def generer_pdf_manquants(dossier: Path) -> None:
+    """Génère PDF manquants depuis DOCX dans le dossier DOCUMENTS.
+    
+    v23.4: Cette fonction est appelée AVANT mise à jour STRUCTURE.py
+    pour que les PDF soient présents lors du scan.
+    """
+    if not DOCX2PDF_DISPONIBLE:
         return
+    
+    fichiers = list(dossier.iterdir())
+    log(f"Vérification PDF manquants : {dossier}")
+    
+    nb_conv = pdf.traiter_conversions_dossier(
+        dossier,
+        fichiers,
+        normaliser_nom,
+        convertir_docx_vers_pdf,
+        CONFIG,
+        log
+    )
+    
+    if nb_conv > 0:
+        log(f"{nb_conv} PDF généré(s)")
 
-    try:
-        full_path = str(temp_doc.resolve())
-        doc = word_app.Documents.Open(full_path)
-        doc.SaveAs(str(cible_pdf.resolve()), FileFormat=17)
-        doc.Close()
-        log(f"PDF créé : {cible_pdf.name}")
-    except Exception as e:
-        log(f"Conversion échouée {fichier_doc} : {e}")
-        shutil.copy2(temp_doc, cible_pdf)
-
-def est_nouveau_element(struc: dict, nom_document: str, categorie: str) -> bool:
-    """Vérifie si un élément est déjà présent dans la catégorie."""
-    return not any(item["nom_document"] == nom_document for item in struc.get(categorie, []))
-
-def calculer_position_suivante(struc: dict) -> int:
-    """Calcule la position suivante pour un nouvel élément."""
-    all_items = struc.get("dossiers", []) + struc.get("fichiers", [])
-    return max((it.get("position", 0) for it in all_items), default=0) + 1
-
-def ajouter_nouveau_dossier(struc: dict, entry: Path, position: int) -> None:
-    """Ajoute un nouveau dossier à la structure."""
-    item = {
-        "nom_document": entry.name,
-        "nom_html": normaliser_nom(entry.name),
-        "nom_affiché": entry.name,
-        "nom_navigation": entry.name,
-        "nom_TDM": entry.name,
-        "ajout_affichage": True,
-        "affiché_index": True,
-        "affiché_TDM": True,
-        "position": position
-    }
-    struc.setdefault("dossiers", []).append(item)
-    log(f"Nouveau dossier ajouté : {entry.name}")
-
-def ajouter_nouveau_fichier(struc: dict, entry: Path, position: int) -> None:
-    """Ajoute un nouveau fichier à la structure."""
-    stem = entry.stem
-    item = {
-        "nom_document": entry.name,
-        "nom_html": normaliser_nom(entry.name),
-        "nom_affiché": stem,
-        "nom_TDM": stem,
-        "ajout_affichage": True,
-        "affiché_index": True,
-        "affiché_TDM": True,
-        "position": position
-    }
-    struc.setdefault("fichiers", []).append(item)
-    log(f"Nouveau fichier ajouté : {entry.name}")
-
-def _creer_structure_complete(dossier: Path, temp_dir: Path) -> Dict[str, Any]:
-    """Complète structure.py sans écraser les modifications manuelles."""
-    log(f"Traitement dossier : {dossier}")
-    traiter_docx(dossier, temp_dir)
-
-    struc = charger_structure(dossier)
-
-    defaults = {
-        "titre_dossier": dossier.name if dossier != Path(DOSSIER_DOCUMENTS) else CONFIG.get("titre_site", "Site"),
-        "entete_general": True,
-        "pied_general": True,
-        "entete": True,
-        "pied": True,
-        "navigation": True,
-        "haut_page": True,
-        "bas_page": True,
-        "ajout_affichage": True,
-    }
+def mettre_a_jour_structure(dossier: Path) -> Dict[str, Any]:
+    """Met à jour STRUCTURE.py d'un dossier.
+    
+    v23.4: Appelé APRÈS génération PDF, scanne les fichiers
+    réellement présents dans DOCUMENTS.
+    """
+    log(f"Mise à jour STRUCTURE.py : {dossier}")
+    
+    # Charger structure existante
+    structure = struct.charger_structure(dossier)
+    structure = struct.ajouter_defaults_structure(
+        structure,
+        dossier,
+        CONFIG.get("titre_site", "Site")
+    )
+    
+    # Scanner nouveaux éléments
     modified = False
-    for key, value in defaults.items():
-        if key not in struc:
-            struc[key] = value
-            modified = True
-
-    position_suivante = calculer_position_suivante(struc)
-
-    entries = list(dossier.iterdir())
-    for entry in sorted(entries, key=lambda x: x.name.lower()):
+    position_suivante = struct.calculer_position_suivante(structure)
+    
+    entries = sorted(list(dossier.iterdir()), key=lambda x: x.name.lower())
+    
+    for entry in entries:
         if entry.name in IGNORER or entry.name in FICHIERS_ENTETE_PIED:
             continue
-
+        
         if entry.is_file() and entry.suffix.lower() == ".py":
             continue
-
+        
+        # Dossiers
         if entry.is_dir():
-            if est_nouveau_element(struc, entry.name, "dossiers"):
-                ajouter_nouveau_dossier(struc, entry, position_suivante)
+            if not struct.element_existe(structure, entry.name, "dossiers"):
+                struct.ajouter_element_structure(
+                    structure,
+                    entry.name,
+                    normaliser_nom(entry.name),
+                    "dossiers",
+                    position_suivante,
+                    log
+                )
                 position_suivante += 1
                 modified = True
-        elif entry.is_file() and entry.suffix.lower().lstrip(".") in EXTENSIONS_ACCEPTEES:
-            if est_nouveau_element(struc, entry.name, "fichiers"):
-                ajouter_nouveau_fichier(struc, entry, position_suivante)
-                position_suivante += 1
-                modified = True
-
-    struc["dossiers"].sort(key=lambda x: x.get("position", 9999))
-    struc["fichiers"].sort(key=lambda x: x.get("position", 9999))
-
+        
+        # Fichiers
+        elif entry.is_file():
+            ext = entry.suffix.lower().lstrip(".")
+            
+            # v23.4: Traiter DOCX spécialement
+            if ext in ("doc", "docx"):
+                # Vérifier si déjà dans STRUCTURE
+                if not struct.element_existe(structure, entry.name, "fichiers"):
+                    # Ajouter avec nom_html = PDF correspondant
+                    nom_pdf_normalise = normaliser_nom(entry.stem + ".pdf")
+                    
+                    element = {
+                        "nom_document": entry.name,
+                        "nom_html": nom_pdf_normalise,
+                        "nom_affiché": "{{nom_document_sans_ext}}",
+                        "nom_TDM": "{{nom_document_sans_ext}}",
+                        "ajout_affichage": True,
+                        "affiché_index": True,
+                        "affiché_TDM": True,
+                        "position": position_suivante
+                    }
+                    
+                    structure.setdefault("fichiers", []).append(element)
+                    position_suivante += 1
+                    modified = True
+                    log(f"  Ajouté DOCX : {entry.name} → {nom_pdf_normalise}")
+                
+                continue  # Ne pas traiter dans EXTENSIONS_ACCEPTEES
+            
+            # v23.4: Ignorer PDF si DOCX existe
+            if ext == "pdf":
+                if fichier_docx_existe(entry, dossier):
+                    log(f"  PDF ignoré : {entry.name} (dérivé de DOCX)")
+                    continue
+            
+            if ext in EXTENSIONS_ACCEPTEES:
+                if not struct.element_existe(structure, entry.name, "fichiers"):
+                    struct.ajouter_element_structure(
+                        structure,
+                        entry.name,
+                        normaliser_nom(entry.name),
+                        "fichiers",
+                        position_suivante,
+                        log
+                    )
+                    position_suivante += 1
+                    modified = True
+                    log(f"  Ajouté : {entry.name}")
+    
+    # Sauvegarder si modifié
     if modified:
-        content = f"""# STRUCTURE.py – Généré automatiquement
-STRUCTURE = {json.dumps(struc, ensure_ascii=False, indent=4).replace("true", "True").replace("false", "False")}
-"""
-        p = dossier / "STRUCTURE.py"
-        p.write_text(content, encoding="utf-8")
-        log(f"STRUCTURE.py mis à jour (nouveaux éléments) : {dossier}")
+        struct.sauvegarder_structure(dossier, structure)
+        log(f"✓ STRUCTURE.py mis à jour")
     else:
-        log(f"STRUCTURE.py inchangé : {dossier}")
+        log(f"✓ STRUCTURE.py inchangé")
+    
+    return structure
 
-    return struc
+# ============================================================================
+# GÉNÉRATION PAGES HTML
+# ============================================================================
 
-def copier_fichier_source(src: Path, dst: Path) -> None:
-    """Copie un fichier source vers la destination HTML (sans STRUCTURE.py)."""
-    if src.name == "STRUCTURE.py":
-        return  # Ne jamais copier STRUCTURE.py dans html
-    shutil.copy2(src, dst)
+def generer_page_index(dossier_documents: Path) -> None:
+    """Génère index.html pour un dossier.
+    
+    v23.4: Assume que STRUCTURE.py est déjà à jour.
+    """
+    log(f"Génération index.html : {dossier_documents}")
+    
+    # Charger structure (déjà à jour)
+    structure = struct.charger_structure(dossier_documents)
+    
+    rel_path = dossier_documents.relative_to(DOSSIER_DOCUMENTS)
+    
+    # Préparer éléments
+    elements = []
+    
+    for item in structure.get("dossiers", []):
+        variables = {
+            "nom_document": item["nom_document"],
+            "titre_dossier": structure.get("titre_dossier", "")
+        }
+        resolved = struct.resoudre_templates_runtime(item, variables)
+        resolved["genre"] = "dossier"
+        elements.append(resolved)
+    
+    for item in structure.get("fichiers", []):
+        variables = {
+            "nom_document": item["nom_document"],
+            "titre_dossier": structure.get("titre_dossier", "")
+        }
+        resolved = struct.resoudre_templates_runtime(item, variables)
+        resolved["genre"] = "fichier"
+        elements.append(resolved)
+    
+    elements.sort(key=lambda x: x.get("position", 9999))
+    elements = struct.filtrer_elements_existants(dossier_documents, elements, log)
+    
+    # Assemblage HTML
+    html_parts = []
+    
+    titre = structure.get("titre_dossier", dossier_documents.name)
+    html_parts.append(html.generer_debut_html(titre, BASE_PATH))
+    
+    if structure.get("haut_page", False):
+        contenu = "".join(CONFIG.get("haut_page", []))
+        if contenu:
+            html_parts.append(contenu)
+    
+    if structure.get("entete_general", False):
+        html_parts.append(
+            charger_fichier_html_avec_fallback(dossier_documents, "entete_general.html", "début", "_général")
+        )
+    
+    if structure.get("navigation", False):
+        nav = generer_navigation_ariane(list(rel_path.parts), Path(DOSSIER_DOCUMENTS))
+        if nav:
+            html_parts.append(nav)
+    
+    if structure.get("entete", False):
+        html_parts.append(
+            charger_fichier_html_avec_fallback(dossier_documents, "entete.html", "début", "")
+        )
+    
+    titre_table = structure.get("titre_table", "{{titre_dossier}}")
+    if "{{" in titre_table:
+        titre_table = titre_table.replace("{{titre_dossier}}", titre)
+    
+    if titre_table:
+        html_parts.append(html.generer_titre_table(titre_table))
+    
+    html_parts.append(
+        html.generer_table_index(elements, AJOUT_AFFICHAGE, LIEN_SOULIGNÉ)
+    )
+    
+    if structure.get("pied", False):
+        html_parts.append(
+            charger_fichier_html_avec_fallback(dossier_documents, "pied.html", "fin", "")
+        )
+    
+    if structure.get("pied_general", False):
+        html_parts.append(
+            charger_fichier_html_avec_fallback(dossier_documents, "pied_general.html", "fin", "_général")
+        )
+    
+    if structure.get("bas_page", False):
+        contenu = "".join(CONFIG.get("bas_page", []))
+        if contenu:
+            html_parts.append(contenu)
+    
+    html_parts.append(html.generer_fin_html(version[1]))
+    
+    # Sauvegarde dans HTML
+    html_brut = "".join(html_parts)
+    html_final = BeautifulSoup(html_brut, 'html.parser').prettify()
+    
+    cible_rel_norm = Path(*(normaliser_nom(part) for part in rel_path.parts))
+    cible = Path(DOSSIER_HTML) / cible_rel_norm
+    cible.mkdir(parents=True, exist_ok=True)
+    
+    (cible / "index.html").write_text(html_final, encoding="utf-8")
+    log(f"✓ index.html généré")
 
-def copie_site(temp_dir: Path) -> None:
-    """Copie les fichiers de documents vers html, sans copier STRUCTURE.py."""
-    log(f"Création du dossier HTML : {DOSSIER_HTML}")
-    if Path(DOSSIER_HTML).exists():
-        shutil.rmtree(DOSSIER_HTML)
-    Path(DOSSIER_HTML).mkdir(parents=True, exist_ok=True)
+# ============================================================================
+# COPIE FICHIERS
+# ============================================================================
 
-    if STYLE_CSS_SRC.exists():
-        shutil.copy2(STYLE_CSS_SRC, Path(DOSSIER_HTML) / "style.css")
-        log("style.css copié")
-
-    arbre_site = _construire_arbre_complet(Path(DOSSIER_DOCUMENTS), temp_dir)
-    tdm_path = Path(DOSSIER_HTML) / DOSSIER_TDM
-    tdm_path.mkdir(parents=True, exist_ok=True)
-    (tdm_path / "structure_site.json").write_text(json.dumps(arbre_site, ensure_ascii=False, indent=4), encoding="utf-8")
-    log("structure_site.json généré")
-
+def copier_fichiers_site() -> None:
+    """Copie fichiers DOCUMENTS → HTML.
+    
+    v23.4: Appelé EN DERNIER, après génération PDF et index.html.
+    """
+    log("Copie fichiers vers HTML")
+    
     for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
         dirs[:] = [d for d in dirs if d not in IGNORER]
-
+        
         rel_path = Path(racine).relative_to(DOSSIER_DOCUMENTS)
         cible_rel_norm = Path(*(normaliser_nom(part) for part in rel_path.parts))
         cible = Path(DOSSIER_HTML) / cible_rel_norm
         cible.mkdir(parents=True, exist_ok=True)
-
-        _creer_structure_complete(Path(racine), temp_dir)
-
+        
         for fichier in files:
             src_file = Path(racine) / fichier
-            copier_fichier_source(src_file, cible / normaliser_nom(fichier))
+            if pdf.est_fichier_copiable(src_file, EXTENSIONS_COPIABLES):
+                dst_file = cible / normaliser_nom(fichier)
+                shutil.copy2(src_file, dst_file)
 
-def _construire_arbre_complet(dossier: Path, temp_dir: Path) -> Dict[str, Any]:
-    """Construit l’arbre complet du site pour structure_site.json."""
-    arbre = {
-        "titre_dossier": dossier.name if dossier != Path(DOSSIER_DOCUMENTS) else CONFIG.get("titre_site", "Site"),
-        "nom_html": normaliser_nom(dossier.name) if dossier != Path(DOSSIER_DOCUMENTS) else "",
-        "dossiers": [],
-        "fichiers": []
-    }
-
-    struc = _creer_structure_complete(dossier, temp_dir)
-
-    for cat in ["dossiers", "fichiers"]:
-        for item in struc.get(cat, []):
-            arbre[cat].append(item.copy())
-
-    for entry in arbre["dossiers"]:
-        entry.update(_construire_arbre_complet(dossier / entry["nom_document"], temp_dir))
-
-    return arbre
-
-def table_index(liste_fils: List[Dict[str, Any]]) -> str:
-    """Génère le HTML de la liste des éléments (dossiers/fichiers)."""
-    style_a = 'text-decoration: none;' if not lien_souligné_index else ''
-    h = []
-    for fils in liste_fils:
-        if not fils.get("affiché_index", True):
-            continue
-        nom_affiché = fils.get("nom_affiché", Path(fils.get("nom_document", "inconnu")).stem)
-        nom_stylé = appliquer_style(nom_affiché)
-        if fils.get("genre") == "dossier":
-            nom = f"{AJOUT[0]}{nom_stylé}{AJOUT[1]}" if fils.get("ajout_affichage", True) else nom_stylé
-            h.append(f'<a class="dossier-item" style="{style_a}" href="{fils["nom_html"]}/index.html">{nom}</a><br>')
-        else:
-            nom = f"{AJOUT[2]}{nom_stylé}{AJOUT[3]}" if fils.get("ajout_affichage", True) else nom_stylé
-            h.append(f'<a class="dossier-item" style="{style_a}" href="{fils["nom_html"]}">{nom}</a><br>')
-    return "".join(h)
-
-def ajouter_haut_page(html_parts: list, struc: dict) -> None:
-    """Ajoute le contenu haut_page global si activé."""
-    if struc.get("haut_page", False):
-        html_parts.append("".join(CONFIG.get("haut_page", [])))
-
-def ajouter_entete_general(html_parts: list, dossier: Path, struc: dict) -> None:
-    """Ajoute entete_general avec fallback si activé."""
-    if struc.get("entete_general", False):
-        html_parts.append(plage_html_avec_fallback(dossier, "entete_general.html", "début", "_général"))
-
-def ajouter_navigation_page(html_parts: list, rel_path: Path, struc: dict) -> None:
-    """Ajoute la navigation si activée."""
-    if struc.get("navigation", False):
-        html_parts.append(_generer_navigation(list(rel_path.parts)))
-
-def ajouter_entete_local(html_parts: list, dossier: Path, struc: dict) -> None:
-    """Ajoute entete local si activé."""
-    if struc.get("entete", False):
-        html_parts.append(plage_html_avec_fallback(dossier, "entete.html", "début", ""))
-
-def ajouter_table(html_parts: list, liste_fils: List[Dict[str, Any]]) -> None:
-    """Ajoute la table des éléments."""
-    html_parts.append(f"<div class=\"table-container\"><table class=\"dossiers\"><tbody><tr><td>{table_index(liste_fils)}</td></tr></tbody></table></div>")
-
-def ajouter_pied_local(html_parts: list, dossier: Path, struc: dict) -> None:
-    """Ajoute pied local si activé."""
-    if struc.get("pied", False):
-        html_parts.append(plage_html_avec_fallback(dossier, "pied.html", "fin", ""))
-
-def ajouter_pied_general(html_parts: list, dossier: Path, struc: dict) -> None:
-    """Ajoute pied_general avec fallback si activé."""
-    if struc.get("pied_general", False):
-        html_parts.append(plage_html_avec_fallback(dossier, "pied_general.html", "fin", "_général"))
-
-def ajouter_bas_page(html_parts: list, struc: dict) -> None:
-    """Ajoute le contenu bas_page global si activé."""
-    if struc.get("bas_page", False):
-        html_parts.append("".join(CONFIG.get("bas_page", [])))
-
-def generer_page_index(dossier: Path, temp_dir: Path) -> None:
-    """Génère index.html pour un dossier avec structure modulaire."""
-    log(f"Génération page : {dossier}")
-    rel_path = dossier.relative_to(DOSSIER_DOCUMENTS)
-    cible_rel_norm = Path(*(normaliser_nom(part) for part in rel_path.parts))
-    cible = Path(DOSSIER_HTML) / cible_rel_norm
-    cible.mkdir(parents=True, exist_ok=True)
-
-    struc = _creer_structure_complete(dossier, temp_dir)
-
-    for item in struc.get("dossiers", []):
-        item["genre"] = "dossier"
-    for item in struc.get("fichiers", []):
-        item["genre"] = "fichier"
-
-    liste_fils = sorted(struc.get("dossiers", []) + struc.get("fichiers", []), key=lambda x: x.get("position", 9999))
-
-    html_parts = []
-    titre = struc.get("titre_dossier", dossier.name)
-    html_parts.append(deb_html(titre))
-
-    ajouter_haut_page(html_parts, struc)
-    ajouter_entete_general(html_parts, dossier, struc)
-    ajouter_navigation_page(html_parts, rel_path, struc)
-    ajouter_entete_local(html_parts, dossier, struc)
-    ajouter_table(html_parts, liste_fils)
-    ajouter_pied_local(html_parts, dossier, struc)
-    ajouter_pied_general(html_parts, dossier, struc)
-    ajouter_bas_page(html_parts, struc)
-
-    html_parts.append(fin_html())
-
-    html_brut = "".join(html_parts)
-    html_prettify = BeautifulSoup(html_brut, 'html.parser').prettify()
-    (cible / "index.html").write_text(html_prettify, encoding="utf-8")
-    log(f"Page générée : {cible / 'index.html'}")
+# ============================================================================
+# MAIN
+# ============================================================================
 
 def main() -> None:
-    """Lance la génération complète du site."""
-    log("=== DÉBUT GÉNÉRATION ===")
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        temp_dir = Path(tmpdirname)
-        copie_site(temp_dir)
-        for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
-            dirs[:] = [d for d in dirs if d not in IGNORER]
-            generer_page_index(Path(racine), temp_dir)
+    """Génération complète - WORKFLOW CORRECT v23.4."""
+    log("=" * 70)
+    log("=== GÉNÉRATION SITE STATIQUE v23.4 ===")
+    log("=" * 70)
+    
+    log(f"Source : {DOSSIER_DOCUMENTS}")
+    log(f"HTML : {DOSSIER_HTML}")
+    log(f"BASE_PATH : {BASE_PATH}")
+    log("")
+    
+    # Config
+    if DOCX2PDF_DISPONIBLE and HAS_WIN32COM:
+        log("✓ Conversion PDF disponible")
+    else:
+        log("✗ Conversion PDF désactivée")
+    log("")
+    
+    # Créer dossier HTML et copier style.css
+    if Path(DOSSIER_HTML).exists():
+        shutil.rmtree(DOSSIER_HTML)
+    Path(DOSSIER_HTML).mkdir(parents=True, exist_ok=True)
+    
+    style_src = Path(__file__).parent / "lib1" / "style.css"
+    if style_src.exists():
+        shutil.copy2(style_src, Path(DOSSIER_HTML) / "style.css")
+    
+    tdm_path = Path(DOSSIER_HTML) / DOSSIER_TDM
+    tdm_path.mkdir(parents=True, exist_ok=True)
+    
+    log("=" * 70)
+    log("PHASE 1 : GÉNÉRATION PDF + MISE À JOUR STRUCTURE.py")
+    log("=" * 70)
+    log("")
+    
+    # PHASE 1 : Pour chaque dossier, générer PDF et mettre à jour STRUCTURE
+    for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
+        dirs[:] = [d for d in dirs if d not in IGNORER]
+        dossier = Path(racine)
+        
+        log(f"--- {dossier} ---")
+        generer_pdf_manquants(dossier)
+        mettre_a_jour_structure(dossier)
+        log("")
+    
+    log("=" * 70)
+    log("PHASE 2 : GÉNÉRATION index.html")
+    log("=" * 70)
+    log("")
+    
+    # PHASE 2 : Générer tous les index.html
+    for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
+        dirs[:] = [d for d in dirs if d not in IGNORER]
+        generer_page_index(Path(racine))
+        log("")
+    
+    log("=" * 70)
+    log("PHASE 3 : COPIE FICHIERS VERS HTML")
+    log("=" * 70)
+    log("")
+    
+    # PHASE 3 : Copier fichiers
+    copier_fichiers_site()
+    
+    # Nettoyage
     processes = get_word_processes()
     if processes:
-        log("Fermeture processus Word résiduels")
+        log("")
+        log("Fermeture Word")
         kill_word_processes(processes)
+    
+    log("")
+    log("=" * 70)
     log("=== FIN GÉNÉRATION ===")
+    log("=" * 70)
 
 if __name__ == "__main__":
     main()
 
-# fin du "genere_site.py" version "21.9"
+# Fin genere_site.py v23.4

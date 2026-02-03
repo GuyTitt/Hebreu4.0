@@ -5,8 +5,8 @@ STRUCTURE = {
         {
             "nom_document": "3.0 Repertoire lexical des verbes hebreux.pdf",
             "nom_html": "3.0_repertoire_lexical_des_verbes_hebreux.pdf",
-            "nom_affiché": "3.0 Repertoire lexical des verbes hebreux",
-            "nom_TDM": "3.0 Repertoire lexical des verbes hebreux",
+            "nom_affiché": "Répertoire lexical des verbes hébreux",
+            "nom_TDM": "Répertoire lexical des verbes hébreux",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -15,15 +15,15 @@ STRUCTURE = {
         {
             "nom_document": "3.0+S Supplement lexique arameen.pdf",
             "nom_html": "3.0+s_supplement_lexique_arameen.pdf",
-            "nom_affiché": "3.0+S Supplement lexique arameen",
-            "nom_TDM": "3.0+S Supplement lexique arameen",
+            "nom_affiché": "Supplément : Répertoire des verbes araméens de la Bible",
+            "nom_TDM": "Supplément : Répertoire des verbes araméens de la Bible",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 2
         }
     ],
-    "titre_dossier": "B.Les Verbes. Repertoire lexical",
+    "titre_dossier": "Les Verbes - Répertoire lexical",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
