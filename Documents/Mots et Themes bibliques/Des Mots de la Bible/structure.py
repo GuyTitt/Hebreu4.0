@@ -138,8 +138,8 @@ STRUCTURE = {
         {
             "nom_document": "Noms au pluriel avec sens abstrait.docx",
             "nom_html": "noms_au_pluriel_avec_sens_abstrait.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document}}",
+            "nom_affiché": "Noms au pluriel avec sens abstrait",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -148,8 +148,8 @@ STRUCTURE = {
         {
             "nom_document": "Petit lexique abstrait-concret.docx",
             "nom_html": "petit_lexique_abstrait-concret.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document}}",
+            "nom_affiché": "{{Petit lexique abstrait-concret}}",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,

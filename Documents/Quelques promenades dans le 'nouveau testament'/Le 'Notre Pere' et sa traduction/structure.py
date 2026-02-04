@@ -6,13 +6,13 @@ STRUCTURE = {
         {
             "nom_document": "Formules liturgiques",
             "nom_html": "formules_liturgiques",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document}}",
+            "nom_affiché": "{{Formules liturgiques}}",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 1,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Source. Evangiles en Grec",
@@ -23,7 +23,7 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 2,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Source. Evangiles en langues orientales",
@@ -34,7 +34,7 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 3,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Source. Evangiles en Latin",
@@ -45,18 +45,18 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 4,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Traductions récentes",
             "nom_html": "traductions_recentes",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document}}",
+            "nom_affiché": "Traductions récentes",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 5,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         }
     ],
     "fichiers": [],

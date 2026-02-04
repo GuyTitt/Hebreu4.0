@@ -61,13 +61,13 @@ STRUCTURE = {
         {
             "nom_document": "La transfiguration. Synopse (en A3)",
             "nom_html": "la_transfiguration._synopse_(en_a3)",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_affiché": "La transfiguration. Synopse __(en A3)__",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 7,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         }
     ],
     "fichiers": [],

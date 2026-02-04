@@ -39,7 +39,7 @@ STRUCTURE = {
         {
             "nom_document": "Quatre sont entrés au Pardes",
             "nom_html": "quatre_sont_entres_au_pardes",
-            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Quatre sont entrés au Pardes",
             "nom_TDM": "{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -50,13 +50,13 @@ STRUCTURE = {
         {
             "nom_document": "Sujets en vrac",
             "nom_html": "sujets_en_vrac",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document}}",
+            "nom_affiché": "Sujets en vrac",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 5,
-            "nom_navigation": "{{nom_document}}"
+            "nom_navigation": "{{nom_affiché}}"
         },
         {
             "nom_document": "Chants hebreux et Yiddish. Partitions",
