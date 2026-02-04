@@ -15,8 +15,8 @@ STRUCTURE = {
         {
             "nom_document": "B.Les Verbes. Repertoire lexical",
             "nom_html": "b.les_verbes._repertoire_lexical",
-            "nom_affiché": "Les Verbes - Répertoire lexical",
-            "nom_navigation": "Les Verbes - Répertoire lexical",
+            "nom_affiché": "Les verbes - Répertoire lexical",
+            "nom_navigation": "Les verbes - Répertoire lexical",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -36,9 +36,9 @@ STRUCTURE = {
         },
         {
             "nom_document": "CD.Les te'amim, pour savourer l'hebreu",
-            "nom_html": "cd.les_te'amim,_pour_savourer_l'hebreu",
+            "nom_html": "cd.les_te_amim,_pour_savourer_l_hebreu",
             "nom_affiché": "Les te'amim, pour savourer l'hébreu",
-            "nom_navigation": "Les te'amim, pour  &laquo; savourer &raquo;  l'hébreu",
+            "nom_navigation": "Les te'amim, pour &laquo; savourer &raquo; l'hébreu",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -59,7 +59,7 @@ STRUCTURE = {
         {
             "nom_document": "E.Memoire sur le Waw conversif",
             "nom_html": "e.memoire_sur_le_waw_conversif",
-            "nom_affiché": "Mémoire sur le  &laquo; Waw conversif &raquo;",
+            "nom_affiché": "Mémoire sur le &laquo; Waw conversif &raquo;",
             "nom_navigation": "Mémoire sur le &laquo; Waw conversif &raquo;",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
