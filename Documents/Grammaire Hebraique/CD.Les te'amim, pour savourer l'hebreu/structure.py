@@ -27,7 +27,7 @@ STRUCTURE = {
         {
             "nom_document": "Recension des te'amim.pdf",
             "nom_html": "recension_des_te_amim.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Recension des te'amim",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

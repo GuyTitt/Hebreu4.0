@@ -148,7 +148,7 @@ STRUCTURE = {
         {
             "nom_document": "Petit lexique abstrait-concret.docx",
             "nom_html": "petit_lexique_abstrait-concret.pdf",
-            "nom_affiché": "{{Petit lexique abstrait-concret}}",
+            "nom_affiché": "Petit lexique abstrait-concret",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

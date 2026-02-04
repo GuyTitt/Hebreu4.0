@@ -77,7 +77,7 @@ STRUCTURE = {
         {
             "nom_document": "3.908 vb irreg yatsa'.pdf",
             "nom_html": "3.908_vb_irreg_yatsa_.pdf",
-            "nom_affiché": "Le verbe unique יָצָא _(Tableau détaillé)__'",
+            "nom_affiché": "Le verbe unique יָצָא __(Tableau détaillé)__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -87,7 +87,7 @@ STRUCTURE = {
         {
             "nom_document": "3.909 vb irreg yare'.pdf",
             "nom_html": "3.909_vb_irreg_yare_.pdf",
-            "nom_affiché": "Le verbe unique יָרֵא __(Tableau détaillé)__'",
+            "nom_affiché": "Le verbe unique יָרֵא __(Tableau détaillé)__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

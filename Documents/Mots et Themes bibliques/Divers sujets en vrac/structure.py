@@ -67,8 +67,8 @@ STRUCTURE = {
         {
             "nom_document": "Buissons et épineux dans la Bible.docx",
             "nom_html": "buissons_et_epineux_dans_la_bible.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document}}",
+            "nom_affiché": "Buissons et épineux dans la Bible",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
