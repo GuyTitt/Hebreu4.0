@@ -4,7 +4,7 @@ Adaptés pour github et local.
 
 Pour voir le résultat :
 
-https://guytitt.github.io/Hebreu4.0
+https://guytitt.github.io/Hebreu4.0/index.html
 
 Bonne lecture.
 
