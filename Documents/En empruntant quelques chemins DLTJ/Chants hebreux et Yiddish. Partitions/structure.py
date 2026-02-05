@@ -325,7 +325,7 @@ STRUCTURE = {
             "position": 36
         }
     ],
-    "titre_dossier": "Chants hebreux et Yiddish. Partitions",
+    "titre_dossier": "Chants hébreux et Yiddish __(Partitions)__",
     "entete_general": True,
     "pied_general": True,
     "entete": True,

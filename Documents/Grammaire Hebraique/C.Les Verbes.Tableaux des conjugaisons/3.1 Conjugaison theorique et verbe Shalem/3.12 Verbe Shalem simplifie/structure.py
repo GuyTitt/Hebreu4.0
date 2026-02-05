@@ -37,7 +37,7 @@ STRUCTURE = {
         {
             "nom_document": "3.123 vb sh. quadrilittere type Targem.complet.pdf",
             "nom_html": "3.123_vb_sh._quadrilittere_type_targem.complet.pdf",
-            "nom_affiché": "verbe shalém quadrilittère __(Grille complète Modèle תִּרְגֵּם)__",
+            "nom_affiché": "Le verbe shalém quadrilittère __(Grille complète Modèle תִּרְגֵּם)__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

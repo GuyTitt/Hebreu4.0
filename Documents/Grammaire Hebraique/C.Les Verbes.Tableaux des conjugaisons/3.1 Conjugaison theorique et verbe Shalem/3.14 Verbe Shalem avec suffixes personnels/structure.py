@@ -5,7 +5,7 @@ STRUCTURE = {
         {
             "nom_document": "3.141.S vb shalem cj paal avec suffixes.pdf",
             "nom_html": "3.141.s_vb_shalem_cj_paal_avec_suffixes.pdf",
-            "nom_affiché": "verbe shalém type קָטַל avec suffixes pronominaux. Binyan Pa´al (I)",
+            "nom_affiché": "Le verbe shalém type קָטַל avec suffixes pronominaux __(Binyan Pa´al [I])__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

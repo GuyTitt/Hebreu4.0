@@ -36,7 +36,7 @@ STRUCTURE = {
         }
     ],
     "fichiers": [],
-    "titre_dossier": "3.5 Verbe avec Yod ou Waw",
+    "titre_dossier": "Verbe avec Yod ou Waw",
     "entete_general": True,
     "pied_general": True,
     "entete": True,

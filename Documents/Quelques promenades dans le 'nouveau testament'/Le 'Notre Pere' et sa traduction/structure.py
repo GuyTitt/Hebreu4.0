@@ -6,7 +6,7 @@ STRUCTURE = {
         {
             "nom_document": "Formules liturgiques",
             "nom_html": "formules_liturgiques",
-            "nom_affiché": "{{Formules liturgiques}}",
+            "nom_affiché": "Formules liturgiques",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

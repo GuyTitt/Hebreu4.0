@@ -6,9 +6,9 @@ STRUCTURE = {
         {
             "nom_document": "Credo et Hymnes du NT",
             "nom_html": "credo_et_hymnes_du_nt",
-            "nom_affiché": "Credo et Hymnes du NT",
-            "nom_navigation": "Formation du Credo et Hymnes du &laquo; Nouveau testament &raquo;",
-            "nom_TDM": "Formation du Credo et Hymnes du &laquo; Nouveau testament &raquo; ",
+            "nom_affiché": "Formation du Credo et Hymnes du &laquo; nouveau testament &raquo;",
+            "nom_navigation": "Formation du Credo et Hymnes du &laquo; nouveau testament &raquo;",
+            "nom_TDM": "Formation du Credo et Hymnes du &laquo; nouveau testament &raquo; ",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -17,9 +17,9 @@ STRUCTURE = {
         {
             "nom_document": "Guerir et Sauver dans les Evangiles",
             "nom_html": "guerir_et_sauver_dans_les_evangiles",
-            "nom_affiché": "Guérison et Salut dans le &laquo; Nouveau testament &raquo;",
+            "nom_affiché": "Guérison et Salut dans le &laquo; nouveau testament &raquo;",
             "nom_navigation": "Guérison et Salut dans le &laquo; Nouveau testament &raquo;",
-            "nom_TDM": "Guérison et Salut dans le &laquo; Nouveau testament &raquo;",
+            "nom_TDM": "Guérison et Salut dans le &laquo; nouveau testament &raquo;",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -71,7 +71,7 @@ STRUCTURE = {
         }
     ],
     "fichiers": [],
-    "titre_dossier": "Quelques promenades dans le &laquo; Nouveau testament &raquo;",
+    "titre_dossier": "Quelques promenades dans le &laquo; nouveau testament &raquo;",
     "entete_general": True,
     "pied_general": True,
     "entete": True,

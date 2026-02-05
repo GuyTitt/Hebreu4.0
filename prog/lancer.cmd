@@ -1,22 +1,37 @@
 @echo off
-REM Début de "lancer.cmd" version "2.2"
+REM Début de "lancer.cmd" version "2.3"
 cls
 echo.
-echo lancer.cmd — Version 2.2
+echo lancer.cmd — Version 2.3
 echo.
 
-:: Activation de l'environnement virtuel si nécessaire
-where python | findstr /i "virPy13" >nul
-if %errorlevel% neq 0 (
-    echo Activation de l'environnement virtuel virPy13...
-    call C:\virPy13\Scripts\activate.bat
-    if %errorlevel% neq 0 (
-        echo [ERREUR] Impossible d'activer virPy13
-        pause
-        exit /b 1
-    )
+:: O entrer en mode virtualisation pour python
+setlocal EnableExtensions EnableDelayedExpansion
+
+rem Nom de l'environnement virtuel
+set VENV_NAME=virPy13
+
+rem Chemin d'activation
+set VENV_PATH=c:\%VENV_NAME%\Scripts\activate.bat
+
+rem Vérifier si le fichier activate.bat existe
+if not exist "%VENV_PATH%" (
+    echo L'environnement virtuel "%VENV_NAME%" n'a pas été trouvé.
+    exit /b 1
 )
 
+rem Si l'environnement existe, activer l'environnement virtuel
+echo L'environnement "%VENV_NAME%" a été trouvé. Activation en cours...
+call "%VENV_PATH%"
+
+rem Si l'activation réussie, exécuter le reste du script
+if not errorlevel 1 (
+    echo Environnement activé avec succès.
+    rem Ajouter ici le reste des commandes que tu souhaites exécuter après activation
+) else (
+    echo Echec de l'activation de l'environnement.
+    exit /b 1
+)
 :: Aller dans le répertoire du projet
 cd /d "%~dp0\.."
 
@@ -49,4 +64,4 @@ echo.
 echo Site réel disponible sur : http://localhost:3500/index.html
 echo.
 pause
-REM Fin de "lancer.cmd" version "2.2"
+REM Fin de "lancer.cmd" version "2.3"

@@ -7,7 +7,7 @@ STRUCTURE = {
         {
             "nom_document": "Arbre et fruits pourris dans le N.T.docx",
             "nom_html": "arbre_et_fruits_pourris_dans_le_n.t.pdf",
-            "nom_affiché": "Arbre et fruits pourris dans le &laquo; Nouveau testament &raquo;",
+            "nom_affiché": "Arbre et fruits pourris dans le &laquo; nouveau testament &raquo;",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -37,7 +37,7 @@ STRUCTURE = {
         {
             "nom_document": "Le verbe splancnizomai ds le NT.docx",
             "nom_html": "le_verbe_splancnizomai_ds_le_nt.pdf",
-            "nom_affiché": "Le verbe **splancnizomai** dans le &laquo; Nouveau testament &raquo;",
+            "nom_affiché": "Le verbe **splancnizomai** dans le &laquo; nouveau testament &raquo;",
             "nom_TDM": "{{nom_document_sans_ext}}",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -47,7 +47,7 @@ STRUCTURE = {
         {
             "nom_document": "Le vocabulaire de la Rédemption ds le N.T.docx",
             "nom_html": "le_vocabulaire_de_la_redemption_ds_le_n.t.pdf",
-            "nom_affiché": "Le vocabulaire de la Rédemption dans le &laquo; Nouveau testament &raquo;",
+            "nom_affiché": "Le vocabulaire de la Rédemption dans le &laquo; nouveau testament &raquo;",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

@@ -4,17 +4,6 @@
 STRUCTURE = {
     "dossiers": [
         {
-            "nom_document": "En empruntant quelques chemins DLTJ",
-            "nom_html": "en_empruntant_quelques_chemins_dltj",
-            "nom_affiché": "En empruntant quelques chemins dans la tradition juive",
-            "nom_TDM": "{{nom_affiché}}",
-            "nom_navigation": "En empruntant quelques chemins dans la tradition juive",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 3
-        },
-        {
             "nom_document": "Grammaire Hebraique",
             "nom_html": "grammaire_hebraique",
             "nom_affiché": "Grammaire hébraïque",
@@ -37,11 +26,22 @@ STRUCTURE = {
             "position": 2
         },
         {
+            "nom_document": "En empruntant quelques chemins DLTJ",
+            "nom_html": "en_empruntant_quelques_chemins_dltj",
+            "nom_affiché": "En empruntant quelques chemins dans la tradition juive",
+            "nom_TDM": "{{nom_affiché}}",
+            "nom_navigation": "En empruntant quelques chemins dans la tradition juive",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 3
+        },
+        {
             "nom_document": "Quelques promenades dans le 'nouveau testament'",
             "nom_html": "quelques_promenades_dans_le__nouveau_testament_",
-            "nom_affiché": "Quelques promenades dans le &laquo; Nouveau testament &raquo;",
+            "nom_affiché": "Quelques promenades dans le &laquo; nouveau testament &raquo;",
             "nom_TDM": "{{nom_affiché}}",
-            "nom_navigation": "Quelques promenades dans le &laquo; Nouveau testament &raquo;",
+            "nom_navigation": "Quelques promenades dans le &laquo; nouveau testament &raquo;",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -57,6 +57,17 @@ STRUCTURE = {
             "affiché_TDM": False,
             "position": 15,
             "nom_navigation": "TDM"
+        },
+        {
+            "nom_document": "ig",
+            "nom_html": "ig",
+            "nom_affiché": "ig",
+            "nom_TDM": "ig",
+            "ajout_affichage": True,
+            "affiché_index": False,
+            "affiché_TDM": False,
+            "position": 16,
+            "nom_navigation": ""
         }
     ],
     "fichiers": [
@@ -71,16 +82,6 @@ STRUCTURE = {
             "position": 10
         },
         {
-            "nom_document": "Intro Générale.html",
-            "nom_html": "intro_generale.html",
-            "nom_affiché": "Intro Générale",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": False,
-            "affiché_TDM": True,
-            "position": 12
-        },
-        {
             "nom_document": "Sites amis.pdf",
             "nom_html": "sites_amis.pdf",
             "nom_affiché": "Sites amis",
@@ -88,27 +89,17 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": False,
             "affiché_TDM": True,
-            "position": 13
+            "position": 12
         },
         {
-            "nom_document": "Potier.jpg",
-            "nom_html": "potier.jpg",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_document": "Potier.png",
+            "nom_html": "potier.png",
+            "nom_affiché": "Potier",
+            "nom_TDM": "Potier",
             "ajout_affichage": False,
             "affiché_index": False,
             "affiché_TDM": False,
-            "position": 14
-        },
-        {
-            "nom_document": "Dedicace.docx",
-            "nom_html": "dedicace.pdf",
-            "nom_affiché": "Dédicace",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 5
+            "position": 13
         }
     ],
     "titre_dossier": "H&eacute;breu biblique",

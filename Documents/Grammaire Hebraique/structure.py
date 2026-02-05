@@ -69,7 +69,7 @@ STRUCTURE = {
         }
     ],
     "fichiers": [],
-    "titre_dossier": "Grammaire Hébraique",
+    "titre_dossier": "Grammaire Hébraïque",
     "entete_general": True,
     "pied_general": True,
     "entete": True,

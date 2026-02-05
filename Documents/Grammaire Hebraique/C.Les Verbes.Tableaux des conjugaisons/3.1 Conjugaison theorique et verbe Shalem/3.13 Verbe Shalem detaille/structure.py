@@ -45,7 +45,7 @@ STRUCTURE = {
         {
             "nom_document": "3.134+ vb shalem cj detaille bin. goremim.pdf",
             "nom_html": "3.134+_vb_shalem_cj_detaille_bin._goremim.pdf",
-            "nom_affiché": "verbe shalém type קָטַל __Tableau détaillé binyanîm Goremîm [V, VI])__",
+            "nom_affiché": "verbe shalém type קָטַל __(Tableau détaillé binyanîm Goremîm [V, VI])__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

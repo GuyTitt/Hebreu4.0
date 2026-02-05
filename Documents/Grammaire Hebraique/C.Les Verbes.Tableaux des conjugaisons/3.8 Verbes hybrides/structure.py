@@ -77,7 +77,7 @@ STRUCTURE = {
         {
             "nom_document": "3.808 vb hybride puts.nafats.pdf",
             "nom_html": "3.808_vb_hybride_puts.nafats.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Les verbes hybrides ",
             "nom_TDM": "v",
             "ajout_affichage": True,
             "affiché_index": True,
@@ -85,7 +85,7 @@ STRUCTURE = {
             "position": 8
         }
     ],
-    "titre_dossier": "3.8 Verbes hybrides",
+    "titre_dossier": "Verbes hybrides",
     "titre_table": "{{titre_dossier}}",
     "entete_general": True,
     "pied_general": True,
