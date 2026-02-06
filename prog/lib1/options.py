@@ -1,6 +1,6 @@
-# options.py — Version 1.1
+# options.py — Version 1.2
 
-version = ("options.py", "1.1")
+version = ("options.py", "1.2")
 print(f"[Import] {version[0]} - Version {version[1]} chargé")
 
 # Chemins relatifs ou absolus selon ton environnement
@@ -14,4 +14,4 @@ DOSSIER_HTML = f"{DOSSIER_RACINE}\\html"
 BASE_PATH = "/Hebreu4.0/html"  # ← Modifier ici : "" pour local, "/Hebreu4.0/html" pour GitHub
 #BASE_PATH = ""  # ← Modifier ici : "" pour local, "/Hebreu4.0" pour GitHub
 
-# fin du "options.py" version "1.1"
+# fin du "options.py" version "1.2"

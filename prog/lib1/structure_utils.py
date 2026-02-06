@@ -9,21 +9,28 @@ from typing import Dict, Any, List
 def resoudre_templates_runtime(item: dict, variables: dict) -> dict:
     """Résout les templates {{variable}} à l'exécution.
     
+    Supporte templates imbriqués:
+    - nom_affiché = "{{nom_document_sans_ext}}"
+    - nom_TDM = "{{nom_affiché}}" → Résolu récursivement
+    
     Syntaxe supportée:
-    - {{nom_document}} : Copie nom_document complet
-    - {{nom_document_sans_ext}} : Copie sans extension
-    - {{titre_dossier}} : Copie titre_dossier
+    - {{nom_document}} : Nom complet avec extension
+    - {{nom_document_sans_ext}} : Nom sans extension
+    - {{titre_dossier}} : Titre du dossier
+    - {{nom_affiché}} : Valeur de nom_affiché (récursif)
+    - {{nom_TDM}} : Valeur de nom_TDM (récursif)
+    - {{nom_navigation}} : Valeur de nom_navigation (récursif)
     
     Args:
         item: Élément avec possibles templates
-        variables: Dict des variables disponibles (nom_document, titre_dossier, etc.)
+        variables: Dict des variables disponibles
         
     Returns:
         Élément avec templates résolus (copie)
     """
     resolved = item.copy()
     
-    # Préparer variables
+    # Variables de base
     nom_document = variables.get("nom_document", "")
     nom_sans_ext = Path(nom_document).stem if nom_document else ""
     titre_dossier = variables.get("titre_dossier", "")
@@ -34,17 +41,41 @@ def resoudre_templates_runtime(item: dict, variables: dict) -> dict:
         "titre_dossier": titre_dossier
     }
     
-    # Résoudre chaque champ
-    for champ in ["nom_affiché", "nom_TDM", "nom_navigation", "titre_table"]:
-        if champ in resolved:
+    # Résoudre chaque champ (plusieurs passes pour templates imbriqués)
+    champs = ["nom_affiché", "nom_TDM", "nom_navigation", "titre_table"]
+    max_passes = 5  # Protection contre boucles infinies
+    
+    for passe in range(max_passes):
+        changed = False
+        
+        for champ in champs:
+            if champ not in resolved:
+                continue
+            
             valeur = resolved[champ]
             
-            if isinstance(valeur, str):
-                # Remplacer tous les templates {{var}}
-                for var_name, var_value in vars_disponibles.items():
-                    valeur = valeur.replace(f"{{{{{var_name}}}}}", var_value)
-                
-                resolved[champ] = valeur
+            if not isinstance(valeur, str):
+                continue
+            
+            # Ajouter valeurs déjà résolues aux variables disponibles
+            vars_etendues = vars_disponibles.copy()
+            for c in champs:
+                if c in resolved and isinstance(resolved[c], str):
+                    vars_etendues[c] = resolved[c]
+            
+            # Remplacer tous les templates {{var}}
+            nouvelle_valeur = valeur
+            for var_name, var_value in vars_etendues.items():
+                pattern = f"{{{{{var_name}}}}}"
+                if pattern in nouvelle_valeur:
+                    nouvelle_valeur = nouvelle_valeur.replace(pattern, var_value)
+                    changed = True
+            
+            resolved[champ] = nouvelle_valeur
+        
+        # Si aucun changement, on a fini
+        if not changed:
+            break
     
     return resolved
 

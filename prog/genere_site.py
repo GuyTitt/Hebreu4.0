@@ -457,6 +457,7 @@ def copier_fichiers_site() -> None:
             src_file = Path(racine) / fichier
             if pdf.est_fichier_copiable(src_file, EXTENSIONS_COPIABLES):
                 dst_file = cible / normaliser_nom(fichier)
+                print(f"Range {dst_file}" )
                 shutil.copy2(src_file, dst_file)
 
 # ============================================================================

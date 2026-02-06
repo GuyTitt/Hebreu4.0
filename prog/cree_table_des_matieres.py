@@ -1,6 +1,6 @@
-# cree_table_des_matieres.py — Version 6.28
+# cree_table_des_matieres.py — Version 6.29
 
-version = ("cree_table_des_matieres.py", "6.28")
+version = ("cree_table_des_matieres.py", "6.29")
 print(f"[Version] {version[0]} — {version[1]}")
 
 import json
@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 
 from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
 from lib1.config import CONFIG
+from lib1 import html_utils as html  # v6.29: Import html_utils pour templates
 
 def lire(variable: dict, element: str, defaut) -> object:
     """Lit une valeur dans un dictionnaire, retourne la valeur par défaut sinon.
@@ -93,7 +94,9 @@ def fin_html() -> str:
 </html>"""
 
 def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun: str) -> str:
-    """Lit un fichier HTML avec fallback à la racine pour entete_general et pied_general.
+    """Lit un fichier HTML avec fallback à la racine et interprétation templates.
+    
+    v6.29: Utilise html_utils.charger_template_html() pour interpréter {{BASE_PATH}}.
 
     Args:
         dossier (Path): Dossier local à vérifier.
@@ -102,9 +105,10 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
         commun (str): Suffixe pour commentaires debug.
 
     Returns:
-        str: Contenu du fichier ou chaîne vide.
+        str: Contenu du fichier avec templates résolus ou chaîne vide.
     """
     local = dossier / fichier
+    
     if local.exists():
         modele = local
     else:
@@ -115,18 +119,22 @@ def plage_html_avec_fallback(dossier: Path, fichier: str, position: str, commun:
                 return ""
         else:
             return ""
-
-    with open(modele, "r", encoding="utf-8") as f:
-        h = f.read()
-
-    if voir_structure:
-        h = f"<div><!-- début {position}{commun} -->{h}<!-- fin {position}{commun} --></div>"
-    return h
+    
+    # v6.29: Utiliser charger_template_html pour interpréter {{BASE_PATH}}
+    contenu = html.charger_template_html(
+        modele,
+        {"BASE_PATH": BASE_PATH},
+        voir_structure,
+        position,
+        commun
+    )
+    
+    return contenu
 
 def _generer_navigation(chemin_relatif: list[str]) -> str:
     """Génère la barre de navigation pour la page TDM.
 
-    Sur la page TDM on n’affiche pas le bouton « Sommaire » (on y est déjà)
+    Sur la page TDM on n'affiche pas le bouton « Sommaire » (on y est déjà)
     et le bouton Accueil pointe vers la racine du site.
 
     Returns:
@@ -208,7 +216,7 @@ def construire_arbo_recursif(dossier_sources: Path, prefixe_html: str = "") -> s
         str: HTML de l'arbre (<li>...</li>).
     """
     struc = charger_structure(dossier_sources)
-    html = ""
+    html_arbre = ""
 
     # Tri des dossiers et fichiers
     struc["dossiers"].sort(key=lambda x: x.get("position", 9999))
@@ -219,15 +227,15 @@ def construire_arbo_recursif(dossier_sources: Path, prefixe_html: str = "") -> s
             nom_html = item["nom_html"]
             lien = f"{BASE_PATH}{prefixe_html}/{nom_html}/index.html"
             sous_arbo = construire_arbo_recursif(dossier_sources / item["nom_document"], f"{prefixe_html}/{nom_html}")
-            html += generer_ligne_dossier(item, lien, sous_arbo)
+            html_arbre += generer_ligne_dossier(item, lien, sous_arbo)
 
     for item in struc["fichiers"]:
         if est_visible_tdm(item):
             nom_html = item["nom_html"]
             lien = f"{BASE_PATH}{prefixe_html}/{nom_html}"
-            html += generer_ligne_fichier(item, lien)
+            html_arbre += generer_ligne_fichier(item, lien)
 
-    return html
+    return html_arbre
 
 def charger_configuration_tdm() -> dict:
     """Charge la configuration spécifique à la page TDM depuis documents/TDM/STRUCTURE.py.
@@ -324,4 +332,4 @@ def generer_tdm() -> None:
 if __name__ == "__main__":
     generer_tdm()
 
-# fin du "cree_table_des_matieres.py" version "6.28"
+# fin du "cree_table_des_matieres.py" version "6.29"
