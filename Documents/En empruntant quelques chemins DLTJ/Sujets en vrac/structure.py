@@ -5,16 +5,6 @@ STRUCTURE = {
     "dossiers": [],
     "fichiers": [
         {
-            "nom_document": "Methode guitare FB corrigée.pdf",
-            "nom_html": "methode_guitare_fb_corrigee.pdf",
-            "nom_affiché": "Méthode guitare FB __corrigée__",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 4
-        },
-        {
             "nom_document": "Eldad et Medad.Midrach.docx",
             "nom_html": "eldad_et_medad.midrach.pdf",
             "nom_affiché": "Eldad et Medad __(Midrach)__",
