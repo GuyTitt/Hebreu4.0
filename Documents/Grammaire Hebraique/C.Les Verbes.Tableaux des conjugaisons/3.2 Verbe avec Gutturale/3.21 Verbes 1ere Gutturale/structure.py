@@ -67,7 +67,7 @@ STRUCTURE = {
         {
             "nom_document": "3.211.a2+ vb 1ere gutt. type Hamal detaille.pdf",
             "nom_html": "3.211.a2+_vb_1ere_gutt._type_hamal_detaille.pdf",
-            "nom_affiché": "3.211.a2+ vb 1ere gutt. type Hamal detaille",
+            "nom_affiché": "Verbe פ״גּ׳ (avec Gutturale ח) Modèle חָמַל. Grille détaillée",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
