@@ -85,7 +85,7 @@ STRUCTURE = {
             "position": 8
         }
     ],
-    "titre_dossier": "Verbes hybrides",
+    "titre_dossier": "Les verbes 'hybrides' (ou défectifs)",
     "titre_table": "{{titre_dossier}}",
     "entete_general": True,
     "pied_general": True,
