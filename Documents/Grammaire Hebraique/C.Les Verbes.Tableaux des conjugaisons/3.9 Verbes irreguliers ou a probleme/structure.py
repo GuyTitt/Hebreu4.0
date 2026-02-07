@@ -145,7 +145,7 @@ STRUCTURE = {
             "position": 14
         }
     ],
-    "titre_dossier": "Les verbes irréguliers ou à probleme",
+    "titre_dossier": "Les verbes irréguliers ou à problème",
     "entete_general": True,
     "pied_general": True,
     "entete": True,

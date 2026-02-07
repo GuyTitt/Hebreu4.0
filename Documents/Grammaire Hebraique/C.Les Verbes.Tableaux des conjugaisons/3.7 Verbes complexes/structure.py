@@ -4,7 +4,7 @@ STRUCTURE = {
         {
             "nom_document": "3.70 Verbes avec 1ere Shalem",
             "nom_html": "3.70_verbes_avec_1ere_shalem",
-            "nom_affiché": "3.70 Verbes avec 1<sup>ère</sup> Shalem",
+            "nom_affiché": "Les verbes avec 1<sup>ère</sup> Shalem",
             "nom_navigation": "Les verbes avec 1<sup>ère</sup> radicale shalém",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,

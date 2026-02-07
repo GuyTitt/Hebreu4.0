@@ -69,7 +69,7 @@ STRUCTURE = {
         }
     ],
     "fichiers": [],
-    "titre_dossier": "Conjugaison théorique et verbe Shalem",
+    "titre_dossier": "Conjugaison théorique et verbe Shalém",
     "entete_general": True,
     "pied_general": True,
     "entete": True,

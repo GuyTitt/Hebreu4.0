@@ -7,7 +7,7 @@ STRUCTURE = {
         {
             "nom_document": "3.610.ab. vb Ayin-Ayin.variantes pa'al.pdf",
             "nom_html": "3.610.ab._vb_ayin-ayin.variantes_pa_al.pdf",
-            "nom_affiché": "Les verbes ע״ע __(Les 5 à 8 variantes du binyan Pa´al [I])__",
+            "nom_affiché": "Les verbes ע״ע __(Les 5 à 8 variantes du binyan Pa´al)__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
