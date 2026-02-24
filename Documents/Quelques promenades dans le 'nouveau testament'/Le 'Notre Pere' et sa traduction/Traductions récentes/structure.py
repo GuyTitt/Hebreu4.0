@@ -37,7 +37,7 @@ STRUCTURE = {
         {
             "nom_document": "4.Synopse. Traduction Bible Bayard.Nouvelle 2001. Mt 6 - Lc 11.docx",
             "nom_html": "4.synopse._traduction_bible_bayard.nouvelle_2001._mt_6_-_lc_11.pdf",
-            "nom_affiché": "Synopse __(Traduction Bible Bayard. Nouvelle 2001 __[Mt 6 - Lc 11]__",
+            "nom_affiché": "Synopse __(Traduction Bible Bayard. Nouvelle 2001 [Mt 6 - Lc 11])__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

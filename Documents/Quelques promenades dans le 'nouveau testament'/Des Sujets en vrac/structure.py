@@ -57,7 +57,7 @@ STRUCTURE = {
         {
             "nom_document": "Plan de la lettre aux Hebreux. d'après Vanhoye.docx",
             "nom_html": "plan_de_la_lettre_aux_hebreux._d_apres_vanhoye.pdf",
-            "nom_affiché": "Plan de la lettre aux Hébreux __(Vanhoye)__",
+            "nom_affiché": "Plan de la lettre aux Hébreux __(d'après Vanhoye)__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

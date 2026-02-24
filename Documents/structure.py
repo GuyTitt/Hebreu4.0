@@ -102,7 +102,7 @@ STRUCTURE = {
             "position": 13
         }
     ],
-    "titre_dossier": "H&eacute;breu biblique",
+    "titre_dossier": "Mes dossiers partag&eacute;s",
     "entete_general": True,
     "pied_general": True,
     "entete": True,
@@ -111,5 +111,5 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "Mes dossiers partag&eacute;s"
 }
