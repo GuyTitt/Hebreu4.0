@@ -92,10 +92,10 @@ STRUCTURE = {
             "position": 12
         },
         {
-            "nom_document": "Potier.png",
-            "nom_html": "potier.png",
-            "nom_affiché": "Potier",
-            "nom_TDM": "Potier",
+            "nom_document": "lecture_torah.png",
+            "nom_html": "lecture_torah.png",
+            "nom_affiché": "lecture_torah",
+            "nom_TDM": "lecture_torah",
             "ajout_affichage": False,
             "affiché_index": False,
             "affiché_TDM": False,
