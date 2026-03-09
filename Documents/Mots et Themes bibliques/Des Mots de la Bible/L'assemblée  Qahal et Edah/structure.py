@@ -35,5 +35,22 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "partitions": [
+        {
+            "nom_document": "Qahal et Edah Repart par livre.pdf",
+            "nom_html": "qahal_et_edah_repart_par_livre.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Qahal expressions et sens.pdf",
+            "nom_html": "qahal_expressions_et_sens.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

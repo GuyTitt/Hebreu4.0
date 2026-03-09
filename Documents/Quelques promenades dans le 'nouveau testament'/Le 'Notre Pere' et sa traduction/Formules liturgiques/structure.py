@@ -64,5 +64,47 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Le N.P. liturgique en araméen.Phonétique.docx",
+            "nom_html": "le_n.p._liturgique_en_arameen.phonetique.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Le N.P. liturgique en diverses langues.docx",
+            "nom_html": "le_n.p._liturgique_en_diverses_langues.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Le Notre Père liturgique.Evolution.docx",
+            "nom_html": "le_notre_pere_liturgique.evolution.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Le NP. liturgique en Néerlandais et flamand.docx",
+            "nom_html": "le_np._liturgique_en_neerlandais_et_flamand.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Le NP liturgique en langues sémitiques.docx",
+            "nom_html": "le_np_liturgique_en_langues_semitiques.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -31,5 +33,23 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "partitions": [
+        {
+            "nom_document": "3.230.Rc Repertoire des vb 3eme gutt.pdf",
+            "nom_html": "3.230.rc_repertoire_des_vb_3eme_gutt.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.231.ab vb 3eme gutt. type balA.pdf",
+            "nom_html": "3.231.ab_vb_3eme_gutt._type_bala.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

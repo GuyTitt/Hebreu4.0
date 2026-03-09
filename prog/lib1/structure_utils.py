@@ -1,5 +1,8 @@
-# structure_utils.py — Version 2.0
-# Gestion STRUCTURE.py avec support templates {{variable}}
+# structure_utils.py — Version 2.1
+# v2.1 : correction null->None dans sauvegarder_structure (json.dumps ecrit null pour None)
+
+version = ("structure_utils.py", "2.1")
+print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 from pathlib import Path
 import json
@@ -182,7 +185,7 @@ def sauvegarder_structure(dossier: Path, structure: dict) -> None:
     contenu += "# Templates {{variable}} résolus à l'exécution\n\n"
     
     json_str = json.dumps(structure, ensure_ascii=False, indent=4)
-    json_str = json_str.replace("true", "True").replace("false", "False")
+    json_str = json_str.replace("true", "True").replace("false", "False").replace("null", "None")
     
     contenu += f"STRUCTURE = {json_str}\n"
     
@@ -190,4 +193,4 @@ def sauvegarder_structure(dossier: Path, structure: dict) -> None:
     fichier = dossier / "STRUCTURE.py"
     fichier.write_text(contenu, encoding="utf-8")
 
-# Fin structure_utils.py v2.0
+# Fin structure_utils.py v2.1

@@ -5,16 +5,6 @@ STRUCTURE = {
     "dossiers": [],
     "fichiers": [
         {
-            "nom_document": "Les Noms de Dieu.Tsafon 40.pdf",
-            "nom_html": "les_noms_de_dieu.tsafon_40.pdf",
-            "nom_affiché": "Les noms de Dieu. __(Dossier publié dans la revue Tsafon N°40)__",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 2
-        },
-        {
             "nom_document": "Les noms de Dieu dans la Bible.A3.docx",
             "nom_html": "les_noms_de_dieu_dans_la_bible.a3.pdf",
             "nom_affiché": "Les noms de Dieu. __(Grand tableau format A3)__",
@@ -23,6 +13,16 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 1
+        },
+        {
+            "nom_document": "Les Noms de Dieu.Tsafon 40.pdf",
+            "nom_html": "les_noms_de_dieu.tsafon_40.pdf",
+            "nom_affiché": "Les noms de Dieu. __(Dossier publié dans la revue Tsafon N°40)__",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 2
         }
     ],
     "titre_dossier": "Les noms de Dieu dans la bible",
@@ -34,5 +34,23 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Les Noms de Dieu.Tsafon 40.pdf",
+            "nom_html": "les_noms_de_dieu.tsafon_40.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Les noms de Dieu dans la Bible.A3.docx",
+            "nom_html": "les_noms_de_dieu_dans_la_bible.a3.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

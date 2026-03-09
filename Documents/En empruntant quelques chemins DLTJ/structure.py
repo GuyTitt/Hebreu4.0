@@ -1,5 +1,5 @@
-# STRUCTURE.py – Corrigé automatiquement v2.0
-# Templates {{variable}} pour flexibilité
+# STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
 
 STRUCTURE = {
     "dossiers": [
@@ -91,5 +91,15 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Petit équipement de l'emprunteur novice.docx",
+            "nom_html": "petit_equipement_de_l_emprunteur_novice.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

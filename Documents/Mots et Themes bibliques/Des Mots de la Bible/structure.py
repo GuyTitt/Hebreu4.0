@@ -15,17 +15,6 @@ STRUCTURE = {
             "nom_navigation": "{{nom_document}}"
         },
         {
-            "nom_document": "Je Suis, auxiliaire banal ou identite divine",
-            "nom_html": "je_suis,_auxiliaire_banal_ou_identite_divine",
-            "nom_affiché": "Je Suis, auxiliaire banal ou identité divine",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 8,
-            "nom_navigation": "{{nom_affiché}}"
-        },
-        {
             "nom_document": "L'assemblée  Qahal et Edah",
             "nom_html": "l_assemblee__qahal_et_edah",
             "nom_affiché": "L'Assemblée : קָהָל et עֵדָה",
@@ -45,28 +34,6 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 5,
-            "nom_navigation": "{{nom_affiché}}"
-        },
-        {
-            "nom_document": "Le Message de Qohelet",
-            "nom_html": "le_message_de_qohelet",
-            "nom_affiché": "Le Message de Qohèlèt",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 14,
-            "nom_navigation": "{{nom_affiché}}"
-        },
-        {
-            "nom_document": "Les Entrailles, Objet Biblique Mal Identifie",
-            "nom_html": "les_entrailles,_objet_biblique_mal_identifie",
-            "nom_affiché": "Les entrailles, Objet Biblique Mal Identifié",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 12,
             "nom_navigation": "{{nom_affiché}}"
         },
         {
@@ -92,14 +59,14 @@ STRUCTURE = {
             "nom_navigation": "{{nom_affiché}}"
         },
         {
-            "nom_document": "Miséricorde et compassion.Un portrait de Dieu",
-            "nom_html": "misericorde_et_compassion.un_portrait_de_dieu",
-            "nom_affiché": "Miséricorde et compassion - un portrait de Dieu",
+            "nom_document": "Je Suis, auxiliaire banal ou identite divine",
+            "nom_html": "je_suis,_auxiliaire_banal_ou_identite_divine",
+            "nom_affiché": "Je Suis, auxiliaire banal ou identité divine",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 11,
+            "position": 8,
             "nom_navigation": "{{nom_affiché}}"
         },
         {
@@ -123,18 +90,51 @@ STRUCTURE = {
             "affiché_TDM": True,
             "position": 10,
             "nom_navigation": "{{nom_affiché}}"
-        }
-    ],
-    "fichiers": [
+        },
         {
-            "nom_document": "Chair Corps Ame. Tableau resume.docx",
-            "nom_html": "chair_corps_ame._tableau_resume.pdf",
-            "nom_affiché": "Chair, Corps, Âme",
+            "nom_document": "Miséricorde et compassion.Un portrait de Dieu",
+            "nom_html": "misericorde_et_compassion.un_portrait_de_dieu",
+            "nom_affiché": "Miséricorde et compassion - un portrait de Dieu",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 13
+            "position": 11,
+            "nom_navigation": "{{nom_affiché}}"
+        },
+        {
+            "nom_document": "Les Entrailles, Objet Biblique Mal Identifie",
+            "nom_html": "les_entrailles,_objet_biblique_mal_identifie",
+            "nom_affiché": "Les entrailles, Objet Biblique Mal Identifié",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 12,
+            "nom_navigation": "{{nom_affiché}}"
+        },
+        {
+            "nom_document": "Le Message de Qohelet",
+            "nom_html": "le_message_de_qohelet",
+            "nom_affiché": "Le Message de Qohèlèt",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 14,
+            "nom_navigation": "{{nom_affiché}}"
+        }
+    ],
+    "fichiers": [
+        {
+            "nom_document": "Petit lexique abstrait-concret.docx",
+            "nom_html": "petit_lexique_abstrait-concret.pdf",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 1
         },
         {
             "nom_document": "Noms au pluriel avec sens abstrait.docx",
@@ -147,14 +147,14 @@ STRUCTURE = {
             "position": 2
         },
         {
-            "nom_document": "Petit lexique abstrait-concret.docx",
-            "nom_html": "petit_lexique_abstrait-concret.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_document": "Chair Corps Ame. Tableau resume.docx",
+            "nom_html": "chair_corps_ame._tableau_resume.pdf",
+            "nom_affiché": "Chair, Corps, Âme",
+            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 1
+            "position": 13
         }
     ],
     "titre_dossier": "Des mots de la Bible",
@@ -166,5 +166,31 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "partitions": [
+        {
+            "nom_document": "Chair Corps Ame. Tableau resume.docx",
+            "nom_html": "chair_corps_ame._tableau_resume.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Noms au pluriel avec sens abstrait.docx",
+            "nom_html": "noms_au_pluriel_avec_sens_abstrait.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Petit lexique abstrait-concret.docx",
+            "nom_html": "petit_lexique_abstrait-concret.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

@@ -348,13 +348,14 @@ footer {
   background-color: #1abc9c;
   color: #ffffff;
   text-align: center;
-  border-radius: 6px;
+  border-radius: 12px;
   padding: 5px 0;
   position: absolute;
   z-index: 1;
   bottom: 150%;
   left: 50%;
   margin-left: -135px;
+  border-spacing: 20px;
 }
 
 .tooltiptext::after {

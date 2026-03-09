@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -42,5 +44,31 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Kapper.Le verbe.Constructions diverses.pdf",
+            "nom_html": "kapper.le_verbe.constructions_diverses.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Kapper.Le verbe.Occurrences.pdf",
+            "nom_html": "kapper.le_verbe.occurrences.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "La racine KPR.champ semantique.pdf",
+            "nom_html": "la_racine_kpr.champ_semantique.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

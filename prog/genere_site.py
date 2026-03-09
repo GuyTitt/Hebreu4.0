@@ -1,26 +1,35 @@
-# genere_site.py — Version 23.5
+# genere_site.py — Version 25.2
 
-version = ("genere_site.py", "23.5")
+version = ("genere_site.py", "25.2")
 
 """
-Générateur de site statique - Version 23.4
+Générateur de site statique - Version 25.2
 
-Correction MAJEURE v23.4:
-- Ordre exécution corrigé :
-  1. Scanner DOCUMENTS → Générer PDF manquants
-  2. Mettre à jour STRUCTURE.py
-  3. Générer index.html dans HTML
-  4. Copier fichiers vers HTML
-  
-WORKFLOW CORRECT:
+NOUVEAUTÉS v25.2:
+- PHASE 4 : musique.py appelé APRES copier_fichiers_site()
+  Les PDF avec bouton YouTube ecrasent les copies sans bouton.
+
+NOUVEAUTÉS v25.1:
+- (voir historique)
+
+NOUVEAUTÉS v24.0:
+- Fichiers commentaires (__*) ignorés sauf partitions
+- Partitions musicales avec boutons YouTube
+- Lecteur musical /musique/index.html
+- Regénération forcée via lancer.cmd regenere_tout
+- Filtrage intelligent fichiers sources
+
+Workflow v25.2:
 Pour chaque dossier dans DOCUMENTS:
-  1. Lister fichiers DOCX et PDF
-  2. Générer PDF manquants (DOCX→PDF dans DOCUMENTS)
+  1. Générer PDF manquants (DOCX→PDF)
+  2. Traiter partitions (__partition_*.pdf → avec boutons)
   3. Scanner dossier et mettre à jour STRUCTURE.py
-  4. Générer index.html dans HTML
-  
+  4. Générer index.html
+
 Ensuite:
-  5. Copier tous fichiers (PDF, images, etc.) vers HTML
+  5. Copier fichiers vers HTML
+  6. PHASE 4 : musique.py -> boutons YouTube sur PDF (ecrase copies sans bouton)
+  7. Générer page lecteur musical
 """
 
 import os
@@ -48,6 +57,9 @@ from lib1.config import CONFIG
 from lib1 import html_utils as html
 from lib1 import structure_utils as struct
 from lib1 import pdf_utils as pdf
+from lib1 import fichier_utils as fichiers  # v24.0
+from lib1 import partition_utils as partitions  # v24.0
+import musique as _musique                        # v25.2 : boutons YouTube phase 4
 
 print(f"[Version] {version[0]} — {version[1]}")
 
@@ -205,20 +217,22 @@ def generer_navigation_ariane(chemin_relatif: List[str], dossier_documents: Path
 # ============================================================================
 
 def generer_pdf_manquants(dossier: Path) -> None:
-    """Génère PDF manquants depuis DOCX dans le dossier DOCUMENTS.
+    """Génère PDF manquants depuis DOCX + traite partitions musicales.
     
-    v23.4: Cette fonction est appelée AVANT mise à jour STRUCTURE.py
-    pour que les PDF soient présents lors du scan.
+    v24.0: Ajout traitement partitions avec boutons YouTube.
+    Phase 1 : DOCX→PDF
+    Phase 2 : Partitions avec boutons
     """
     if not DOCX2PDF_DISPONIBLE:
         return
     
-    fichiers = list(dossier.iterdir())
+    fichiers_dir = list(dossier.iterdir())
     log(f"Vérification PDF manquants : {dossier}")
     
+    # PHASE 1 : Conversions DOCX→PDF normales
     nb_conv = pdf.traiter_conversions_dossier(
         dossier,
-        fichiers,
+        fichiers_dir,
         normaliser_nom,
         convertir_docx_vers_pdf,
         CONFIG,
@@ -227,6 +241,67 @@ def generer_pdf_manquants(dossier: Path) -> None:
     
     if nb_conv > 0:
         log(f"{nb_conv} PDF généré(s)")
+    
+    # === v24.0 : PHASE 2 - Partitions musicales ===
+    if not partitions.HAS_PDF_LIBS:
+        return
+    
+    # Chercher __correspondance.csv
+    csv_path = dossier / "__correspondance.csv"
+    if not csv_path.exists():
+        return  # Pas de partitions dans ce dossier
+    
+    log(f"Traitement partitions : {dossier}")
+    
+    # Charger correspondances
+    correspondances = partitions.charger_correspondances(csv_path)
+    if not correspondances:
+        log("  Aucune correspondance trouvée")
+        return
+    
+    # Player URL
+    player_url = CONFIG.get("player_url", f"{BASE_PATH}/musique/index.html")
+    
+    nb_partitions = 0
+    
+    # Traiter chaque partition
+    for nom_pdf_final, video_id in correspondances.items():
+        # Chercher PDF source (avec __partition_)
+        pdf_source = None
+        
+        for f in dossier.iterdir():
+            if f.name.startswith("__partition_") and f.suffix == ".pdf":
+                # Vérifier si correspond au nom final
+                nom_attendu = fichiers.nom_partition_final(f.name.replace(".pdf", ".docx"))
+                if normaliser_nom(nom_attendu) == nom_pdf_final:
+                    pdf_source = f
+                    break
+        
+        if not pdf_source:
+            log(f"  ⚠ PDF source partition introuvable : {nom_pdf_final}")
+            continue
+        
+        # PDF final (sans __partition_)
+        pdf_final = dossier / nom_pdf_final
+        
+        # Vérifier si regénération nécessaire
+        if not partitions.doit_regenerer_partition(pdf_source, pdf_final):
+            continue
+        
+        # Ajouter boutons
+        log(f"  Partition : {nom_pdf_final} (YouTube: {video_id})")
+        success = partitions.ajouter_boutons_partition(
+            pdf_source,
+            pdf_final,
+            player_url,
+            video_id
+        )
+        
+        if success:
+            nb_partitions += 1
+    
+    if nb_partitions > 0:
+        log(f"{nb_partitions} partition(s) traitée(s)")
 
 def mettre_a_jour_structure(dossier: Path) -> Dict[str, Any]:
     """Met à jour STRUCTURE.py d'un dossier.
@@ -251,6 +326,10 @@ def mettre_a_jour_structure(dossier: Path) -> Dict[str, Any]:
     entries = sorted(list(dossier.iterdir()), key=lambda x: x.name.lower())
     
     for entry in entries:
+        # === v24.0 : Filtrage fichiers commentaires ===
+        if fichiers.doit_filtrer_fichier(entry.name):
+            continue  # Ignorer fichiers __* (commentaires)
+        
         if entry.name in IGNORER or entry.name in FICHIERS_ENTETE_PIED:
             continue
         
@@ -441,12 +520,13 @@ def generer_page_index(dossier_documents: Path) -> None:
 def copier_fichiers_site() -> None:
     """Copie fichiers DOCUMENTS → HTML.
     
-    v23.4: Appelé EN DERNIER, après génération PDF et index.html.
+    v24.0: Filtre fichiers commentaires (__*).
     """
     log("Copie fichiers vers HTML")
     
     for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
-        dirs[:] = [d for d in dirs if d not in IGNORER]
+        # v24.0 : Ignorer dossiers commentaires
+        dirs[:] = [d for d in dirs if not d.startswith("__") and d not in IGNORER]
         
         rel_path = Path(racine).relative_to(DOSSIER_DOCUMENTS)
         cible_rel_norm = Path(*(normaliser_nom(part) for part in rel_path.parts))
@@ -454,6 +534,10 @@ def copier_fichiers_site() -> None:
         cible.mkdir(parents=True, exist_ok=True)
         
         for fichier in files:
+            # v24.0 : Filtrer fichiers commentaires
+            if fichiers.doit_filtrer_fichier(fichier):
+                continue
+            
             src_file = Path(racine) / fichier
             if pdf.est_fichier_copiable(src_file, EXTENSIONS_COPIABLES):
                 dst_file = cible / normaliser_nom(fichier)
@@ -464,9 +548,9 @@ def copier_fichiers_site() -> None:
 # ============================================================================
 
 def main() -> None:
-    """Génération complète - WORKFLOW CORRECT v23.4."""
+    """Génération complète - WORKFLOW v24.0."""
     log("=" * 70)
-    log("=== GÉNÉRATION SITE STATIQUE v23.4 ===")
+    log("=== GÉNÉRATION SITE STATIQUE v24.0 ===")
     log("=" * 70)
     
     log(f"Source : {DOSSIER_DOCUMENTS}")
@@ -479,6 +563,12 @@ def main() -> None:
         log("✓ Conversion PDF disponible (PDFCreator)")
     else:
         log("✗ Conversion PDF désactivée (PDFCreator manquant)")
+    
+    # v24.0 : Modules partitions
+    if partitions.HAS_PDF_LIBS:
+        log("✓ Modules partitions disponibles (pypdf + reportlab)")
+    else:
+        log("✗ Modules partitions manquants (pip install pypdf reportlab)")
     log("")
     
     # Créer dossier HTML et copier style.css
@@ -494,13 +584,14 @@ def main() -> None:
     tdm_path.mkdir(parents=True, exist_ok=True)
     
     log("=" * 70)
-    log("PHASE 1 : GÉNÉRATION PDF + MISE À JOUR STRUCTURE.py")
+    log("PHASE 1 : GÉNÉRATION PDF + PARTITIONS + STRUCTURE.py")
     log("=" * 70)
     log("")
     
     # PHASE 1 : Pour chaque dossier, générer PDF et mettre à jour STRUCTURE
     for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
-        dirs[:] = [d for d in dirs if d not in IGNORER]
+        # v24.0 : Ignorer dossiers commentaires
+        dirs[:] = [d for d in dirs if not d.startswith("__") and d not in IGNORER]
         dossier = Path(racine)
         
         log(f"--- {dossier} ---")
@@ -526,6 +617,27 @@ def main() -> None:
     
     # PHASE 3 : Copier fichiers
     copier_fichiers_site()
+
+    log("=" * 70)
+    log("PHASE 4 : BOUTONS YOUTUBE SUR PARTITIONS PDF")
+    log("=" * 70)
+    log("")
+
+    # PHASE 4 : Pour chaque dossier ayant un __correspondance.csv,
+    # appeler musique.traiter_partitions_du_dossier().
+    # S'execute APRES copier_fichiers_site() pour ecraser les copies sans bouton.
+    nb_total_partitions = 0
+    for racine, dirs, files in os.walk(DOSSIER_DOCUMENTS):
+        dirs[:] = [d for d in dirs if not d.startswith("__") and d not in IGNORER]
+        dossier = Path(racine)
+        if (dossier / "__correspondance.csv").exists():
+            log(f"--- Partitions : {dossier} ---")
+            nb = _musique.traiter_partitions_du_dossier(dossier, log)
+            nb_total_partitions += nb
+            log("")
+    if nb_total_partitions == 0:
+        log("  Aucune partition traitee (pas de __correspondance.csv)")
+    log("")
     
     # Nettoyage
     processes = get_word_processes()
@@ -542,4 +654,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Fin genere_site.py v23.4
+# Fin genere_site.py v24.0

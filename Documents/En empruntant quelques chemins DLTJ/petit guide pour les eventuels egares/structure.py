@@ -15,34 +15,14 @@ STRUCTURE = {
             "position": 2
         },
         {
-            "nom_document": "Les 13 middot selon Hillel et Yishmael.docx",
-            "nom_html": "les_13_middot_selon_hillel_et_yishmael.pdf",
-            "nom_affiché": "Les 13 middot __(Hillel & Yishmael)__",
+            "nom_document": "Tableau des Tannaim principaux.docx",
+            "nom_html": "tableau_des_tannaim_principaux.pdf",
+            "nom_affiché": "Tableau des Tannaïm principaux",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 8
-        },
-        {
-            "nom_document": "Les chretiens d'origine juive selon Mimouni.docx",
-            "nom_html": "les_chretiens_d_origine_juive_selon_mimouni.pdf",
-            "nom_affiché": "Les chrétiens d'origine juive __(Mimouni 2004)__",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 7
-        },
-        {
-            "nom_document": "Tableau des Amoraim en Babylonie.docx",
-            "nom_html": "tableau_des_amoraim_en_babylonie.pdf",
-            "nom_affiché": "Tableau des Amoraïm en Babylonie",
-            "nom_TDM": "{{nom_affiché}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 6
+            "position": 3
         },
         {
             "nom_document": "Tableau des Amoraim en Israel.docx",
@@ -55,14 +35,34 @@ STRUCTURE = {
             "position": 5
         },
         {
-            "nom_document": "Tableau des Tannaim principaux.docx",
-            "nom_html": "tableau_des_tannaim_principaux.pdf",
-            "nom_affiché": "Tableau des Tannaïm principaux",
+            "nom_document": "Tableau des Amoraim en Babylonie.docx",
+            "nom_html": "tableau_des_amoraim_en_babylonie.pdf",
+            "nom_affiché": "Tableau des Amoraïm en Babylonie",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 3
+            "position": 6
+        },
+        {
+            "nom_document": "Les chretiens d'origine juive selon Mimouni.docx",
+            "nom_html": "les_chretiens_d_origine_juive_selon_mimouni.pdf",
+            "nom_affiché": "Les chrétiens d'origine juive __(Mimouni 2004)__",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 7
+        },
+        {
+            "nom_document": "Les 13 middot selon Hillel et Yishmael.docx",
+            "nom_html": "les_13_middot_selon_hillel_et_yishmael.pdf",
+            "nom_affiché": "Les 13 middot __(Hillel & Yishmael)__",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 8
         }
     ],
     "titre_dossier": "Petit guide pour les éventuels égarés",
@@ -74,5 +74,55 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "La tradition rabbinique. Repères chronologiques.docx",
+            "nom_html": "la_tradition_rabbinique._reperes_chronologiques.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Les 13 middot selon Hillel et Yishmael.docx",
+            "nom_html": "les_13_middot_selon_hillel_et_yishmael.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Les chretiens d'origine juive selon Mimouni.docx",
+            "nom_html": "les_chretiens_d_origine_juive_selon_mimouni.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Tableau des Amoraim en Babylonie.docx",
+            "nom_html": "tableau_des_amoraim_en_babylonie.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Tableau des Amoraim en Israel.docx",
+            "nom_html": "tableau_des_amoraim_en_israel.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Tableau des Tannaim principaux.docx",
+            "nom_html": "tableau_des_tannaim_principaux.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

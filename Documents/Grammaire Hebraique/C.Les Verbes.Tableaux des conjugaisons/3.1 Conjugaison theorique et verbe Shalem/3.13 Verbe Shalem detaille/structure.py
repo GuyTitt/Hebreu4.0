@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -62,5 +64,47 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.130+ vb shalem 7 bin.detaille.pdf",
+            "nom_html": "3.130+_vb_shalem_7_bin.detaille.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.131.ab+ vb shalem cj detaille Paal Iabc.pdf",
+            "nom_html": "3.131.ab+_vb_shalem_cj_detaille_paal_iabc.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.132+ vb shalem cj detaille bin. qallim.pdf",
+            "nom_html": "3.132+_vb_shalem_cj_detaille_bin._qallim.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.133+ vb shalem cj detaille bin. kevedim.pdf",
+            "nom_html": "3.133+_vb_shalem_cj_detaille_bin._kevedim.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.134+ vb shalem cj detaille bin. goremim.pdf",
+            "nom_html": "3.134+_vb_shalem_cj_detaille_bin._goremim.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

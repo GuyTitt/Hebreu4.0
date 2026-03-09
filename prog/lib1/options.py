@@ -1,17 +1,10 @@
-# options.py — Version 1.2
+# lib1/options.py — Version 2.0 (shim)
+# Redirige vers settings.py (fusion v25.0)
+# Conservé pour compatibilité avec cree_table_des_matieres.py et autres imports anciens
 
-version = ("options.py", "1.2")
-print(f"[Import] {version[0]} - Version {version[1]} chargé")
+version = ("lib1/options.py", "2.0")
+print(f"[Import] options.py - Version 2.0 (shim → settings.py)")
 
-# Chemins relatifs ou absolus selon ton environnement
-DOSSIER_RACINE = r"C:\SiteGITHUB\Hebreu4.0"
-DOSSIER_DOCUMENTS = f"{DOSSIER_RACINE}\\documents"
-DOSSIER_HTML = f"{DOSSIER_RACINE}\\html"
+from settings import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
 
-# Base path pour les liens (GitHub Pages vs local)
-# "" pour test local (serveur sur /html)
-# "/hebreu4.0" pour GitHub Pages (repo à la racine du user site)
-BASE_PATH = "/Hebreu4.0/html"  # ← Modifier ici : "" pour local, "/Hebreu4.0/html" pour GitHub
-#BASE_PATH = ""  # ← Modifier ici : "" pour local, "/Hebreu4.0" pour GitHub
-
-# fin du "options.py" version "1.2"
+# Fin lib1/options.py v2.0 (shim)

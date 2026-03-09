@@ -5,16 +5,6 @@ STRUCTURE = {
     "dossiers": [],
     "fichiers": [
         {
-            "nom_document": "Eldad et Medad.Midrach.docx",
-            "nom_html": "eldad_et_medad.midrach.pdf",
-            "nom_affiché": "Eldad et Medad __(Midrach)__",
-            "nom_TDM": "{{nom_document_sans_ext}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 2
-        },
-        {
             "nom_document": "Noé le deluge et la patience de Dieu.Midrash.docx",
             "nom_html": "noe_le_deluge_et_la_patience_de_dieu.midrash.pdf",
             "nom_affiché": "Noé, le déluge et la patience de Dieu",
@@ -23,6 +13,16 @@ STRUCTURE = {
             "affiché_index": True,
             "affiché_TDM": True,
             "position": 1
+        },
+        {
+            "nom_document": "Eldad et Medad.Midrach.docx",
+            "nom_html": "eldad_et_medad.midrach.pdf",
+            "nom_affiché": "Eldad et Medad __(Midrach)__",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 2
         },
         {
             "nom_document": "Widuï. Prière du Yom kippur.docx",
@@ -44,5 +44,31 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Eldad et Medad.Midrach.docx",
+            "nom_html": "eldad_et_medad.midrach.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Noé le deluge et la patience de Dieu.Midrash.docx",
+            "nom_html": "noe_le_deluge_et_la_patience_de_dieu.midrash.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Widuï. Prière du Yom kippur.docx",
+            "nom_html": "widui._priere_du_yom_kippur.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

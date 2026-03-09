@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -42,5 +44,31 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.73.05 vb Pe alef quiesc et Lamed He.type abah.pdf",
+            "nom_html": "3.73.05_vb_pe_alef_quiesc_et_lamed_he.type_abah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.73.10.a vb Pe alef et Ayin gutt.type aHaz.pdf",
+            "nom_html": "3.73.10.a_vb_pe_alef_et_ayin_gutt.type_ahaz.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.73.10.b vb Pe alef et Ayin gutt.type ahev.pdf",
+            "nom_html": "3.73.10.b_vb_pe_alef_et_ayin_gutt.type_ahev.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

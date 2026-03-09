@@ -68,6 +68,17 @@ STRUCTURE = {
             "affiché_TDM": False,
             "position": 16,
             "nom_navigation": ""
+        },
+        {
+            "nom_document": "musique",
+            "nom_html": "musique",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 17,
+            "nom_navigation": "{{nom_document}}"
         }
     ],
     "fichiers": [
@@ -111,5 +122,23 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "Mes dossiers partag&eacute;s"
+    "titre_table": "Mes dossiers partag&eacute;s",
+    "partitions": [
+        {
+            "nom_document": "Code de translittération des consonnes hébraïques.pdf",
+            "nom_html": "code_de_translitteration_des_consonnes_hebraiques.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Sites amis.pdf",
+            "nom_html": "sites_amis.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

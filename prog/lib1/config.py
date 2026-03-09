@@ -1,53 +1,10 @@
-# config.py — Version 3.0
-# Configuration globale du générateur de site
+# lib1/config.py — Version 4.0 (shim)
+# Redirige vers settings.py (fusion v25.0)
+# Conservé pour compatibilité avec cree_table_des_matieres.py et autres imports anciens
 
-CONFIG = {
-    # ========================================
-    # TITRES ET LABELS
-    # ========================================
-    "titre_site": "Hébreu biblique",
-    
-    # ========================================
-    # AFFICHAGE DOSSIERS/FICHIERS
-    # ========================================
-    # Format : [préfixe_dossier, suffixe_dossier, préfixe_fichier, suffixe_fichier]
-    "ajout_affichage": ["📁 ", "", "📘 ", ""],
-    
-    # ========================================
-    # STRUCTURE ET NAVIGATION
-    # ========================================
-    "dossier_tdm": "TDM",
-    "voir_structure": False,  # Ajoute commentaires HTML structure
-    "lien_souligné_index": False,
-    
-    # ========================================
-    # EXTENSIONS ACCEPTÉES
-    # ========================================
-    "extensions_acceptees": ["pdf", "doc", "docx", "html", "htm", "txt", "jpg", "jpeg", "png", "gif"],
-    
-    # ========================================
-    # DOSSIERS À IGNORER
-    # ========================================
-    "ignorer": ["nppBackup", ".git", ".github", "__pycache__"],
-    
-    # ========================================
-    # CONVERSION PDF (v23.1)
-    # ========================================
-    # Options :
-    # - True : Regénérer TOUS les PDF
-    # - "JJ/MM/AAAA" : Regénérer si DOCX modifié après cette date
-    # - False : Comportement normal (PDF absent ou DOCX plus récent)
-    "regeneration": False,
-    
-    # Regénérer PDF créés aujourd'hui (erreurs possibles)
-    "regenerer_pdf_aujourd_hui": False,
-    
-    # ========================================
-    # CONTENU GLOBAL HAUT/BAS PAGE
-    # ========================================
-    "haut_page": [],
-    
-    "bas_page": [],
-}
+version = ("lib1/config.py", "4.0")
+print(f"[Import] config.py - Version 4.0 (shim → settings.py)")
 
-# Fin config.py v3.0
+from settings import CONFIG
+
+# Fin lib1/config.py v4.0 (shim)

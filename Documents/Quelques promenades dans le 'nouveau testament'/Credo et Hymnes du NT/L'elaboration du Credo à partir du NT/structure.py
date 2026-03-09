@@ -65,4 +65,46 @@ STRUCTURE = {
     "bas_page": True,
     "ajout_affichage": True,
     "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Amorces de la Trinité dans le N.T.docx",
+            "nom_html": "amorces_de_la_trinite_dans_le_n.t.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Credo baptismal dialogué.docx",
+            "nom_html": "credo_baptismal_dialogue.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Credo de Nicee-Constantinople.trilingue.docx",
+            "nom_html": "credo_de_nicee-constantinople.trilingue.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Credo liturgiques français.Synopse.docx",
+            "nom_html": "credo_liturgiques_francais.synopse.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Définition de Chalcédoine sur les deux natures du Christ.docx",
+            "nom_html": "definition_de_chalcedoine_sur_les_deux_natures_du_christ.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

@@ -94,5 +94,71 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "partitions": [
+        {
+            "nom_document": "3.801 vb hybride halakh.yalakh.pdf",
+            "nom_html": "3.801_vb_hybride_halakh.yalakh.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.802 vb hybride tov.yatav.pdf",
+            "nom_html": "3.802_vb_hybride_tov.yatav.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.803 vb hybride yagor.gur.pdf",
+            "nom_html": "3.803_vb_hybride_yagor.gur.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.804 vb hybride yatsav.natsav.pdf",
+            "nom_html": "3.804_vb_hybride_yatsav.natsav.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.805 vb hybride yaqets.qits.pdf",
+            "nom_html": "3.805_vb_hybride_yaqets.qits.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.806 vb hybride yaqosh.naqash.pdf",
+            "nom_html": "3.806_vb_hybride_yaqosh.naqash.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.807 vb hybride puH.nafaH.pdf",
+            "nom_html": "3.807_vb_hybride_puh.nafah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.808 vb hybride puts.nafats.pdf",
+            "nom_html": "3.808_vb_hybride_puts.nafats.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

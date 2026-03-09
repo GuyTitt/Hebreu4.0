@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Lecteur Musical
+  </title>
+  <link href="/Hebreu4.0/html/style.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <!-- entete_general.html musique -->
+  <div style="text-align:center; color:#7f8c8d; font-size:.95em; padding:8px 0 0 0;">
+   Cliquez sur 🎵 “Jouer ici” depuis une partition pour lancer la musique
+  </div>
+  <!-- entete.html — Player YouTube (iframe + fallback) -->
+  <div class="monTitre">
+   🎵 Lecteur Musical
+  </div>
+  <div id="player-zone" style="display:flex;flex-direction:column;align-items:center;padding:20px;gap:16px;">
+   <div id="video-wrapper" style="
+      width:100%; max-width:800px; aspect-ratio:16/9;
+      background:#111; border-radius:8px; overflow:hidden;
+      box-shadow:0 4px 16px rgba(0,0,0,.3); display:none;">
+    <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="100%" id="yt-iframe" style="display:block;" width="100%">
+    </iframe>
+   </div>
+   <div id="fallback-zone" style="display:none; text-align:center; padding:20px;">
+    <p style="color:#888; margin-bottom:12px;">
+     Le lecteur integre n'est pas disponible dans ce contexte.
+    </p>
+    <a href="#" id="yt-link" style="display:inline-block; background:#FF0000; color:#fff;
+              padding:12px 28px; border-radius:6px; text-decoration:none;
+              font-weight:bold; font-size:1.05em;" target="_blank">
+     ▶ Ouvrir sur YouTube
+    </a>
+   </div>
+   <p id="no-video-msg" style="color:#888; font-style:italic;">
+    Aucune video selectionnee. Cliquez sur 🎵 "Jouer ici" depuis une partition.
+   </p>
+  </div>
+  <script>
+   (function() {
+  var params   = new URLSearchParams(window.location.search);
+  var videoId  = params.get('v');
+  var iframe   = document.getElementById('yt-iframe');
+  var wrapper  = document.getElementById('video-wrapper');
+  var fallback = document.getElementById('fallback-zone');
+  var noMsg    = document.getElementById('no-video-msg');
+  var ytLink   = document.getElementById('yt-link');
+
+  if (!videoId) return;
+
+  noMsg.style.display = 'none';
+  var ytUrl    = 'https://www.youtube.com/watch?v=' + encodeURIComponent(videoId);
+  var embedUrl = 'https://www.youtube.com/embed/'   + encodeURIComponent(videoId)
+               + '?autoplay=1&rel=0';
+  ytLink.href = ytUrl;
+
+  wrapper.style.display = 'block';
+  iframe.src = embedUrl;
+
+  var loaded = false;
+  iframe.onload = function() { loaded = true; };
+  setTimeout(function() {
+    if (!loaded) {
+      wrapper.style.display  = 'none';
+      fallback.style.display = 'block';
+    }
+  }, 3000);
+})();
+  </script>
+  <div class="table-container">
+   <table class="dossiers">
+    <tbody>
+     <tr>
+      <td>
+      </td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+  <div>
+   <!-- debut pied general -->
+   <!-- fin pied general -->
+  </div>
+  <!-- Généré le 2026-03-10 00:29:18 par genere_site.py v25.2 -->
+ </body>
+</html>

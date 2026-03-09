@@ -1,5 +1,5 @@
-# STRUCTURE.py – Corrigé automatiquement
-# Templates {{variable}} pour flexibilité
+# STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
 
 STRUCTURE = {
     "dossiers": [],
@@ -154,5 +154,119 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.901 vb irreg bo'.pdf",
+            "nom_html": "3.901_vb_irreg_bo_.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.902 vb irreg bosh.pdf",
+            "nom_html": "3.902_vb_irreg_bosh.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.903 vb irreg hayah.pdf",
+            "nom_html": "3.903_vb_irreg_hayah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.904 vb irreg Hayah.pdf",
+            "nom_html": "3.904_vb_irreg_hayah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.905 vb irreg yakhol.pdf",
+            "nom_html": "3.905_vb_irreg_yakhol.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.906 vb irreg yasaf.pdf",
+            "nom_html": "3.906_vb_irreg_yasaf.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.907 vb irreg yatsaq.pdf",
+            "nom_html": "3.907_vb_irreg_yatsaq.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.908 vb irreg yatsa'.pdf",
+            "nom_html": "3.908_vb_irreg_yatsa_.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.909 vb irreg yare'.pdf",
+            "nom_html": "3.909_vb_irreg_yare_.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.910 vb irreg yarah.pdf",
+            "nom_html": "3.910_vb_irreg_yarah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.911 vb irreg laqaH.pdf",
+            "nom_html": "3.911_vb_irreg_laqah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.912 vb irreg mut.pdf",
+            "nom_html": "3.912_vb_irreg_mut.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.913 vb irreg nasa.pdf",
+            "nom_html": "3.913_vb_irreg_nasa.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.914 vb irreg natan.pdf",
+            "nom_html": "3.914_vb_irreg_natan.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

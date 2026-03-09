@@ -1,5 +1,5 @@
-# STRUCTURE.py – Corrigé automatiquement
-# Templates {{variable}} pour flexibilité
+# STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
 
 STRUCTURE = {
     "dossiers": [],
@@ -44,5 +44,31 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.610.ab. vb Ayin-Ayin.variantes pa'al.pdf",
+            "nom_html": "3.610.ab._vb_ayin-ayin.variantes_pa_al.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.610.R+ Repertoire des vb Ayin Ayin.pdf",
+            "nom_html": "3.610.r+_repertoire_des_vb_ayin_ayin.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.611.ab vb Ayin Ayin savav-qalal simplifie.pdf",
+            "nom_html": "3.611.ab_vb_ayin_ayin_savav-qalal_simplifie.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

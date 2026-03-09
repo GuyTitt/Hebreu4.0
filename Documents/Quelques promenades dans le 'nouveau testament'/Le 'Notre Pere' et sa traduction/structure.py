@@ -28,7 +28,7 @@ STRUCTURE = {
         {
             "nom_document": "Source. Evangiles en langues orientales",
             "nom_html": "source._evangiles_en_langues_orientales",
-            "nom_affiché": "Source. Évangiles en langues Orientales",
+            "nom_affiché": "Source - Évangiles en langues Orientales",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

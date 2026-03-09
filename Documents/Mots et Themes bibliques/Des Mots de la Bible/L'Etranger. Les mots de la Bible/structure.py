@@ -35,5 +35,22 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "partitions": [
+        {
+            "nom_document": "Etranger.1.du grec a l'hebreu.pdf",
+            "nom_html": "etranger.1.du_grec_a_l_hebreu.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Etranger.2.de l'hebreu au grec.pdf",
+            "nom_html": "etranger.2.de_l_hebreu_au_grec.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

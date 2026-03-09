@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [],
     "fichiers": [
@@ -102,5 +104,79 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.74.01 vb Pe nun et Lamed gutt.type nagA.pdf",
+            "nom_html": "3.74.01_vb_pe_nun_et_lamed_gutt.type_naga.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.02 vb Pe nun et Lamed resh.type nadar.pdf",
+            "nom_html": "3.74.02_vb_pe_nun_et_lamed_resh.type_nadar.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.03 vb Pe nun et Lamed alef.type nasa.pdf",
+            "nom_html": "3.74.03_vb_pe_nun_et_lamed_alef.type_nasa.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.05 vb Pe nun et Lamed he.type naTah.pdf",
+            "nom_html": "3.74.05_vb_pe_nun_et_lamed_he.type_natah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.10 vb Pe nun et Ayin gutt.type naHah.pdf",
+            "nom_html": "3.74.10_vb_pe_nun_et_ayin_gutt.type_nahah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.12 vb Pe nun.Ayin gutt et Lamed resh.type naAr.pdf",
+            "nom_html": "3.74.12_vb_pe_nun.ayin_gutt_et_lamed_resh.type_naar.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.15 vb Pe nun.Ayin gutt et Lamed He.type naHah.pdf",
+            "nom_html": "3.74.15_vb_pe_nun.ayin_gutt_et_lamed_he.type_nahah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.51 vb Pe nun.Ayin waw et Lamed gutt.pdf",
+            "nom_html": "3.74.51_vb_pe_nun.ayin_waw_et_lamed_gutt.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.74.60 vb Pe nun et Ayin Ayin.type nadad.pdf",
+            "nom_html": "3.74.60_vb_pe_nun_et_ayin_ayin.type_nadad.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

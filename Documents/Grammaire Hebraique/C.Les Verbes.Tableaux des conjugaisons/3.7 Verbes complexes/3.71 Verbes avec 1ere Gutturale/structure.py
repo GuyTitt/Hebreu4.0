@@ -1,5 +1,5 @@
-# STRUCTURE.py – Corrigé automatiquement
-# Templates {{variable}} pour flexibilité
+# STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
 
 STRUCTURE = {
     "dossiers": [],
@@ -154,5 +154,119 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.71.01 vb Pe gut et Lamed gut.type anaH.pdf",
+            "nom_html": "3.71.01_vb_pe_gut_et_lamed_gut.type_anah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.03 vb Pe gut et Lamed alef.type HaTa.pdf",
+            "nom_html": "3.71.03_vb_pe_gut_et_lamed_alef.type_hata.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.050 vb Pe gut et Lamed He.variantes paal.pdf",
+            "nom_html": "3.71.050_vb_pe_gut_et_lamed_he.variantes_paal.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.051 vb Pe gut et Lamed He.type Asah.pdf",
+            "nom_html": "3.71.051_vb_pe_gut_et_lamed_he.type_asah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.052+ vb Pe gut et Lamed He.Asah bin qallim.pdf",
+            "nom_html": "3.71.052+_vb_pe_gut_et_lamed_he.asah_bin_qallim.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.053+ vb Pe gut et Lamed He.Asah bin kev.et.gor.pdf",
+            "nom_html": "3.71.053+_vb_pe_gut_et_lamed_he.asah_bin_kev.et.gor.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.054 vb Pe gut et Lamed He.type Hatah.pdf",
+            "nom_html": "3.71.054_vb_pe_gut_et_lamed_he.type_hatah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.055 vb Pe gut et Lamed He.type hamah.pdf",
+            "nom_html": "3.71.055_vb_pe_gut_et_lamed_he.type_hamah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.056 vb Pe gut et Lamed He.type hagah.pdf",
+            "nom_html": "3.71.056_vb_pe_gut_et_lamed_he.type_hagah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.251 vb Pe gut. 2 resh. 3 He.'arah.pdf",
+            "nom_html": "3.71.251_vb_pe_gut._2_resh._3_he._arah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.255 vb Pe gut. 2 resh. 3 He.Harah.pdf",
+            "nom_html": "3.71.255_vb_pe_gut._2_resh._3_he.harah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.50 vb Pe gut et Ayin waw.type Od.pdf",
+            "nom_html": "3.71.50_vb_pe_gut_et_ayin_waw.type_od.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.60 vb Pe gut et Ayin Ayin.type Halal.pdf",
+            "nom_html": "3.71.60_vb_pe_gut_et_ayin_ayin.type_halal.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.71.62.ab vb Pe gut et Ayin Ayin resh.pdf",
+            "nom_html": "3.71.62.ab_vb_pe_gut_et_ayin_ayin_resh.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

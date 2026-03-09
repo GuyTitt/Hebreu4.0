@@ -44,5 +44,31 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Guérir et sauver dans les Evangiles.Les textes.docx",
+            "nom_html": "guerir_et_sauver_dans_les_evangiles.les_textes.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Les mots Guérir, Soigner, Purifier ds le NT. Les textes.docx",
+            "nom_html": "les_mots_guerir,_soigner,_purifier_ds_le_nt._les_textes.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Vocabulaire de la santé ds la Bible.Les références.docx",
+            "nom_html": "vocabulaire_de_la_sante_ds_la_bible.les_references.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

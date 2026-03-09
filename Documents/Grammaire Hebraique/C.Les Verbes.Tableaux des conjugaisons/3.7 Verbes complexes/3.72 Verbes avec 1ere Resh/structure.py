@@ -1,5 +1,5 @@
-# STRUCTURE.py – Corrigé automatiquement
-# Templates {{variable}} pour flexibilité
+# STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
 
 STRUCTURE = {
     "dossiers": [],
@@ -124,5 +124,95 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "3.72.01 vb Pe resh et Lamed gutt.type ratsaH.pdf",
+            "nom_html": "3.72.01_vb_pe_resh_et_lamed_gutt.type_ratsah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.03 vb Pe resh et Lamed alef.type rafa.pdf",
+            "nom_html": "3.72.03_vb_pe_resh_et_lamed_alef.type_rafa.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.05.ab vb Pe resh et Lamed He.type ratsah.pdf",
+            "nom_html": "3.72.05.ab_vb_pe_resh_et_lamed_he.type_ratsah.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.10.ab vb Pe resh et Ayin gutt.type raHam.pdf",
+            "nom_html": "3.72.10.ab_vb_pe_resh_et_ayin_gutt.type_raham.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.150 vb raah.simplifie.pdf",
+            "nom_html": "3.72.150_vb_raah.simplifie.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.151+ vb raah.detaille.bin qallim.pdf",
+            "nom_html": "3.72.151+_vb_raah.detaille.bin_qallim.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.152+ vb raah.detaille.autres bin.pdf",
+            "nom_html": "3.72.152+_vb_raah.detaille.autres_bin.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.50 vb Pe gut et Ayin waw.type rum.pdf",
+            "nom_html": "3.72.50_vb_pe_gut_et_ayin_waw.type_rum.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.51 vb Pe gut.Ayin waw.Lamed gut.type ruA'.pdf",
+            "nom_html": "3.72.51_vb_pe_gut.ayin_waw.lamed_gut.type_rua_.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.60.ab vb Pe resh et Ayin Ayin.actif et qualificatif.pdf",
+            "nom_html": "3.72.60.ab_vb_pe_resh_et_ayin_ayin.actif_et_qualificatif.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "3.72.61 vb Pe resh et Ayin Ayin gutt.rA'A'.pdf",
+            "nom_html": "3.72.61_vb_pe_resh_et_ayin_ayin_gutt.ra_a_.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }

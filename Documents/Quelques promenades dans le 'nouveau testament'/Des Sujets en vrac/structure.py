@@ -74,5 +74,55 @@ STRUCTURE = {
     "haut_page": True,
     "bas_page": True,
     "ajout_affichage": True,
-    "titre_table": "{{titre_dossier}}"
+    "titre_table": "{{titre_dossier}}",
+    "partitions": [
+        {
+            "nom_document": "Arbre et fruits pourris dans le N.T.docx",
+            "nom_html": "arbre_et_fruits_pourris_dans_le_n.t.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Au large ou en eau profone. Luc 5.1-11.docx",
+            "nom_html": "au_large_ou_en_eau_profone._luc_5.1-11.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "L'herbe verte en Mc 6,39.docx",
+            "nom_html": "l_herbe_verte_en_mc_6,39.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Le verbe splancnizomai ds le NT.docx",
+            "nom_html": "le_verbe_splancnizomai_ds_le_nt.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Le vocabulaire de la Rédemption ds le N.T.docx",
+            "nom_html": "le_vocabulaire_de_la_redemption_ds_le_n.t.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        },
+        {
+            "nom_document": "Plan de la lettre aux Hebreux. d'après Vanhoye.docx",
+            "nom_html": "plan_de_la_lettre_aux_hebreux._d_apres_vanhoye.pdf",
+            "nom_affiche": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "youtube_url": None,
+            "avec_bouton": False
+        }
+    ]
 }
