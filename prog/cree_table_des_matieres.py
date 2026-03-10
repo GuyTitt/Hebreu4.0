@@ -1,7 +1,11 @@
-# cree_table_des_matieres.py — Version 6.29
+# cree_table_des_matieres.py — Version 6.30
 
-version = ("cree_table_des_matieres.py", "6.29")
+version = ("cree_table_des_matieres.py", "6.30")
 print(f"[Version] {version[0]} — {version[1]}")
+
+# v6.30 : resolution des templates {{nom_document_sans_ext}} via
+#          struct.resoudre_templates_runtime() avant affichage TDM
+# v6.29 : Import html_utils pour templates
 
 import json
 import re
@@ -11,6 +15,7 @@ from bs4 import BeautifulSoup
 from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
 from lib1.config import CONFIG
 from lib1 import html_utils as html  # v6.29: Import html_utils pour templates
+from lib1 import structure_utils as struct  # v6.30: resolution templates
 
 def lire(variable: dict, element: str, defaut) -> object:
     """Lit une valeur dans un dictionnaire, retourne la valeur par défaut sinon.
@@ -176,6 +181,14 @@ def est_visible_tdm(item: dict) -> bool:
     """
     return item.get("affiché_TDM", True)
 
+def _resoudre_item(item: dict) -> dict:
+    """Resout les templates {{...}} d'un item via structure_utils.
+    Ex: '{{nom_document_sans_ext}}' -> 'Mi ha-ish.Ps 34.13-15'
+    """
+    variables = {"nom_document": item.get("nom_document", "")}
+    return struct.resoudre_templates_runtime(item, variables)
+
+
 def generer_ligne_dossier(item: dict, lien: str, sous_arbo: str) -> str:
     """Génère le HTML pour un dossier dans l'arbre TDM.
 
@@ -187,6 +200,7 @@ def generer_ligne_dossier(item: dict, lien: str, sous_arbo: str) -> str:
     Returns:
         str: Ligne HTML <li>...</li>.
     """
+    item = _resoudre_item(item)
     nom_affiché = appliquer_style(item.get("nom_affiché", item["nom_document"]))
     if sous_arbo:
         return f'<li><details><summary><a href="{lien}" class="folder-link">{nom_affiché}</a></summary><ul>{sous_arbo}</ul></details></li>\n'
@@ -202,6 +216,7 @@ def generer_ligne_fichier(item: dict, lien: str) -> str:
     Returns:
         str: Ligne HTML <li>...</li>.
     """
+    item = _resoudre_item(item)
     nom_affiché = appliquer_style(item.get("nom_affiché", item["nom_document"]))
     return f'<li><a href="{lien}">{nom_affiché}</a></li>\n'
 

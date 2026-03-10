@@ -1,5 +1,6 @@
 # remplace_v10.py
-# Version 10.0
+# Version 10.1
+# v10.1 : cree_table_des_matieres v6.30 (resolution templates TDM)
 # v10.0 : genere_site v25.3 (style.css, suppression musique/, TDM)
 # v9.1 : place_bouton v1.1 (NewWindow YouTube)
 # Verifie et copie les fichiers du package vers le dossier prog.
@@ -13,7 +14,7 @@ import sys
 import re
 from pathlib import Path
 
-version = ("remplace_v10.py", "10.0")
+version = ("remplace_v10.py", "10.1")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -32,7 +33,7 @@ FICHIERS = [
     ("builder_v1.0.py",            DST / "builder.py",           True),
     ("docx_to_pdf_v1.3.py",        DST / "docx_to_pdf.py",       True),
     ("conversion_pdf_v1.0.py",     DST / "conversion_pdf.py",    True),
-    ("cree_table_des_matieres_v6.29.py", DST / "cree_table_des_matieres.py", True),
+    ("cree_table_des_matieres_v6.30.py", DST / "cree_table_des_matieres.py", True),
     ("musique_v1.13.py",           DST / "musique.py",           True),
     ("normalisation_utils_v1.0.py", DST / "normalisation_utils.py", True),
     ("place_bouton_v02.py",        DST / "place_bouton.py",      True),
