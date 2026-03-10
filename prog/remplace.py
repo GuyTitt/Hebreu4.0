@@ -1,5 +1,7 @@
-# remplace_v9.py
-# Version 9.0
+# remplace_v10.py
+# Version 10.0
+# v10.0 : genere_site v25.3 (style.css, suppression musique/, TDM)
+# v9.1 : place_bouton v1.1 (NewWindow YouTube)
 # Verifie et copie les fichiers du package vers le dossier prog.
 # Affiche la version de chaque fichier source et cible.
 # Signale les fichiers presents dans prog\ qui ne sont pas repertories.
@@ -11,7 +13,7 @@ import sys
 import re
 from pathlib import Path
 
-version = ("remplace_v9.py", "9.0")
+version = ("remplace_v10.py", "10.0")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -24,26 +26,34 @@ LIB    = DST / "lib1"
 # (nom_fichier_source, chemin_cible, obligatoire)
 FICHIERS = [
     # prog\
-    ("genere_site_v25.1.py",       DST / "genere_site.py",       True),
+    ("genere_site_v25.3.py",       DST / "genere_site.py",       True),
     ("settings_v1.0.py",           DST / "settings.py",          True),
     ("documents_v2.1.py",          DST / "documents.py",         True),
     ("builder_v1.0.py",            DST / "builder.py",           True),
     ("docx_to_pdf_v1.3.py",        DST / "docx_to_pdf.py",       True),
-    ("musique_v1.11.py",           DST / "musique.py",           True),
-    ("place_bouton_v01.py",        DST / "place_bouton.py",      True),
+    ("conversion_pdf_v1.0.py",     DST / "conversion_pdf.py",    True),
+    ("cree_table_des_matieres_v6.29.py", DST / "cree_table_des_matieres.py", True),
+    ("musique_v1.13.py",           DST / "musique.py",           True),
+    ("normalisation_utils_v1.0.py", DST / "normalisation_utils.py", True),
+    ("place_bouton_v02.py",        DST / "place_bouton.py",      True),
     ("versions_v1.0.py",           DST / "versions.py",          False),
-    ("remplace_v9.py",             DST / "remplace.py",          False),
+    ("remplace_v10.py",            DST / "remplace.py",          False),
+    ("style.css",                  DST / "style.css",            True),
     # lib1\
     ("structure_utils_v2.1.py",    LIB / "structure_utils.py",   True),
+    ("fichier_utils_v1.0.py",      LIB / "fichier_utils.py",     True),
+    ("html_utils_v1.0.py",         LIB / "html_utils.py",        True),
+    ("pdf_utils_v1.1.py",          LIB / "pdf_utils.py",         True),
+    ("partition_utils_v2.3.py",    LIB / "partition_utils.py",   True),
     ("lib1_options_shim_v2.0.py",  LIB / "options.py",           False),
     ("lib1_config_shim_v4.0.py",   LIB / "config.py",            False),
 ]
 
 # Fichiers a supprimer si presents (anciens noms)
 SUPPRIMER = [
-    LIB / "partition_utils.py",
     DST / "Place_Bouton_PDF.py",
     DST / "place_bouton_v01.py",
+    DST / "place_bouton_v02.py",  # si deploye manuellement
 ]
 
 # Fichiers connus dans prog\ et lib1\ (ne pas signaler comme inutiles)

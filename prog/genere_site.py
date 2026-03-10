@@ -1,35 +1,20 @@
-# genere_site.py — Version 25.2
+# genere_site.py — Version 25.3
 
-version = ("genere_site.py", "25.2")
+version = ("genere_site.py", "25.3")
 
 """
-Générateur de site statique - Version 25.2
+Générateur de site statique - Version 25.3
+
+NOUVEAUTÉS v25.3:
+- style.css copie depuis prog/ (meme dossier que genere_site.py) vers html/
+- Suppression creation dossier html/musique/
+- PHASE 5 : appel generer_tdm() pour remplir la table des matieres
 
 NOUVEAUTÉS v25.2:
-- PHASE 4 : musique.py appelé APRES copier_fichiers_site()
-  Les PDF avec bouton YouTube ecrasent les copies sans bouton.
+- PHASE 4 : musique.py apres copier_fichiers_site() pour boutons YouTube
 
 NOUVEAUTÉS v25.1:
 - (voir historique)
-
-NOUVEAUTÉS v24.0:
-- Fichiers commentaires (__*) ignorés sauf partitions
-- Partitions musicales avec boutons YouTube
-- Lecteur musical /musique/index.html
-- Regénération forcée via lancer.cmd regenere_tout
-- Filtrage intelligent fichiers sources
-
-Workflow v25.2:
-Pour chaque dossier dans DOCUMENTS:
-  1. Générer PDF manquants (DOCX→PDF)
-  2. Traiter partitions (__partition_*.pdf → avec boutons)
-  3. Scanner dossier et mettre à jour STRUCTURE.py
-  4. Générer index.html
-
-Ensuite:
-  5. Copier fichiers vers HTML
-  6. PHASE 4 : musique.py -> boutons YouTube sur PDF (ecrase copies sans bouton)
-  7. Générer page lecteur musical
 """
 
 import os
@@ -60,6 +45,7 @@ from lib1 import pdf_utils as pdf
 from lib1 import fichier_utils as fichiers  # v24.0
 from lib1 import partition_utils as partitions  # v24.0
 import musique as _musique                        # v25.2 : boutons YouTube phase 4
+import cree_table_des_matieres as _tdm            # v25.3 : generation table des matieres
 
 print(f"[Version] {version[0]} — {version[1]}")
 
@@ -575,13 +561,19 @@ def main() -> None:
     if Path(DOSSIER_HTML).exists():
         shutil.rmtree(DOSSIER_HTML)
     Path(DOSSIER_HTML).mkdir(parents=True, exist_ok=True)
-    
-    style_src = Path(__file__).parent / "lib1" / "style.css"
+
+    # v25.3 : style.css depuis prog/ en priorite, sinon prog/lib1/
+    style_src = Path(__file__).parent / "style.css"
+    if not style_src.exists():
+        style_src = Path(__file__).parent / "lib1" / "style.css"
     if style_src.exists():
         shutil.copy2(style_src, Path(DOSSIER_HTML) / "style.css")
-    
-    tdm_path = Path(DOSSIER_HTML) / DOSSIER_TDM
-    tdm_path.mkdir(parents=True, exist_ok=True)
+        log(f"style.css copie depuis {style_src}")
+    else:
+        log("ATTENTION : style.css introuvable (ni prog/ ni prog/lib1/)")
+
+    # v25.3 : dossier TDM cree par generer_tdm() en PHASE 5 - pas ici
+    # v25.3 : dossier html/musique/ supprime - plus utilise
     
     log("=" * 70)
     log("PHASE 1 : GÉNÉRATION PDF + PARTITIONS + STRUCTURE.py")
@@ -638,14 +630,28 @@ def main() -> None:
     if nb_total_partitions == 0:
         log("  Aucune partition traitee (pas de __correspondance.csv)")
     log("")
-    
+
+    log("=" * 70)
+    log("PHASE 5 : TABLE DES MATIERES")
+    log("=" * 70)
+    log("")
+
+    # v25.3 : appel generer_tdm() - etait absent, causait TDM vide
+    try:
+        _tdm.generer_tdm()
+    except Exception as e:
+        log(f"ERREUR generation TDM : {e}")
+        import traceback
+        log(traceback.format_exc())
+    log("")
+
     # Nettoyage
     processes = get_word_processes()
     if processes:
         log("")
         log("Fermeture Word")
         kill_word_processes(processes)
-    
+
     log("")
     log("=" * 70)
     log("=== FIN GÉNÉRATION ===")
@@ -654,4 +660,4 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-# Fin genere_site.py v24.0
+# Fin genere_site.py v25.3
