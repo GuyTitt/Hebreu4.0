@@ -145,6 +145,16 @@ STRUCTURE = {
             "position": 15
         },
         {
+            "nom_document": "__partition_L'auvergnat de Brassens en hébreu.docx",
+            "nom_html": "l_auvergnat_de_brassens_en_hebreu.pdf",
+            "nom_affiché": "L'auvergnat de Brassens en hébreu",
+            "nom_TDM": "{{nom_affiché}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 16
+        },
+        {
             "nom_document": "Lekhah Dodi.Accueil du Shabbat.pdf",
             "nom_html": "lekhah_dodi.accueil_du_shabbat.pdf",
             "nom_affiché": "{{nom_document_sans_ext}}",
@@ -152,7 +162,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 16
+            "position": 17
         },
         {
             "nom_document": "Lomir allen. A glazele vaijn.pdf",
@@ -162,7 +172,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 17
+            "position": 18
         },
         {
             "nom_document": "Lou Yehi.Naomi Shemer.pdf",
@@ -172,7 +182,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 18
+            "position": 19
         },
         {
             "nom_document": "Mi ha-ish.Ps 34.13-15.pdf",
@@ -182,7 +192,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 19
+            "position": 20
         },
         {
             "nom_document": "Min ha-metsar.Ps 118.5-6.pdf",
@@ -192,7 +202,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 20
+            "position": 21
         },
         {
             "nom_document": "Od Yishama.Jr 33.10-11.pdf",
@@ -202,7 +212,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 21
+            "position": 22
         },
         {
             "nom_document": "Oyfn pripetschik.pdf",
@@ -212,7 +222,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 22
+            "position": 23
         },
         {
             "nom_document": "Qol Dodi.Ct 2.8.pdf",
@@ -222,7 +232,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 23
+            "position": 24
         },
         {
             "nom_document": "Roni we-simhi.pdf",
@@ -232,7 +242,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 24
+            "position": 25
         },
         {
             "nom_document": "Ronni we-simhi.Za 2.14.pdf",
@@ -242,7 +252,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 25
+            "position": 26
         },
         {
             "nom_document": "Shema Yisrael.De 6.4.pdf",
@@ -252,7 +262,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 26
+            "position": 27
         },
         {
             "nom_document": "Sim shalom.pdf",
@@ -262,7 +272,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 27
+            "position": 28
         },
         {
             "nom_document": "Wihuda leolam teshev.Jl 4.20.pdf",
@@ -272,7 +282,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 28
+            "position": 29
         },
         {
             "nom_document": "Yedid Nephesh.pdf",
@@ -282,7 +292,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 29
+            "position": 30
         },
         {
             "nom_document": "Yepheh noph.cf.Ps 48.3.pdf",
@@ -292,7 +302,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 30
+            "position": 31
         },
         {
             "nom_document": "Yerushalayim shel zahav.naomi Shemer.pdf",
@@ -302,7 +312,7 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 31
+            "position": 32
         },
         {
             "nom_document": "Yevarekhekha hashem mi-Sion.Ps 128.5-6.pdf",
@@ -312,23 +322,13 @@ STRUCTURE = {
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
-            "position": 32
+            "position": 33
         },
         {
             "nom_document": "Zekhor davar.Ps 119,49-51.pdf",
             "nom_html": "zekhor_davar.ps_119,49-51.pdf",
             "nom_affiché": "{{nom_document_sans_ext}}",
             "nom_TDM": "{{nom_document_sans_ext}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 33
-        },
-        {
-            "nom_document": "__partition_L'auvergnat de Brassens en hébreu.docx",
-            "nom_html": "l_auvergnat_de_brassens_en_hebreu.pdf",
-            "nom_affiché": "L'auvergnat de Brassens en hébreu",
-            "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -340,8 +340,8 @@ STRUCTURE = {
             "nom_affiché": "{{nom_document_sans_ext}}",
             "nom_TDM": "{{nom_document_sans_ext}}",
             "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
+            "affiché_index": False,
+            "affiché_TDM": False,
             "position": 35
         }
     ],
