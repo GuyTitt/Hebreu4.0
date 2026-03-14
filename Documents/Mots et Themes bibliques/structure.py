@@ -1,4 +1,6 @@
 # STRUCTURE.py – Généré automatiquement
+# Templates {{variable}} résolus à l'exécution
+
 STRUCTURE = {
     "dossiers": [
         {
@@ -35,7 +37,18 @@ STRUCTURE = {
             "position": 3
         }
     ],
-    "fichiers": [],
+    "fichiers": [
+        {
+            "nom_document": "cordage.png",
+            "nom_html": "cordage.png",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": False,
+            "affiché_index": False,
+            "affiché_TDM": False,
+            "position": 4
+        }
+    ],
     "titre_dossier": "Mots et thèmes bibliques",
     "entete_general": True,
     "pied_general": True,
@@ -44,5 +57,6 @@ STRUCTURE = {
     "navigation": True,
     "haut_page": True,
     "bas_page": True,
-    "ajout_affichage": True
+    "ajout_affichage": True,
+    "titre_table": "{{titre_dossier}}"
 }

@@ -68,7 +68,18 @@ STRUCTURE = {
             "position": 6
         }
     ],
-    "fichiers": [],
+    "fichiers": [
+        {
+            "nom_document": "grand_mere_r.png",
+            "nom_html": "grand_mere_r.png",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": False,
+            "affiché_index": False,
+            "affiché_TDM": False,
+            "position": 7
+        }
+],
     "titre_dossier": "Grammaire Hébraïque",
     "entete_general": True,
     "pied_general": True,

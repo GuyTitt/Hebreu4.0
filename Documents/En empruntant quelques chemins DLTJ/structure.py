@@ -80,6 +80,16 @@ STRUCTURE = {
             "affiché_index": False,
             "affiché_TDM": True,
             "position": 7
+        },
+        {
+            "nom_document": "lecteurs_rouleau.png",
+            "nom_html": "lecteurs_rouleau.png",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 8
         }
     ],
     "titre_dossier": "En empruntant quelques chemins dans la tradition juive",

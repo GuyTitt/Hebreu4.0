@@ -92,10 +92,10 @@ STRUCTURE = {
             "position": 12
         },
         {
-            "nom_document": "lecture_torah.png",
-            "nom_html": "lecture_torah.png",
-            "nom_affiché": "lecture_torah",
-            "nom_TDM": "lecture_torah",
+            "nom_document": "rouleau.png",
+            "nom_html": "rouleau.png",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
             "ajout_affichage": False,
             "affiché_index": False,
             "affiché_TDM": False,
