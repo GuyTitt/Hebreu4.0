@@ -27,8 +27,8 @@ STRUCTURE = {
         {
             "nom_document": "anokhi et ani dans la Torah.pdf",
             "nom_html": "anokhi_et_ani_dans_la_torah.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Anokhi et ani dans la Torah",
+            "nom_TDM": "Anokhi et ani dans la Torah",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -47,8 +47,8 @@ STRUCTURE = {
         {
             "nom_document": "des mots avec un sens abstrait au pluriel.docx",
             "nom_html": "des_mots_avec_un_sens_abstrait_au_pluriel.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Des mots avec un sens abstrait au pluriel",
+            "nom_TDM": "Des mots avec un sens abstrait au pluriel",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -77,8 +77,8 @@ STRUCTURE = {
         {
             "nom_document": "Le vocabulaire du betail.pdf",
             "nom_html": "le_vocabulaire_du_betail.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Le vocabulaire du bétail",
+            "nom_TDM": "Le vocabulaire du bétail",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
@@ -87,8 +87,8 @@ STRUCTURE = {
         {
             "nom_document": "Yobel-Jubilé.Petite histoire du mot.docx",
             "nom_html": "yobel-jubile.petite_histoire_du_mot.pdf",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
+            "nom_affiché": "Yobel-Jubilé. Petite histoire du mot",
+            "nom_TDM": "Yobel-Jubilé. Petite histoire du mot",
             "ajout_affichage": True,
             "affiché_index": True,
             "affiché_TDM": True,
