@@ -457,16 +457,16 @@ STRUCTURE = {
             "nom_html": "hinneh_mah_tov-air_1.ps133.1.pdf",
             "nom_affiche": "{{nom_document_sans_ext}}",
             "nom_TDM": "{{nom_document_sans_ext}}",
-            "youtube_url": None,
-            "avec_bouton": False
+            "youtube_url": "https://www.youtube.com/watch?v=DGBSDTNEmcY",
+            "avec_bouton": True
         },
         {
             "nom_document": "Hinneh mah tov-air_1.PS133.2.pdf",
             "nom_html": "hinneh_mah_tov-air_1.ps133.2.pdf",
             "nom_affiche": "{{nom_document_sans_ext}}",
             "nom_TDM": "{{nom_document_sans_ext}}",
-            "youtube_url": None,
-            "avec_bouton": False
+            "youtube_url": "https://www.youtube.com/watch?v=NSx3DBqA8UA",
+            "avec_bouton": True
         },
         {
             "nom_document": "Kol ha-olam kullo.N.de Braslaw.pdf",

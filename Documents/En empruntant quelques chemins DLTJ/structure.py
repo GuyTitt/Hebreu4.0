@@ -86,9 +86,9 @@ STRUCTURE = {
             "nom_html": "lecteurs_rouleau.png",
             "nom_affiché": "{{nom_document_sans_ext}}",
             "nom_TDM": "{{nom_document_sans_ext}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
+            "ajout_affichage": False,
+            "affiché_index": False,
+            "affiché_TDM": False,
             "position": 8
         }
     ],

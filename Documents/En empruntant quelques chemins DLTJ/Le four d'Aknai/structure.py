@@ -17,7 +17,7 @@ STRUCTURE = {
         {
             "nom_document": "BabaMetsia 59b.Traduction Steinsaltz.docx",
             "nom_html": "babametsia_59b.traduction_steinsaltz.pdf",
-            "nom_affiché": "BabaMetsia 59b __(Traduction Steinsaltz)__",
+            "nom_affiché": "Baba Metsia 59b __(Traduction Steinsaltz)__",
             "nom_TDM": "{{nom_affiché}}",
             "ajout_affichage": True,
             "affiché_index": True,

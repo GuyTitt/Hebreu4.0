@@ -1,4 +1,4 @@
-/* style.css — Version 4.1 pour genere_site.py v23.2 */
+/* style.css — Version 4.2 pour genere_site.py v23.2 */
 
 /* ==============================================================
    RÉINITIALISATION GLOBALE
@@ -52,6 +52,7 @@ body {
 .monSousTitre .nav-center {
     flex: 1;
     text-align: center;
+	font-size: 58px;
 }
 
 .monSousTitre .monbouton {
@@ -394,30 +395,6 @@ footer {
   font-size: 0.92em;
 }
 
-/* Intro avec rouleau.png à droite */
-.entete-intro-avec-img {
-  display: flex;
-  gap: 24px;
-  align-items: flex-start;
-  margin-bottom: 0.5em;
-}
-
-.entete-intro-texte {
-  flex: 1;
-  line-height: 1.8;
-}
-
-.entete-intro-img {
-  width: 120px;
-  flex-shrink: 0;
-  text-align: center;
-  padding-top: 4px;
-}
-
-.entete-intro-img img {
-  width: 100%;
-}
-
 /* Intro texte */
 .entete-intro {
   line-height: 1.8;
@@ -531,13 +508,8 @@ table.entete-tableau tr:hover td:not(.entete-col-sep):not(.entete-td-vide) {
 
 /* Responsive */
 @media (max-width: 620px) {
-  .entete-intro-avec-img,
   .entete-bloc, .entete-bloc-reverse {
     flex-direction: column;
-  }
-  .entete-intro-img {
-    width: 100px;
-    margin: 0 auto;
   }
   .entete-bloc-img {
     width: 100%;
