@@ -100,6 +100,16 @@ STRUCTURE = {
             "affiché_index": False,
             "affiché_TDM": False,
             "position": 13
+        },
+        {
+            "nom_document": "femme_enceinte.png",
+            "nom_html": "femme_enceinte.png",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 17
         }
     ],
     "titre_dossier": "Mes dossiers partag&eacute;s",

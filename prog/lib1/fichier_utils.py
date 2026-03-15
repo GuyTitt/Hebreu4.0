@@ -1,4 +1,4 @@
-# fichier_utils.py — Version 1.0
+# fichier_utils.py — Version 1.1
 # Gestion fichiers spéciaux et filtrage
 
 """
@@ -94,7 +94,10 @@ def doit_filtrer_fichier(nom_fichier: str) -> bool:
     # Commentaires
     if est_fichier_commentaire(nom_fichier):
         return True
+    # entêtes et pieds
+    if nom_fichier in ('entete.html','pied.html','entete_general.html','pied_general.html'):
+        return True
     
     return False
 
-# Fin fichier_utils.py v1.0
+# Fin fichier_utils.py v1.1

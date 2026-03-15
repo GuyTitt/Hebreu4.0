@@ -59,7 +59,18 @@ STRUCTURE = {
             "position": 6
         }
     ],
-    "fichiers": [],
+    "fichiers": [
+        {
+            "nom_document": "femme_enceinte.png",
+            "nom_html": "femme_enceinte.png",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": False,
+            "affiché_index": False,
+            "affiché_TDM": False,
+            "position": 4
+        }
+    ],
     "titre_dossier": "Quelques promenades dans le &laquo; nouveau testament &raquo;",
     "entete_general": True,
     "pied_general": True,
