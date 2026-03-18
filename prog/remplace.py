@@ -41,7 +41,7 @@ FICHIERS = [
     ("style_v4.2.css",             DST / "style.css",            True),
     ("versions_v1.0.py",           DST / "versions.py",          False),
     # mise à jour locale
-    ("config_v1.3.yaml",            DST / "config.yaml",              True),
+    ("config_v1.4.yaml",            DST / "config.yaml",              True),
     ("guide_maj_github_v1.0.docx",  DST / "guide_maj_github.docx",    True),
     ("MAJ_GITHUB_v1.0.cmd",         DST / "MAJ_GITHUB.cmd",           True),
     ("maj_github_v1.5.py",          DST / "maj_github.py",            True),
