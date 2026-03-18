@@ -1,17 +1,19 @@
-# maj_github_v1.5.py — Version 1.5
+# maj_github_v1.6.py — Version 1.6
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.5 : etape 2 en streaming (Popen + readline) evite blocage buffer stdout
-#        affichage temps reel de la generation dans le log
+# v1.6 : suppression token dans URL git (revoque par GitHub push protection)
+#        utilise git push origin main + Windows Credential Manager
+#        suppression github_token et github_user de config.yaml
+# v1.5 : etape 2 streaming Popen evite blocage buffer
 # v1.4 : lancer.cmd appele avec argument 'nolocal'
 # v1.3 : fermeture propre par croix ; confirmation optionnelle
 # v1.2 : authentification GitHub via token PAT
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.5")
+version = ("maj_github.py", "1.6")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -37,12 +39,10 @@ CONFIG_DEFAUT = {
     "racine_source":    "",   # dossier des fichiers editables (docx...)
     "racine_site_local": "",  # dossier racine du site local (depot git)
     "lancer_cmd":       "",   # chemin vers lancer.cmd
-    "url_github":       "",   # ex: https://github.com/francisboulanger/Hebreu4.0
+    "url_github":       "",   # ex: https://github.com/GuyTitt/Hebreu4.0
     "message_commit":   "auto",  # "auto" = date+heure, sinon texte fixe
     "filtre":           "",   # filtre pour sync_dossiers (vide = tout)
     "branche":          "main",
-    "github_token":     "",   # Personal Access Token GitHub
-    "github_user":      "",   # nom d'utilisateur GitHub
     "confirmation_git": "true",  # demander confirmation avant push
 }
 
@@ -71,7 +71,6 @@ def lire_config(chemin: Path) -> dict:
     cfg = CONFIG_DEFAUT.copy()
     for cle in ("racine_source", "racine_site_local", "lancer_cmd",
                 "url_github", "message_commit", "filtre", "branche",
-                "github_token", "github_user",
                 "confirmation_git"):
         if cle in raw and raw[cle] is not None:
             cfg[cle] = str(raw[cle]).strip()
@@ -529,44 +528,22 @@ class FenetreMaj(tk.Tk):
         if remote_txt.strip():
             self._log(f"  Remote : {remote_txt.splitlines()[0]}", "#AED6F1")
 
-        # Construire l'URL avec token si fourni
-        token = self.cfg.get("github_token", "").strip()
-        user  = self.cfg.get("github_user", "").strip()
-        if token:
-            # Extraire l'URL de base depuis le remote existant
-            # ex: https://github.com/user/repo.git
-            import re as _re
-            m = _re.search(r'https://(?:[^@]+@)?(.+?)(?:\.git)?[\s\t]', remote_txt)
-            if m:
-                base_url = m.group(1)   # github.com/user/repo
-                push_user = user if user else "x-token"
-                url_avec_token = f"https://{push_user}:{token}@{base_url}.git"
-                self._log("  Authentification via token PAT.", "#AED6F1")
-                push_target = url_avec_token
-            else:
-                self._log("  Remote non reconnu, push sans token.", "#FFD700")
-                push_target = "origin"
-        else:
-            self._log("  Aucun token — push via credentials système.", "#FFD700")
-            push_target = "origin"
-
-        # git push
-        self._log(f"  git push {branche} ...", "#DDDDDD")
+        # git push via origin — credentials gérés par Windows Credential Manager
+        # (configuré une fois avec : cmdkey /generic:git:https://github.com
+        #                                    /user:GuyTitt /pass:TON_TOKEN)
+        self._log(f"  git push origin {branche} ...", "#DDDDDD")
         code, sortie = run_cmd(
-            ["git", "push", push_target, branche],
+            ["git", "push", "origin", branche],
             cwd=site
         )
-        # Masquer le token dans le log
-        if token and sortie:
-            sortie = sortie.replace(token, "***TOKEN***")
         if sortie.strip():
             for ligne in sortie.strip().split("\n"):
                 couleur = "#FF6B6B" if "error" in ligne.lower() else "#DDDDDD"
                 self._log(f"  {ligne}", couleur)
         if code != 0:
             self._log(f"  ERREUR git push (code {code})", "#FF6B6B")
-            if not token:
-                self._log("  → Ajoutez github_token dans config.yaml", "#FFD700")
+            self._log("  → Vérifier que le token est dans le Credential Manager :", "#FFD700")
+            self._log("    cmdkey /generic:git:https://github.com /user:GuyTitt /pass:TOKEN", "#FFD700")
             self._set_etape(idx, "erreur")
             self._terminer(False)
             return False
@@ -666,4 +643,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# fin de maj_github_v1.5.py - Version 1.5
+# fin de maj_github_v1.6.py - Version 1.6

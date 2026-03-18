@@ -44,7 +44,7 @@ FICHIERS = [
     ("config_v1.4.yaml",            DST / "config.yaml",              True),
     ("guide_maj_github_v1.0.docx",  DST / "guide_maj_github.docx",    True),
     ("MAJ_GITHUB_v1.0.cmd",         DST / "MAJ_GITHUB.cmd",           True),
-    ("maj_github_v1.5.py",          DST / "maj_github.py",            True),
+    ("maj_github_v1.6.py",          DST / "maj_github.py",            True),
     ("sync_dossiers_doc_v1.0.docx", DST / "sync_dossiers_doc.docx",   True),
     ("sync_dossiers_v1.1.py",       DST / "sync_dossiers.py",         True),
     # lib1\

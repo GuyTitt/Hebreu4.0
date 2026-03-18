@@ -1,9 +1,9 @@
-# config.yaml — maj_github.py v1.3
+# config.yaml — maj_github.py v1.6
 # Mise a jour du site GitHub Hebreu4.0
-# Placer ce fichier dans le meme dossier que maj_github_v1.3.py
+# Placer ce fichier dans le meme dossier que maj_github_v1.6.py
 
 # Dossier contenant les fichiers source editables par l'utilisateur
-racine_source     = C:\test\modif\Hebreu4.0
+racine_source     = C:\Test\modif\Hebreu4.0
 
 # Dossier racine du site local (depot git clone de GitHub)
 racine_site_local = C:\SiteGITHUB\Hebreu4.0
@@ -11,16 +11,17 @@ racine_site_local = C:\SiteGITHUB\Hebreu4.0
 # Chemin complet vers lancer.cmd (generateur du site)
 lancer_cmd        = C:\SiteGITHUB\Hebreu4.0\prog\lancer.cmd
 
-# URL du depot GitHub (informatif uniquement)
+# URL du depot GitHub (informatif uniquement — non utilisee pour le push)
 url_github        = https://github.com/GuyTitt/Hebreu4.0
 
 # ── Authentification GitHub ────────────────────────────────────
-# Token PAT : GitHub > Settings > Developer settings >
-#             Personal access tokens > Tokens (classic) > cocher "repo"
-github_token      = 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
-
-# Votre nom d'utilisateur GitHub
-github_user       = GuyTitt
+# Le token est gere par Windows Credential Manager (a faire une seule fois) :
+#
+#   cmdkey /generic:git:https://github.com /user:GuyTitt /pass:ghp_VOTRE_TOKEN
+#
+# Apres cette commande, git push fonctionne automatiquement sans mot de passe.
+# Pour verifier : cmdkey /list | findstr github
+# Pour supprimer : cmdkey /delete:git:https://github.com
 
 # ── Options ───────────────────────────────────────────────────
 # Message du commit : "auto" = date+heure automatique
@@ -34,13 +35,5 @@ branche           = main
 # false = pousser automatiquement sans demander
 confirmation_git  = true
 
-# Delai d'attente (secondes) apres lancer.cmd pour que le site
-# soit genere avant d'arreter le serveur node
-# Augmenter si le site est volumineux (> 15s de generation)
-delai_generation  = 15
-
-# Filtre : laisser vide pour synchroniser tous les fichiers modifies
-# Exemples :
-#   .*\.docx$          => uniquement les fichiers Word
-#   .*\.docx$,.*\.html$ => Word et HTML
+# Filtre fichiers (vide = tout accepter)
 filtre            = .*\.docx$,.*\.html$
