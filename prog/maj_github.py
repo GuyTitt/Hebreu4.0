@@ -1,8 +1,11 @@
-# maj_github_v1.7.py — Version 1.7
+# maj_github_v1.8.py — Version 1.8
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
+# v1.8 : GIT_ASKPASS utilise un script Python temporaire au lieu d'un .bat
+#         (echo dans .bat ajoute des espaces => token invalide sur GitHub)
+#         si pas de token : Credential Manager Windows utilise (GitHub Desktop)
 # v1.7 : authentification via GIT_ASKPASS + token dans config.yaml
 #        evite le conflit Credential Manager entre plusieurs utilisateurs
 #        le token n'apparait jamais dans les URLs ni dans les logs
@@ -14,7 +17,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.7")
+version = ("maj_github.py", "1.8")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -532,34 +535,46 @@ class FenetreMaj(tk.Tk):
         if remote_txt.strip():
             self._log(f"  Remote : {remote_txt.splitlines()[0]}", "#AED6F1")
 
-        # Authentification via GIT_ASKPASS :
-        # git appelle askpass_script avec "Username" ou "Password" comme argument
-        # le script retourne le bon token sans l'exposer dans les URLs ni les logs
+        # Authentification :
+        #   - Si token + user configures dans config.yaml :
+        #     script Python temporaire pour GIT_ASKPASS (evite les espaces
+        #     que "echo" .bat ajoute et qui invalident le token sur GitHub)
+        #   - Sinon : le Credential Manager Windows prend la main
+        #     (credentials stockes par GitHub Desktop)
         token = self.cfg.get("github_token", "").strip()
         user  = self.cfg.get("github_user", "").strip()
 
         env = os.environ.copy()
+        askpass_path = None
+
         if token and user:
-            # Créer un script askpass temporaire
-            import tempfile
-            askpass = tempfile.NamedTemporaryFile(
-                mode="w", suffix=".bat", delete=False,
-                encoding="utf-8"
-            )
-            # Le script retourne user ou token selon ce que git demande
-            askpass.write(
-                "@echo off\n"
-                f"echo %1 | findstr /i username >nul && echo {user} && exit /b\n"
-                f"echo {token}\n"
-            )
-            askpass.close()
-            askpass_path = askpass.name
-            env["GIT_ASKPASS"]       = askpass_path
-            env["GIT_TERMINAL_PROMPT"] = "0"   # pas de prompt interactif
-            self._log("  Authentification via token PAT (GIT_ASKPASS).", "#AED6F1")
+            import tempfile, textwrap
+            # Script Python : print() sans espace ni \r\n Windows
+            script = textwrap.dedent(f"""
+                import sys
+                prompt = " ".join(sys.argv[1:]).lower()
+                if "username" in prompt:
+                    print({repr(user)})
+                else:
+                    print({repr(token)})
+            """).strip()
+            fd, askpass_path = tempfile.mkstemp(suffix=".py", prefix="askpass_")
+            import os as _os
+            with _os.fdopen(fd, "w", encoding="utf-8") as f:
+                f.write(script)
+            # GIT_ASKPASS doit etre un executable ; on passe via python
+            py_exe = sys.executable.replace("\\", "/")
+            wrapper_src = f"@echo off\n\"{py_exe}\" \"{askpass_path}\" %*\n"
+            fd2, wrapper_path = tempfile.mkstemp(suffix=".bat", prefix="askpass_wrap_")
+            with _os.fdopen(fd2, "w", encoding="utf-8") as f:
+                f.write(wrapper_src)
+            env["GIT_ASKPASS"]        = wrapper_path
+            env["GIT_TERMINAL_PROMPT"] = "0"
+            self._log("  Authentification via token PAT (script Python).", "#AED6F1")
         else:
-            askpass_path = None
-            self._log("  Aucun token — credentials système utilisés.", "#FFD700")
+            wrapper_path = None
+            self._log("  Pas de token — Credential Manager Windows utilise.", "#FFD700")
+            self._log("  (GitHub Desktop stocke les credentials dans le Credential Manager)", "#AAAAAA")
 
         # git push
         self._log(f"  git push origin {branche} ...", "#DDDDDD")
@@ -578,12 +593,13 @@ class FenetreMaj(tk.Tk):
         except Exception as e:
             code, sortie = -1, str(e)
         finally:
-            # Supprimer le script askpass temporaire
-            if askpass_path:
-                try:
-                    os.unlink(askpass_path)
-                except Exception:
-                    pass
+            # Supprimer les scripts askpass temporaires
+            for _p in (askpass_path, locals().get("wrapper_path")):
+                if _p:
+                    try:
+                        os.unlink(_p)
+                    except Exception:
+                        pass
 
         # Masquer le token dans les logs
         if token and sortie:
@@ -596,7 +612,11 @@ class FenetreMaj(tk.Tk):
         if code != 0:
             self._log(f"  ERREUR git push (code {code})", "#FF6B6B")
             if not token:
-                self._log("  → Ajoutez github_token et github_user dans config.yaml", "#FFD700")
+                self._log("  → Sans token : assurez-vous que GitHub Desktop a stocke", "#FFD700")
+                self._log("    vos credentials (ouvrir GitHub Desktop et vous connecter)", "#FFD700")
+            else:
+                self._log("  → Token invalide ou expire : regenerez un PAT sur GitHub", "#FFD700")
+                self._log("    github.com > Settings > Developer > Personal access tokens", "#FFD700")
             self._set_etape(idx, "erreur")
             self._terminer(False)
             return False
