@@ -79,6 +79,17 @@ STRUCTURE = {
             "affiché_TDM": True,
             "position": 18,
             "nom_navigation": "{{nom_document}}"
+        },
+        {
+            "nom_document": "mots_et_themes_bibliques",
+            "nom_html": "mots_et_themes_bibliques",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 19,
+            "nom_navigation": "{{nom_document}}"
         }
     ],
     "fichiers": [
