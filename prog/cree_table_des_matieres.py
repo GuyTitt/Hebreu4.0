@@ -1,6 +1,8 @@
-# cree_table_des_matieres.py — Version 6.30
+# cree_table_des_matieres.py — Version 6.32
+# v6.32 : shims elimines, import direct depuis settings
+# v6.31 : lib1 renomme en lib
 
-version = ("cree_table_des_matieres.py", "6.30")
+version = ("cree_table_des_matieres.py", "6.32")
 print(f"[Version] {version[0]} — {version[1]}")
 
 # v6.30 : resolution des templates {{nom_document_sans_ext}} via
@@ -12,10 +14,9 @@ import re
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
-from lib1.config import CONFIG
-from lib1 import html_utils as html  # v6.29: Import html_utils pour templates
-from lib1 import structure_utils as struct  # v6.30: resolution templates
+from settings import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH, CONFIG
+from lib import html_utils as html  # v6.29: Import html_utils pour templates
+from lib import structure_utils as struct  # v6.30: resolution templates
 
 def lire(variable: dict, element: str, defaut) -> object:
     """Lit une valeur dans un dictionnaire, retourne la valeur par défaut sinon.

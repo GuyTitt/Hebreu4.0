@@ -1,4 +1,5 @@
-# builder.py — Version 1.0
+# builder.py — Version 1.1
+# v1.1 : lib1 renomme en lib
 # Module "BUILDER" : génération HTML et copie fichiers
 #
 # Extrait de genere_site.py v24.0 → refactorisation v25.0
@@ -7,7 +8,7 @@
 #   - copier_fichiers_site() : copie DOCUMENTS → HTML
 #   - Helpers navigation, templates HTML
 
-version = ("builder.py", "1.0")
+version = ("builder.py", "1.1")
 print(f"[Import] {version[0]} - Version {version[1]} chargé")
 
 import os
@@ -17,10 +18,10 @@ from typing import List, Dict, Any
 from bs4 import BeautifulSoup
 
 from settings import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH, CONFIG
-from lib1 import html_utils as html
-from lib1 import structure_utils as struct
-from lib1 import pdf_utils as pdf
-from lib1 import fichier_utils as fichiers
+from lib import html_utils as html
+from lib import structure_utils as struct
+from lib import pdf_utils as pdf
+from lib import fichier_utils as fichiers
 from documents import normaliser_nom
 
 # Constantes issues de CONFIG

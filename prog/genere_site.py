@@ -1,6 +1,8 @@
-# genere_site.py — Version 25.3
+# genere_site.py — Version 25.5
+# v25.5 : shims elimines, import direct depuis settings
+# v25.4 : lib1 renomme en lib
 
-version = ("genere_site.py", "25.3")
+version = ("genere_site.py", "25.5")
 
 """
 Générateur de site statique - Version 25.3
@@ -37,13 +39,12 @@ except ImportError:
     print("AVERTISSEMENT : conversion_pdf.py non trouvé")
 
 # Import configuration et modules
-from lib1.options import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH
-from lib1.config import CONFIG
-from lib1 import html_utils as html
-from lib1 import structure_utils as struct
-from lib1 import pdf_utils as pdf
-from lib1 import fichier_utils as fichiers  # v24.0
-from lib1 import partition_utils as partitions  # v24.0
+from settings import DOSSIER_DOCUMENTS, DOSSIER_HTML, BASE_PATH, CONFIG
+from lib import html_utils as html
+from lib import structure_utils as struct
+from lib import pdf_utils as pdf
+from lib import fichier_utils as fichiers  # v24.0
+from lib import partition_utils as partitions  # v24.0
 import musique as _musique                        # v25.2 : boutons YouTube phase 4
 import cree_table_des_matieres as _tdm            # v25.3 : generation table des matieres
 
@@ -562,15 +563,15 @@ def main() -> None:
         shutil.rmtree(DOSSIER_HTML)
     Path(DOSSIER_HTML).mkdir(parents=True, exist_ok=True)
 
-    # v25.3 : style.css depuis prog/ en priorite, sinon prog/lib1/
+    # v25.3 : style.css depuis prog/ en priorite, sinon prog/lib/
     style_src = Path(__file__).parent / "style.css"
     if not style_src.exists():
-        style_src = Path(__file__).parent / "lib1" / "style.css"
+        style_src = Path(__file__).parent / "lib" / "style.css"
     if style_src.exists():
         shutil.copy2(style_src, Path(DOSSIER_HTML) / "style.css")
         log(f"style.css copie depuis {style_src}")
     else:
-        log("ATTENTION : style.css introuvable (ni prog/ ni prog/lib1/)")
+        log("ATTENTION : style.css introuvable (ni prog/ ni prog/lib/)")
 
     # v25.3 : dossier TDM cree par generer_tdm() en PHASE 5 - pas ici
     # v25.3 : dossier html/musique/ supprime - plus utilise
