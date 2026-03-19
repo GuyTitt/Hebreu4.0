@@ -1,5 +1,5 @@
 @echo off
-REM lancer_v4_1.cmd — Version 4.1
+REM lancer_v4_1.cmd - Version 4.1
 REM Lance la generation du site avec options
 REM Usage :
 REM   lancer.cmd             => genere le site ET demarre le serveur local
@@ -61,4 +61,4 @@ echo.
 :fin
 echo.
 echo lancer_v4_1.cmd — Version 4.1 acheve
-REM lancer_v4_1.cmd — Version 4.1
+REM lancer_v4_1.cmd - Version 4.1

@@ -1,4 +1,4 @@
-# Version 12
+# remplace_v13.py Version 13
 # v10.1 : cree_table_des_matieres v6.30 (resolution templates TDM)
 # v10.0 : genere_site v25.3 (style.css, suppression musique/, TDM)
 # v9.1 : place_bouton v1.1 (NewWindow YouTube)
@@ -6,14 +6,14 @@
 # Affiche la version de chaque fichier source et cible.
 # Signale les fichiers presents dans prog\ qui ne sont pas repertories.
 #
-# Usage : python remplace_v12.py
+# Usage : python remplace_v13.py
 
 import shutil
 import sys
 import re
 from pathlib import Path
 
-version = ("remplace_v12.py", "12")
+version = ("remplace_v13.py", "13")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -36,15 +36,15 @@ FICHIERS = [
     ("musique_v1.13.py",           DST / "musique.py",           True),
     ("normalisation_utils_v1.0.py", DST / "normalisation_utils.py", True),
     ("place_bouton_v02.py",        DST / "place_bouton.py",      True),
-    ("remplace_v12.py",            DST / "remplace.py",          False),
+    ("remplace_v13.py",            DST / "remplace.py",          False),
     ("settings_v1.0.py",           DST / "settings.py",          True),
     ("style_v4.2.css",             DST / "style.css",            True),
     ("versions_v1.0.py",           DST / "versions.py",          False),
     # mise à jour locale
-    ("config_v1.4.yaml",            DST / "config.yaml",              True),
+    ("config_v1.5.yaml",            DST / "config.yaml",              True),
     ("guide_maj_github_v1.0.docx",  DST / "guide_maj_github.docx",    True),
     ("MAJ_GITHUB_v1.0.cmd",         DST / "MAJ_GITHUB.cmd",           True),
-    ("maj_github_v1.6.py",          DST / "maj_github.py",            True),
+    ("maj_github_v1.7.py",          DST / "maj_github.py",            True),
     ("sync_dossiers_doc_v1.0.docx", DST / "sync_dossiers_doc.docx",   True),
     ("sync_dossiers_v1.1.py",       DST / "sync_dossiers.py",         True),
     # lib1\
@@ -220,3 +220,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# remplace_v13.py Version 13

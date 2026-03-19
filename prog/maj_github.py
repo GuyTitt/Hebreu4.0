@@ -1,11 +1,12 @@
-# maj_github_v1.6.py — Version 1.6
+# maj_github_v1.7.py — Version 1.7
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.6 : suppression token dans URL git (revoque par GitHub push protection)
-#        utilise git push origin main + Windows Credential Manager
-#        suppression github_token et github_user de config.yaml
+# v1.7 : authentification via GIT_ASKPASS + token dans config.yaml
+#        evite le conflit Credential Manager entre plusieurs utilisateurs
+#        le token n'apparait jamais dans les URLs ni dans les logs
+# v1.6 : suppression token dans URL git
 # v1.5 : etape 2 streaming Popen evite blocage buffer
 # v1.4 : lancer.cmd appele avec argument 'nolocal'
 # v1.3 : fermeture propre par croix ; confirmation optionnelle
@@ -13,7 +14,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.6")
+version = ("maj_github.py", "1.7")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -44,6 +45,8 @@ CONFIG_DEFAUT = {
     "filtre":           "",   # filtre pour sync_dossiers (vide = tout)
     "branche":          "main",
     "confirmation_git": "true",  # demander confirmation avant push
+    "github_token":     "",   # Personal Access Token (ghp_...)
+    "github_user":      "",   # nom utilisateur GitHub
 }
 
 def _parser_simple(texte: str) -> dict:
@@ -71,7 +74,8 @@ def lire_config(chemin: Path) -> dict:
     cfg = CONFIG_DEFAUT.copy()
     for cle in ("racine_source", "racine_site_local", "lancer_cmd",
                 "url_github", "message_commit", "filtre", "branche",
-                "confirmation_git"):
+                "confirmation_git",
+                "github_token", "github_user"):
         if cle in raw and raw[cle] is not None:
             cfg[cle] = str(raw[cle]).strip()
     return cfg
@@ -528,22 +532,71 @@ class FenetreMaj(tk.Tk):
         if remote_txt.strip():
             self._log(f"  Remote : {remote_txt.splitlines()[0]}", "#AED6F1")
 
-        # git push via origin — credentials gérés par Windows Credential Manager
-        # (configuré une fois avec : cmdkey /generic:git:https://github.com
-        #                                    /user:GuyTitt /pass:TON_TOKEN)
+        # Authentification via GIT_ASKPASS :
+        # git appelle askpass_script avec "Username" ou "Password" comme argument
+        # le script retourne le bon token sans l'exposer dans les URLs ni les logs
+        token = self.cfg.get("github_token", "").strip()
+        user  = self.cfg.get("github_user", "").strip()
+
+        env = os.environ.copy()
+        if token and user:
+            # Créer un script askpass temporaire
+            import tempfile
+            askpass = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".bat", delete=False,
+                encoding="utf-8"
+            )
+            # Le script retourne user ou token selon ce que git demande
+            askpass.write(
+                "@echo off\n"
+                f"echo %1 | findstr /i username >nul && echo {user} && exit /b\n"
+                f"echo {token}\n"
+            )
+            askpass.close()
+            askpass_path = askpass.name
+            env["GIT_ASKPASS"]       = askpass_path
+            env["GIT_TERMINAL_PROMPT"] = "0"   # pas de prompt interactif
+            self._log("  Authentification via token PAT (GIT_ASKPASS).", "#AED6F1")
+        else:
+            askpass_path = None
+            self._log("  Aucun token — credentials système utilisés.", "#FFD700")
+
+        # git push
         self._log(f"  git push origin {branche} ...", "#DDDDDD")
-        code, sortie = run_cmd(
-            ["git", "push", "origin", branche],
-            cwd=site
-        )
+        try:
+            proc_git = subprocess.run(
+                ["git", "push", "origin", branche],
+                cwd=site,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                env=env,
+            )
+            code   = proc_git.returncode
+            sortie = (proc_git.stdout or "") + (proc_git.stderr or "")
+        except Exception as e:
+            code, sortie = -1, str(e)
+        finally:
+            # Supprimer le script askpass temporaire
+            if askpass_path:
+                try:
+                    os.unlink(askpass_path)
+                except Exception:
+                    pass
+
+        # Masquer le token dans les logs
+        if token and sortie:
+            sortie = sortie.replace(token, "***")
         if sortie.strip():
             for ligne in sortie.strip().split("\n"):
                 couleur = "#FF6B6B" if "error" in ligne.lower() else "#DDDDDD"
                 self._log(f"  {ligne}", couleur)
+
         if code != 0:
             self._log(f"  ERREUR git push (code {code})", "#FF6B6B")
-            self._log("  → Vérifier que le token est dans le Credential Manager :", "#FFD700")
-            self._log("    cmdkey /generic:git:https://github.com /user:GuyTitt /pass:TOKEN", "#FFD700")
+            if not token:
+                self._log("  → Ajoutez github_token et github_user dans config.yaml", "#FFD700")
             self._set_etape(idx, "erreur")
             self._terminer(False)
             return False
@@ -643,4 +696,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# fin de maj_github_v1.6.py - Version 1.6
+# fin de maj_github_v1.7.py - Version 1.7
