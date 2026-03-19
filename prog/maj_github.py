@@ -1,9 +1,10 @@
-# maj_github_v1.11.py — Version 1.11
+# maj_github_v1.12.py — Version 1.12
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.11 : URL avec token passee directement a git push — bypass total
+# v1.12 : verification token GitHub via API avant push (diagnostic clair)
+# v1.11 : URL avec token passee directement a git push
 #         du credential manager (core.askpass/GCM ouvrait /dev/tty)
 # v1.10 : http.extraheader (insuffisant, core.askpass non neutralise)
 # v1.9 : http.extraheader + credential.helper vide = contourne Credential Manager
@@ -21,7 +22,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.11")
+version = ("maj_github.py", "1.12")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -249,6 +250,36 @@ class FenetreMaj(tk.Tk):
             self.log_widget.see("end")
             self.log_widget.config(state="disabled")
         self.after(0, _do)
+
+    def _verifier_token(self, user: str, token: str) -> tuple:
+        """
+        Verifie le token PAT via l'API GitHub.
+        Retourne (ok: bool, message: str, login: str)
+        """
+        import urllib.request, urllib.error, json
+        url = "https://api.github.com/user"
+        req = urllib.request.Request(url)
+        req.add_header("Authorization", f"token {token}")
+        req.add_header("Accept", "application/vnd.github.v3+json")
+        req.add_header("User-Agent", "maj_github/1.12")
+        try:
+            with urllib.request.urlopen(req, timeout=8) as resp:
+                data  = json.loads(resp.read().decode("utf-8"))
+                login = data.get("login", "")
+                if login.lower() == user.lower():
+                    return True, "OK", login
+                else:
+                    return False, (
+                        f"Token valide mais login={login!r} != github_user={user!r} dans config.yaml"
+                    ), login
+        except urllib.error.HTTPError as e:
+            if e.code == 401:
+                return False, "Token invalide ou expire (HTTP 401)", ""
+            if e.code == 403:
+                return False, "Token sans permission repo (HTTP 403) — cocher repo", ""
+            return False, f"Erreur HTTP {e.code}", ""
+        except Exception as e:
+            return False, f"Pas de connexion : {e}", ""
 
     def _set_etape(self, idx: int, statut: str):
         """
@@ -554,8 +585,22 @@ class FenetreMaj(tk.Tk):
         env = os.environ.copy()
 
         if token and user and url_github:
+            # ── Verification token via API GitHub (avant le push) ────
+            self._log("  Verification token GitHub...", "#DDDDDD")
+            api_ok, api_msg, api_login = self._verifier_token(user, token)
+            if api_ok:
+                self._log(f"  Token OK — login GitHub : {api_login}", "#2ECC71")
+            else:
+                self._log(f"  ERREUR token : {api_msg}", "#FF6B6B")
+                self._log(f"  Token lu   : {token[:4]}...{token[-4:]} ({len(token)} car.)", "#FF6B6B")
+                self._log(f"  User lu    : {repr(user)}", "#FF6B6B")
+                self._log("  → Regenerer un token PAT classic (cocher repo)", "#FFD700")
+                self._log("    github.com > Settings > Developer settings >", "#FFD700")
+                self._log("    Personal access tokens > Tokens (classic)", "#FFD700")
+                self._set_etape(idx, "erreur")
+                return False
+
             # Construire l'URL avec credentials
-            # ex: https://user:ghp_token@github.com/GuyTitt/Hebreu4.0.git
             if url_github.startswith("https://"):
                 host_path = url_github[len("https://"):]
             else:
@@ -566,7 +611,7 @@ class FenetreMaj(tk.Tk):
             push_target = push_url
             self._log("  Authentification via token PAT (URL directe).", "#AED6F1")
         else:
-            push_target = f"origin"
+            push_target = "origin"
             if not token:
                 self._log("  Pas de token — Credential Manager Windows utilise.", "#FFD700")
 
