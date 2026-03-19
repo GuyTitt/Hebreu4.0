@@ -1,8 +1,11 @@
-# maj_github_v1.9.py — Version 1.9
+# maj_github_v1.11.py — Version 1.11
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
+# v1.11 : URL avec token passee directement a git push — bypass total
+#         du credential manager (core.askpass/GCM ouvrait /dev/tty)
+# v1.10 : http.extraheader (insuffisant, core.askpass non neutralise)
 # v1.9 : http.extraheader + credential.helper vide = contourne Credential Manager
 #         (le manager ouvrait un browser OAuth et bloquait)
 #         si pas de token : credential.helper laisse en place (GitHub Desktop)
@@ -18,7 +21,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.9")
+version = ("maj_github.py", "1.11")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -538,34 +541,40 @@ class FenetreMaj(tk.Tk):
 
         # Authentification :
         #   - Avec token dans config.yaml :
-        #       http.extraheader = Authorization: Basic base64(user:token)
-        #       credential.helper = ""  (desactive le Credential Manager Windows
-        #       qui sinon intercepte et ouvre un browser OAuth)
+        #       On passe l'URL avec token directement a "git push <url> <branche>"
+        #       Cela bypass COMPLETEMENT le credential manager (GCM, core.askpass,
+        #       GIT_ASKPASS...) — git n'interroge aucun helper, pas de /dev/tty.
         #   - Sans token :
-        #       credential.helper laisse intact => GitHub Desktop fonctionne
+        #       On utilise "git push origin <branche>" normalement
+        #       => GitHub Desktop / Credential Manager prend la main
         token = self.cfg.get("github_token", "").strip()
         user  = self.cfg.get("github_user", "").strip()
+        url_github = self.cfg.get("url_github", "").strip().rstrip("/")
 
         env = os.environ.copy()
-        extra_git_args = []   # args -c injectes avant "push"
 
-        if token and user:
-            import base64
-            b64 = base64.b64encode(f"{user}:{token}".encode()).decode()
-            extra_git_args = [
-                "-c", f"http.extraheader=Authorization: Basic {b64}",
-                "-c", "credential.helper=",   # desactive credential manager
-            ]
-            self._log("  Authentification via token PAT (http.extraheader).", "#AED6F1")
+        if token and user and url_github:
+            # Construire l'URL avec credentials
+            # ex: https://user:ghp_token@github.com/GuyTitt/Hebreu4.0.git
+            if url_github.startswith("https://"):
+                host_path = url_github[len("https://"):]
+            else:
+                host_path = url_github
+            push_url = f"https://{user}:{token}@{host_path}"
+            if not push_url.endswith(".git"):
+                push_url += ".git"
+            push_target = push_url
+            self._log("  Authentification via token PAT (URL directe).", "#AED6F1")
         else:
-            self._log("  Pas de token — Credential Manager Windows utilise.", "#FFD700")
-            self._log("  (configurez github_token dans config.yaml pour eviter le browser)", "#AAAAAA")
+            push_target = f"origin"
+            if not token:
+                self._log("  Pas de token — Credential Manager Windows utilise.", "#FFD700")
 
         # git push
-        self._log(f"  git push origin {branche} ...", "#DDDDDD")
+        self._log(f"  git push {branche} ...", "#DDDDDD")
         try:
             proc_git = subprocess.run(
-                ["git"] + extra_git_args + ["push", "origin", branche],
+                ["git", "push", push_target, branche],
                 cwd=site,
                 capture_output=True,
                 text=True,
@@ -577,17 +586,12 @@ class FenetreMaj(tk.Tk):
             sortie = (proc_git.stdout or "") + (proc_git.stderr or "")
         except Exception as e:
             code, sortie = -1, str(e)
-        finally:
-            # Rien a nettoyer (plus de fichiers temporaires)
-            pass
 
-        # Masquer le token dans les logs
+        # Masquer le token dans les logs (token brut + URL avec token)
         if token and sortie:
             sortie = sortie.replace(token, "***")
-            import base64 as _b64
             try:
-                b64tok = _b64.b64encode(f"{user}:{token}".encode()).decode()
-                sortie = sortie.replace(b64tok, "***")
+                sortie = sortie.replace(f"{user}:{token}@", "***@")
             except Exception:
                 pass
         if sortie.strip():
@@ -599,11 +603,11 @@ class FenetreMaj(tk.Tk):
             self._log(f"  ERREUR git push (code {code})", "#FF6B6B")
             if token:
                 self._log("  → Token invalide/expire : regenerez un PAT sur GitHub", "#FFD700")
-                self._log("    github.com > Settings > Developer > Personal access tokens", "#FFD700")
-                self._log("    Cocher 'repo' (acces complet depot)", "#FFD700")
+                self._log("    github.com > Settings > Developer settings >", "#FFD700")
+                self._log("    Personal access tokens > Generate new token (classic)", "#FFD700")
+                self._log("    Cocher : repo (acces complet)", "#FFD700")
             else:
                 self._log("  → Ajoutez github_token + github_user dans prog\\config.yaml", "#FFD700")
-                self._log("    ou connectez-vous dans GitHub Desktop", "#FFD700")
             self._set_etape(idx, "erreur")
             self._terminer(False)
             return False

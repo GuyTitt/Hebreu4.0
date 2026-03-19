@@ -1,5 +1,7 @@
-# remplace_v16.py — Version 16
-# v16 : creation html\Hebreu4.0\html\ + copie style.css (requis pour node.js local)
+# remplace_v17.py — Version 17
+# v17 : decouvrir() garde uniquement la version MAX de chaque fichier
+#        (v1.11 etait deploye avant v1.9 en tri alphabetique)
+# v16 : creation html\Hebreu4.0\html\ + copie style.css
 # v15 : scan recursif de package/prog (sous-dossiers = modules reutilisables)
 #        dossiers 'archive' et 'ancien' ignores
 #        cree prog/ et prog/lib/ s'ils n'existent pas (1er deploiement)
@@ -21,7 +23,7 @@ import sys
 import re
 from pathlib import Path
 
-version = ("remplace.py", "16")
+version = ("remplace.py", "17")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -101,27 +103,51 @@ def _cible(fichier: Path) -> tuple | None:
     return cible, oblig
 
 
+def _ver_tuple(ver_str: str) -> tuple:
+    """Convertit '1.11' -> (1,11), '4.2' -> (4,2) pour comparaison numerique."""
+    try:
+        return tuple(int(x) for x in re.split(r'[._]', ver_str))
+    except Exception:
+        return (0,)
+
+
 def decouvrir() -> list:
     """
     Scan recursif de SRC.
-    - Ignore les dossiers nommes dans DOSSIERS_IGNORES (et leurs contenus).
+    - Ignore les dossiers dans DOSSIERS_IGNORES.
+    - Par nom de base cible, ne garde que le fichier a la VERSION MAX.
+      (evite que v1.11 < v1.9 en tri alphabetique)
     - Retourne [(nom_src_relatif, chemin_cible, obligatoire)] tries par cible.
     """
-    res = []
+    # dict : chemin_cible -> (nom_src_relatif, ver_str, obligatoire)
+    meilleurs: dict[Path, tuple] = {}
 
     def _walk(dossier: Path):
         for item in sorted(dossier.iterdir()):
             if item.is_dir():
-                if item.name.lower() in DOSSIERS_IGNORES:
-                    continue
-                _walk(item)
+                if item.name.lower() not in DOSSIERS_IGNORES:
+                    _walk(item)
+                continue
+            r = _cible(item)
+            if r is None:
+                continue
+            cible, oblig = r
+            m = _RE_VER.search(item.stem)
+            ver = m.group(1) if m else "0"
+            src_rel = str(item.relative_to(SRC))
+
+            if cible not in meilleurs:
+                meilleurs[cible] = (src_rel, ver, oblig)
             else:
-                r = _cible(item)
-                if r:
-                    res.append((str(item.relative_to(SRC)), r[0], r[1]))
+                _, ver_actuel, _ = meilleurs[cible]
+                if _ver_tuple(ver) > _ver_tuple(ver_actuel):
+                    meilleurs[cible] = (src_rel, ver, oblig)
 
     _walk(SRC)
-    return sorted(res, key=lambda x: str(x[1]))
+    return sorted(
+        [(src, cible, oblig) for cible, (src, _, oblig) in meilleurs.items()],
+        key=lambda x: str(x[1])
+    )
 
 
 # ─────────────────────────────────────────────────────────────────────
