@@ -1,12 +1,11 @@
-# maj_github_v1.13.py — Version 1.13
+# maj_github_v1.14.py — Version 1.14
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.13 : auth via Credential Manager Windows (git credential fill)
-#         fallback sur config.yaml si absent
-#         http.extraheader + core.askpass= (neutralise GitHub Desktop askpass)
-#         plus d'URL avec token (ne se repete pas en boucle)
+# v1.14 : git push nu — zero interference credential
+#         GCM (GitHub Desktop) gere le renouvellement automatique
+#         fallback http.extraheader si config.yaml a un token valide
 # v1.12 : verification token GitHub via API avant push
 # v1.11 : URL avec token passee directement a git push
 #         du credential manager (core.askpass/GCM ouvrait /dev/tty)
@@ -26,7 +25,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.13")
+version = ("maj_github.py", "1.14")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -603,53 +602,45 @@ class FenetreMaj(tk.Tk):
         if remote_txt.strip():
             self._log(f"  Remote : {remote_txt.splitlines()[0]}", "#AED6F1")
 
-        # ── Recuperation des credentials ─────────────────────────────
-        # Priorite 1 : Credential Manager Windows (stocke par GitHub Desktop)
-        # Priorite 2 : config.yaml (github_token + github_user)
-        # Dans les deux cas : http.extraheader + core.askpass= (pas d'URL avec
-        # token, pas de /dev/tty, fonctionne a chaque appel)
+        # ── Authentification ─────────────────────────────────────────
+        # Strategie : git push nu, sans aucune interference credential.
+        #
+        # GCM (Git Credential Manager, installe par GitHub Desktop) gere tout :
+        #   - Token valide en cache  → push silencieux, aucune action
+        #   - Token expire           → GCM ouvre le browser UNE fois, se renouvelle,
+        #                              les prochains pushes sont silencieux
+        #
+        # NE PAS toucher a credential.helper ni core.askpass :
+        #   les neutraliser empeche GCM de fonctionner et provoque /dev/tty ou 401.
+        #
+        # Fallback : si config.yaml contient un token valide, on l'utilise via
+        #   http.extraheader (sans toucher au credential system).
 
         token = self.cfg.get("github_token", "").strip()
         user  = self.cfg.get("github_user",  "").strip()
 
-        # Tentative lecture Credential Manager via "git credential fill"
-        cm_user, cm_token = self._lire_credential_manager(site)
-        if cm_user and cm_token:
-            user  = cm_user
-            token = cm_token
-            self._log("  Credentials lus depuis le Credential Manager Windows.", "#2ECC71")
-        elif token and user:
-            self._log("  Credentials lus depuis config.yaml.", "#AED6F1")
-
         env = os.environ.copy()
         extra_git_args = []
 
+        # Verifier si le token config.yaml est valide (ne pas bloquer si absent)
         if token and user:
-            # Verification token via API
-            self._log("  Verification token GitHub...", "#DDDDDD")
+            self._log("  Verification token config.yaml...", "#DDDDDD")
             api_ok, api_msg, api_login = self._verifier_token(user, token)
             if api_ok:
-                self._log(f"  Token OK — login : {api_login}", "#2ECC71")
+                import base64
+                b64 = base64.b64encode(f"{user}:{token}".encode()).decode()
+                extra_git_args = [
+                    "-c", f"http.extraheader=Authorization: Basic {b64}",
+                ]
+                self._log(f"  Token config.yaml OK ({api_login}) — utilise.", "#2ECC71")
             else:
-                self._log(f"  ERREUR token : {api_msg}", "#FF6B6B")
-                if token:
-                    self._log(f"  Token lu : {token[:4]}...{token[-4:]} ({len(token)} car.)", "#FF6B6B")
-                self._log("  → Ouvrir GitHub Desktop et vous reconnecter, ou", "#FFD700")
-                self._log("    regenerer un PAT : github.com > Settings > Developer settings", "#FFD700")
-                self._set_etape(idx, "erreur")
-                return False
-
-            import base64
-            b64 = base64.b64encode(f"{user}:{token}".encode()).decode()
-            extra_git_args = [
-                "-c", f"http.extraheader=Authorization: Basic {b64}",
-                "-c", "credential.helper=",  # desactive GCM pour cette commande
-                "-c", "core.askpass=",        # neutralise le askpass de GitHub Desktop
-            ]
+                self._log(f"  Token config.yaml invalide ({api_msg}).", "#FFD700")
+                self._log("  → GCM (GitHub Desktop) utilise en fallback.", "#AED6F1")
         else:
-            self._log("  Aucun credential trouve — push sans auth explicite.", "#FFD700")
+            self._log("  Pas de token dans config.yaml — GCM utilise.", "#AED6F1")
+            self._log("  (Si le navigateur s'ouvre : c'est normal, une seule fois)", "#888888")
 
-        # git push
+        # git push — GCM gere l'auth si pas de token config.yaml valide
         self._log(f"  git push origin {branche} ...", "#DDDDDD")
         try:
             proc_git = subprocess.run(
@@ -676,13 +667,10 @@ class FenetreMaj(tk.Tk):
 
         if code != 0:
             self._log(f"  ERREUR git push (code {code})", "#FF6B6B")
-            if token:
-                self._log("  → Token invalide/expire : regenerez un PAT sur GitHub", "#FFD700")
-                self._log("    github.com > Settings > Developer settings >", "#FFD700")
-                self._log("    Personal access tokens > Generate new token (classic)", "#FFD700")
-                self._log("    Cocher : repo (acces complet)", "#FFD700")
-            else:
-                self._log("  → Ajoutez github_token + github_user dans prog\\config.yaml", "#FFD700")
+            self._log("  Si l'erreur persiste :", "#FFD700")
+            self._log("  → Ouvrir GitHub Desktop → File → Options → Sign out / Sign in", "#FFD700")
+            self._log("    Cela renouvelle le token dans le Credential Manager", "#FFD700")
+            self._log("  → Ou ajouter un token PAT valide dans prog\\config.yaml", "#FFD700")
             self._set_etape(idx, "erreur")
             self._terminer(False)
             return False

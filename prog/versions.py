@@ -46,7 +46,7 @@ VERSIONS_MIN = {
     "cree_table_des_matieres.py": "6.32",
     "normalisation_utils.py":     "1.0",
     "place_bouton.py":            "1.1",
-    "maj_github.py":              "1.7",
+    "maj_github.py":              "1.14",
     "sync_dossiers.py":           "1.1",
     "conversion_pdf.py":          "1.0",
     # lib/
