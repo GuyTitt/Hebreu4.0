@@ -1,5 +1,7 @@
-# versions_v1.6.py — Version 1.6
-# v1.6 : settings 1.1, builder 1.2, cree_table 6.33, genere_site 25.6 (tdm minusc.)
+# versions_v1.8.py — Version 1.8
+# v1.8 : maj_github 1.17, remplace 21
+# v1.7 : fix config.yaml parser, version HTML, escape warnings
+# v1.6 : settings 1.1, builder 1.2, tdm minuscules
 # v1.5 : installer 1.1
 # v1.4 : maj_github 1.16
 # v1.3 : maj_github 1.15
@@ -14,7 +16,7 @@ Usage :
     python versions.py  (depuis prog/)
 """
 
-version = ("versions.py", "1.6")
+version = ("versions.py", "1.8")
 
 import ast
 import re
@@ -50,7 +52,7 @@ VERSIONS_MIN = {
     "cree_table_des_matieres.py": "6.33",
     "normalisation_utils.py":     "1.0",
     "place_bouton.py":            "1.1",
-    "maj_github.py":              "1.16",
+    "maj_github.py":              "1.17",
     "installer.py":               "1.1",
     "sync_dossiers.py":           "1.1",
     "conversion_pdf.py":          "1.0",
@@ -172,28 +174,50 @@ def lire_version_cmd(chemin: Path) -> str:
     return "?"
 
 
+def lire_version_html(chemin: Path) -> str:
+    """Extrait la version depuis un fichier HTML manuel.
+    Cherche <td>X.Y</td> apres une cellule 'Version'.
+    """
+    if not chemin.exists():
+        return "ABSENT"
+    try:
+        src = chemin.read_text(encoding="utf-8", errors="replace")
+        # Format : <td>Version</td><td>X.Y</td>
+        m = re.search(r'[Vv]ersion</td>\s*<td>([\d.]+)</td>', src)
+        if m:
+            return m.group(1)
+        # Format dans l'info-table: <td>Version</td><td>X.Y</td>
+        m = re.search(r'<td>Version</td><td>([\d.]+)</td>', src)
+        if m:
+            return m.group(1)
+    except Exception:
+        pass
+    return "?"
+
+
 # ─────────────────────────────────────────────────────────────────────
 # VERIFICATION CONFIG.YAML
 # ─────────────────────────────────────────────────────────────────────
 
 def lire_config_yaml(chemin: Path) -> dict:
+    """
+    Parse config.yaml au format 'cle = valeur' (pas du YAML standard).
+    PyYAML echoue sur ce format car il utilise = au lieu de :.
+    On utilise directement le parser simple.
+    """
     if not chemin.exists():
         return {}
     cfg = {}
     try:
-        try:
-            import yaml
-            raw = yaml.safe_load(chemin.read_text(encoding="utf-8")) or {}
-            if isinstance(raw, dict):
-                return {k: str(v).strip() for k, v in raw.items() if v is not None}
-        except ImportError:
-            pass
         for ligne in chemin.read_text(encoding="utf-8", errors="replace").splitlines():
             ligne = ligne.split("#")[0].strip()
             if "=" not in ligne:
                 continue
             cle, _, val = ligne.partition("=")
-            cfg[cle.strip()] = val.strip()
+            cle = cle.strip()
+            val = val.strip()
+            if cle:
+                cfg[cle] = val
     except Exception:
         pass
     return cfg
@@ -340,6 +364,8 @@ def main():
             ver = "—"
         elif ext in (".docx", ".md"):
             ver = "—"
+        elif ext == ".html":
+            ver = lire_version_html(chemin)
         else:
             _, ver = lire_version(chemin)
 
@@ -419,4 +445,4 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 
-# fin de versions_v1.6.py — Version 1.6
+# fin de versions_v1.8.py — Version 1.8

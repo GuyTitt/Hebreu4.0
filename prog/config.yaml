@@ -27,11 +27,8 @@ url_github        = https://github.com/GuyTitt/Hebreu4.0
 # Il n'apparait jamais dans les URLs ni dans les logs
 # Chaque utilisateur met son propre token dans SON config.yaml
 
-# github_token      = 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
-# github_user       = GuyTitt
-
-github_token      =
-github_user       =
+github_token      = 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
+github_user       = GuyTitt
 
 # ── Options ───────────────────────────────────────────────────
 # Message du commit : "auto" = date+heure automatique

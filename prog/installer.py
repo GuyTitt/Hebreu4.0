@@ -1,4 +1,5 @@
-# installer_v1.0.py — Version 1.0
+# installer_v1.1.py — Version 1.1
+# v1.1 : ajout beautifulsoup4 (requis pour TDM et genere_site)
 # v1.0 : creation
 #   Cree l'environnement virtuel Python C:\virpy13 et installe
 #   toutes les bibliotheques necessaires au projet Hebreu4.0.
@@ -17,7 +18,7 @@ import subprocess
 import shutil
 from pathlib import Path
 
-version = ("installer.py", "1.0")
+version = ("installer.py", "1.1")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -27,12 +28,13 @@ VENV_DIR = Path(r"C:\virpy13")
 
 # Packages requis : (nom_pip, description)
 PACKAGES = [
-    ("pyyaml",        "Lecture fichiers config.yaml"),
-    ("python-docx",   "Lecture/ecriture fichiers Word .docx"),
-    ("pypdf",         "Manipulation PDF (boutons YouTube)"),
-    ("reportlab",     "Generation PDF"),
-    ("psutil",        "Detection processus (serveur local)"),
-    ("requests",      "Requetes HTTP (optionnel)"),
+    ("pyyaml",          "Lecture fichiers config.yaml"),
+    ("python-docx",     "Lecture/ecriture fichiers Word .docx"),
+    ("pypdf",           "Manipulation PDF (boutons YouTube)"),
+    ("reportlab",       "Generation PDF"),
+    ("psutil",          "Detection processus (serveur local)"),
+    ("beautifulsoup4",  "Generation table des matieres (TDM)"),
+    ("requests",        "Requetes HTTP (optionnel)"),
 ]
 
 # ─────────────────────────────────────────────────────────────────────
@@ -161,6 +163,7 @@ def verifier_imports():
         ("import pypdf",              "pypdf"),
         ("import reportlab",          "reportlab"),
         ("import psutil",             "psutil"),
+        ("from bs4 import BeautifulSoup", "beautifulsoup4"),
     ]
 
     py = str(python_venv())
@@ -229,4 +232,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# fin installer_v1.0.py — Version 1.0
+# fin installer_v1.1.py — Version 1.1

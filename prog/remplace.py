@@ -1,6 +1,8 @@
-# remplace_v19.py — Version 19
-# v19 : scan package\manuels\ → manuels\ (meme convention que prog)
-#        "manuel" renomme en "manuels"
+# remplace_v21.py — Version 21
+# v21 : suppression docx de prog\ (remplacés par HTML dans manuels\)
+#        fix extraire_version pour HTML (cherche meta version)
+# v20 : correction banner, fix backslashes
+# v19 : scan package\manuels\ → manuels\
 # v18 : tiebreaker date (src plus recent = copie forcee)
 # v17 : decouvrir() garde la version MAX (tri numerique)
 # v16 : creation html\Hebreu4.0\html\ + copie style.css
@@ -25,7 +27,7 @@ import sys
 import re
 from pathlib import Path
 
-version = ("remplace.py", "19")
+version = ("remplace.py", "21")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -34,6 +36,12 @@ RACINE = Path("C:/SiteGITHUB/Hebreu4.0")
 SRC    = RACINE / "package" / "prog"
 DST    = RACINE / "prog"
 LIB    = DST / "lib"
+
+# Fichiers a exclure du deploiement (docs remplacees par HTML dans manuels\)
+EXCLURE_DEST = {
+    DST / "guide_maj_github.docx",
+    DST / "sync_dossiers_doc.docx",
+}
 
 # Noms de dossiers ignores lors du scan recursif
 DOSSIERS_IGNORES = {"archive", "ancien", "__pycache__"}
@@ -45,10 +53,12 @@ OPTIONNELS = {"remplace.py", "versions.py"}
 SUPPRIMER = [
     DST / "Place_Bouton_PDF.py",
     DST / "place_bouton_v01.py",
-    DST / "lib1",            # ancien dossier renomme en lib
-    LIB / "config.py",       # ancien shim (settings.py importe directement)
-    LIB / "options.py",      # ancien shim (settings.py importe directement)
-    RACINE / "manuel",       # ancien nom renomme en manuels
+    DST / "lib1",                  # ancien dossier renomme en lib
+    LIB / "config.py",             # ancien shim elimine
+    LIB / "options.py",            # ancien shim elimine
+    RACINE / "manuel",             # ancien nom renomme en manuels
+    DST / "guide_maj_github.docx", # remplace par manuels\maj_github\guide_utilisateur.html
+    DST / "sync_dossiers_doc.docx",# remplace par manuels\sync_dossiers\guide.html
 ]
 
 # Extensions deployees
@@ -115,6 +125,9 @@ def _cible(fichier: Path) -> tuple | None:
         cible = DST / sous_chemin / (base + ext)
 
     oblig = cible.name not in OPTIONNELS
+    # Exclure les docx de documentation (deployes dans manuels\ en HTML)
+    if cible in EXCLURE_DEST:
+        return None
     return cible, oblig
 
 
@@ -222,11 +235,20 @@ def decouvrir_manuels() -> list:
 
 def extraire_version(chemin: Path) -> str:
     try:
-        c = chemin.read_text(encoding="utf-8", errors="ignore")
-        m = re.search(r'version\s*=\s*\([^,]+,\s*["\']([^"\']+)["\']', c)
-        if m:
-            return m.group(1)
-        m = re.search(r'[Vv]ersion\s+([\d.]+)', c)
+        txt = chemin.read_text(encoding="utf-8", errors="ignore")
+        if chemin.suffix == ".html":
+            import re as _re
+            m = _re.search(r"<td>Version</td>\s*<td>([0-9.]+)</td>", txt)
+            if m:
+                return m.group(1)
+            return "?"
+        idx = txt.find("version = (")
+        if idx >= 0:
+            sub = txt[idx:idx+80]
+            m = re.search(r"['\"]([0-9][0-9.]*)['\"]", sub[sub.find(","):])
+            if m:
+                return m.group(1)
+        m = re.search(r"[Vv]ersion +([0-9][0-9.]*)", txt[:400])
         if m:
             return m.group(1)
     except Exception:
@@ -254,7 +276,7 @@ def rel(p: Path) -> Path:
 def main():
     print()
     print("=" * 76)
-    print("  remplace.py v16  —  deploiement automatique (scan recursif)")
+    print(f"  remplace.py v{version[1]}  —  deploiement automatique (scan recursif)")
     print(f"  Source : {SRC}")
     print(f"  Cible  : {DST}")
     print("=" * 76)
@@ -422,11 +444,11 @@ def main():
     print("  STRUCTURE HTML (consultation locale node.js)")
     print()
     if not style_src.exists():
-        print(f"  ABSENT   prog\style.css — copie impossible (lancer remplace.py apres le 1er deploiement)")
+        print("  ABSENT   prog" + chr(92) + "style.css — copie impossible (lancer remplace.py apres le 1er deploiement)")
     else:
         style_dst_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy2(str(style_src), str(style_dst))
-        print(f"  OK       html\Hebreu4.0\html\style.css cree/mis a jour")
+        print("  OK       html" + chr(92) + "Hebreu4.0" + chr(92) + "html" + chr(92) + "style.css cree/mis a jour")
 
     # ── Bilan ─────────────────────────────────────────────────────────
     print()

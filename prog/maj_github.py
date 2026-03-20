@@ -1,8 +1,9 @@
-# maj_github_v1.16.py — Version 1.16
+# maj_github_v1.17.py — Version 1.17
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
+# v1.17 : fix SyntaxWarning backslash dans docstring _trouver_git_ghd
 # v1.16 : utilise le git de GitHub Desktop pour le push
 #         git systeme bloque par Windows Firewall en sous-process Python
 #         git GHD a les bons credentials + reseau + permissions
@@ -29,7 +30,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.16")
+version = ("maj_github.py", "1.17")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -264,7 +265,7 @@ class FenetreMaj(tk.Tk):
         Retourne le chemin complet si trouvé, sinon "git" (git système).
 
         GitHub Desktop installe son propre git dans :
-          %LOCALAPPDATA%\GitHubDesktop\app-X.X.X\resources\app\git\cmd\git.exe
+          %LOCALAPPDATA%/GitHubDesktop/app-X.X.X/resources/app/git/cmd/git.exe
         Ce git hérite des credentials et de la config réseau de GitHub Desktop,
         ce qui évite les blocages pare-feu et les problèmes de credential manager.
         """
