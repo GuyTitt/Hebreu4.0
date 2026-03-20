@@ -68,6 +68,17 @@ STRUCTURE = {
             "affiché_TDM": False,
             "position": 16,
             "nom_navigation": ""
+        },
+        {
+            "nom_document": "tdm",
+            "nom_html": "tdm",
+            "nom_affiché": "{{nom_document_sans_ext}}",
+            "nom_TDM": "{{nom_document_sans_ext}}",
+            "ajout_affichage": True,
+            "affiché_index": True,
+            "affiché_TDM": True,
+            "position": 17,
+            "nom_navigation": "{{nom_document}}"
         }
     ],
     "fichiers": [
