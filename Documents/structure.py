@@ -68,28 +68,6 @@ STRUCTURE = {
             "affiché_TDM": False,
             "position": 16,
             "nom_navigation": ""
-        },
-        {
-            "nom_document": "essaimodif",
-            "nom_html": "essaimodif",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 18,
-            "nom_navigation": "{{nom_document}}"
-        },
-        {
-            "nom_document": "mots_et_themes_bibliques",
-            "nom_html": "mots_et_themes_bibliques",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 19,
-            "nom_navigation": "{{nom_document}}"
         }
     ],
     "fichiers": [
@@ -122,16 +100,6 @@ STRUCTURE = {
             "affiché_index": False,
             "affiché_TDM": False,
             "position": 13
-        },
-        {
-            "nom_document": "femme_enceinte.png",
-            "nom_html": "femme_enceinte.png",
-            "nom_affiché": "{{nom_document_sans_ext}}",
-            "nom_TDM": "{{nom_document_sans_ext}}",
-            "ajout_affichage": True,
-            "affiché_index": True,
-            "affiché_TDM": True,
-            "position": 17
         }
     ],
     "titre_dossier": "Mes dossiers partag&eacute;s",
