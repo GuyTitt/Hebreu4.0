@@ -1,6 +1,7 @@
-# remplace_v17.py — Version 17
-# v17 : decouvrir() garde uniquement la version MAX de chaque fichier
-#        (v1.11 etait deploye avant v1.9 en tri alphabetique)
+# remplace_v18.py — Version 18
+# v18 : copie si version differente OU si source plus recente (date)
+#        (evite qu'un fichier avec meme numero mais contenu change ne soit pas copie)
+# v17 : decouvrir() garde la version MAX (tri numerique)
 # v16 : creation html\Hebreu4.0\html\ + copie style.css
 # v15 : scan recursif de package/prog (sous-dossiers = modules reutilisables)
 #        dossiers 'archive' et 'ancien' ignores
@@ -23,7 +24,7 @@ import sys
 import re
 from pathlib import Path
 
-version = ("remplace.py", "17")
+version = ("remplace.py", "18")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -232,13 +233,27 @@ def main():
         vs = extraire_version(chemin_src)
         vd = extraire_version(chemin_dst) if chemin_dst.exists() else "—"
 
-        if vs == vd:
+        # Copier si : version differente OU source plus recente que cible
+        # (cas d'un fichier modifie sans changement de version)
+        src_mtime = chemin_src.stat().st_mtime
+        dst_mtime = chemin_dst.stat().st_mtime if chemin_dst.exists() else 0
+        src_plus_recent = src_mtime > dst_mtime + 2   # tolerance 2s
+
+        if vs != vd:
+            raison = ""
+        elif src_plus_recent:
+            raison = "src plus recent"
+        else:
+            raison = None   # a jour
+
+        if raison is None:
             afficher("OK",    rel(chemin_src), rel(chemin_dst), vs, vd, "a jour")
             a_jour += 1
         else:
             chemin_dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(str(chemin_src), str(chemin_dst))
-            afficher("COPIE", rel(chemin_src), rel(chemin_dst), vs, vd)
+            afficher("COPIE", rel(chemin_src), rel(chemin_dst), vs, vd,
+                     raison if raison else "")
             copies += 1
 
     # ── Suppressions ─────────────────────────────────────────────────

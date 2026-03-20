@@ -1,9 +1,11 @@
-# maj_github_v1.14.py — Version 1.14
+# maj_github_v1.15.py — Version 1.15
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.14 : git push nu — zero interference credential
+# v1.15 : Popen streaming — GCM peut ouvrir le browser OAuth
+#         capture_output=True bloquait le popup de GitHub Desktop
+# v1.14 : git push nu, zero interference credential
 #         GCM (GitHub Desktop) gere le renouvellement automatique
 #         fallback http.extraheader si config.yaml a un token valide
 # v1.12 : verification token GitHub via API avant push
@@ -25,7 +27,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.14")
+version = ("maj_github.py", "1.15")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -640,20 +642,30 @@ class FenetreMaj(tk.Tk):
             self._log("  Pas de token dans config.yaml — GCM utilise.", "#AED6F1")
             self._log("  (Si le navigateur s'ouvre : c'est normal, une seule fois)", "#888888")
 
-        # git push — GCM gere l'auth si pas de token config.yaml valide
+        # git push — Popen streaming pour que GCM puisse ouvrir le browser
+        # IMPORTANT : capture_output=True bloquait le popup OAuth de GitHub Desktop
         self._log(f"  git push origin {branche} ...", "#DDDDDD")
+        sortie = ""
+        code   = -1
         try:
-            proc_git = subprocess.run(
+            proc_git = subprocess.Popen(
                 ["git"] + extra_git_args + ["push", "origin", branche],
                 cwd=site,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
                 text=True,
                 encoding="utf-8",
                 errors="replace",
                 env=env,
             )
+            lines = []
+            for ligne in proc_git.stdout:
+                ligne = ligne.rstrip()
+                if ligne:
+                    lines.append(ligne)
+            proc_git.wait()
             code   = proc_git.returncode
-            sortie = (proc_git.stdout or "") + (proc_git.stderr or "")
+            sortie = "\n".join(lines)
         except Exception as e:
             code, sortie = -1, str(e)
 

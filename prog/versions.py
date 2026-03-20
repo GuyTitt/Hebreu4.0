@@ -1,5 +1,6 @@
-# versions_v1.2.py — Version 1.2
-# v1.2 : liste dynamique — scan prog/ et prog/lib/ au lieu d'une liste codee en dur
+# versions_v1.3.py — Version 1.3
+# v1.3 : versions minimales mises a jour (maj_github 1.15)
+# v1.2 : liste dynamique
 #        tous les fichiers deployes sont verifies automatiquement
 #        ajout conversion_pdf, documents, docx_to_pdf (manquants en v1.1)
 # v1.1 : ajout verification config.yaml (champs, token GitHub via API)
@@ -10,7 +11,7 @@ Usage :
     python versions.py  (depuis prog/)
 """
 
-version = ("versions.py", "1.2")
+version = ("versions.py", "1.3")
 
 import ast
 import re
@@ -46,7 +47,7 @@ VERSIONS_MIN = {
     "cree_table_des_matieres.py": "6.32",
     "normalisation_utils.py":     "1.0",
     "place_bouton.py":            "1.1",
-    "maj_github.py":              "1.14",
+    "maj_github.py":              "1.15",
     "sync_dossiers.py":           "1.1",
     "conversion_pdf.py":          "1.0",
     # lib/
@@ -414,4 +415,4 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 
-# fin de versions_v1.2.py — Version 1.2
+# fin de versions_v1.3.py — Version 1.3
