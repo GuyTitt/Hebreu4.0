@@ -1,10 +1,12 @@
-# maj_github_v1.15.py — Version 1.15
+# maj_github_v1.16.py — Version 1.16
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.15 : Popen streaming — GCM peut ouvrir le browser OAuth
-#         capture_output=True bloquait le popup de GitHub Desktop
+# v1.16 : utilise le git de GitHub Desktop pour le push
+#         git systeme bloque par Windows Firewall en sous-process Python
+#         git GHD a les bons credentials + reseau + permissions
+# v1.15 : Popen streaming
 # v1.14 : git push nu, zero interference credential
 #         GCM (GitHub Desktop) gere le renouvellement automatique
 #         fallback http.extraheader si config.yaml a un token valide
@@ -27,7 +29,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.15")
+version = ("maj_github.py", "1.16")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -255,6 +257,40 @@ class FenetreMaj(tk.Tk):
             self.log_widget.see("end")
             self.log_widget.config(state="disabled")
         self.after(0, _do)
+
+    def _trouver_git_ghd(self) -> str:
+        """
+        Cherche le git.exe bundlé par GitHub Desktop.
+        Retourne le chemin complet si trouvé, sinon "git" (git système).
+
+        GitHub Desktop installe son propre git dans :
+          %LOCALAPPDATA%\GitHubDesktop\app-X.X.X\resources\app\git\cmd\git.exe
+        Ce git hérite des credentials et de la config réseau de GitHub Desktop,
+        ce qui évite les blocages pare-feu et les problèmes de credential manager.
+        """
+        import glob
+        local_app = os.environ.get("LOCALAPPDATA", "")
+        if not local_app:
+            return "git"
+
+        patterns = [
+            os.path.join(local_app,
+                "GitHubDesktop", "app-*", "resources", "app",
+                "git", "cmd", "git.exe"),
+            os.path.join(local_app,
+                "GitHubDesktop", "app-*", "resources", "app",
+                "git", "mingw64", "bin", "git.exe"),
+        ]
+        candidats = []
+        for pattern in patterns:
+            candidats.extend(glob.glob(pattern))
+
+        if not candidats:
+            return "git"
+
+        # Prendre la version la plus recente (tri sur le chemin = tri sur app-X.X.X)
+        candidats.sort(reverse=True)
+        return candidats[0]
 
     def _lire_credential_manager(self, site: str) -> tuple:
         """
@@ -642,14 +678,22 @@ class FenetreMaj(tk.Tk):
             self._log("  Pas de token dans config.yaml — GCM utilise.", "#AED6F1")
             self._log("  (Si le navigateur s'ouvre : c'est normal, une seule fois)", "#888888")
 
-        # git push — Popen streaming pour que GCM puisse ouvrir le browser
-        # IMPORTANT : capture_output=True bloquait le popup OAuth de GitHub Desktop
+        # git push — utilise le git de GitHub Desktop si disponible.
+        # Le git systeme est souvent bloque par Windows Firewall quand lance
+        # depuis un sous-process Python. Le git GHD a les bons droits reseau
+        # et les bons credential helpers configures par GitHub Desktop.
+        git_exe = self._trouver_git_ghd()
+        if git_exe != "git":
+            self._log(f"  Git GitHub Desktop detecte.", "#2ECC71")
+        else:
+            self._log(f"  Git systeme utilise (GitHub Desktop non detecte).", "#FFD700")
+
         self._log(f"  git push origin {branche} ...", "#DDDDDD")
         sortie = ""
         code   = -1
         try:
             proc_git = subprocess.Popen(
-                ["git"] + extra_git_args + ["push", "origin", branche],
+                [git_exe] + extra_git_args + ["push", "origin", branche],
                 cwd=site,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,

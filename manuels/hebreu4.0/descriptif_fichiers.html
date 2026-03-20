@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>Descriptif des fichiers — Hébreu4.0</title>
+<style>body{font-family:Arial,sans-serif;font-size:14px;line-height:1.6;max-width:960px;margin:0 auto;padding:24px;color:#222;}
+h1{font-size:22px;color:#2E75B6;border-bottom:2px solid #2E75B6;padding-bottom:6px;margin-top:32px;}
+h2{font-size:17px;color:#1F4E79;margin-top:24px;}
+h3{font-size:15px;color:#2E75B6;margin-top:16px;}
+table{border-collapse:collapse;width:100%;margin:12px 0;}
+th{background:#1F4E79;color:#fff;padding:8px 10px;text-align:left;}
+td{border:1px solid #ccc;padding:7px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#F0F6FB;}
+code,pre{font-family:'Courier New',monospace;font-size:13px;background:#F2F2F2;padding:2px 6px;border-radius:3px;}
+pre{padding:12px;display:block;white-space:pre-wrap;}
+.info-table td:first-child{background:#D5E8F0;font-weight:bold;width:160px;}
+ul{margin:6px 0;padding-left:24px;}
+li{margin:3px 0;}
+ol{margin:6px 0;padding-left:24px;}
+.titre{text-align:center;color:#1F4E79;font-size:28px;font-weight:bold;margin:32px 0 8px;}
+.sous-titre{text-align:center;color:#595959;font-size:15px;margin-bottom:24px;}
+.note{background:#FFF8E1;border-left:4px solid #F9A825;padding:10px 14px;margin:12px 0;}
+.ok{color:#27AE60;font-weight:bold;}
+.warn{color:#E67E22;font-weight:bold;}
+.err{color:#E74C3C;font-weight:bold;}
+</style></head><body>
+<div class="titre">Descriptif des fichiers — Hébreu4.0</div>
+<div class="sous-titre">Rôle et interdépendances de tous les modules</div>
+<table class="info-table" style="max-width:600px;margin:0 auto 28px;">
+  <tr><td>Version</td><td>1.0</td></tr>
+  <tr><td>Date</td><td>Mars 2026</td></tr>
+  <tr><td>Dossier</td><td><code>manuel\hebreu4.0\</code></td></tr>
+</table>
+
+<h1>1. Fichiers principaux (prog\)</h1>
+<table><tr><th>Fichier déployé</th><th>Version</th><th>Description / Rôle</th></tr>
+<tr><td><code>genere_site.py</code></td><td>25.5</td><td>Générateur principal. Orchestre les 5 phases : scan, PDF, partitions, HTML, TDM.</td></tr>
+<tr><td><code>settings.py</code></td><td>1.0</td><td>Configuration unique : chemins, options, extensions acceptées. Remplace les anciens lib/config.py et lib/options.py.</td></tr>
+<tr><td><code>lancer.cmd</code></td><td>4.4</td><td>Point d'entrée Windows. Supprime html\ avant génération, active C:\virpy13, lance genere_site.py, copie style.css.</td></tr>
+<tr><td><code>builder.py</code></td><td>1.1</td><td>Génération des pages HTML de navigation.</td></tr>
+<tr><td><code>documents.py</code></td><td>2.2</td><td>Scan DOCX/PDF, mise à jour STRUCTURE.py.</td></tr>
+<tr><td><code>musique.py</code></td><td>1.14</td><td>Partitions musicales — boutons YouTube dans les PDF.</td></tr>
+<tr><td><code>cree_table_des_matieres.py</code></td><td>6.32</td><td>Table des matières globale HTML.</td></tr>
+<tr><td><code>conversion_pdf.py</code></td><td>1.0</td><td>Wrapper conversion DOCX → PDF.</td></tr>
+<tr><td><code>docx_to_pdf.py</code></td><td>1.3</td><td>Conversion DOCX → PDF via PDFCreator.</td></tr>
+<tr><td><code>normalisation_utils.py</code></td><td>1.0</td><td>Règle unique de normalisation des noms de fichiers.</td></tr>
+<tr><td><code>place_bouton.py</code></td><td>1.1</td><td>Ajoute bouton YouTube sur la 1re page d'un PDF (pypdf).</td></tr>
+<tr><td><code>maj_github.py</code></td><td>1.12</td><td>Mise à jour GitHub : sync → génération → vérification token → commit → push via URL directe.</td></tr>
+<tr><td><code>sync_dossiers.py</code></td><td>1.1</td><td>Synchronisation dossiers avec sélection Tkinter.</td></tr>
+<tr><td><code>remplace.py</code></td><td>17</td><td>Déploiement package→prog. Scan récursif, version MAX, crée prog\ si absent.</td></tr>
+<tr><td><code>versions.py</code></td><td>1.2</td><td>Vérification installation : scan dynamique prog\ et prog\lib\, test token GitHub.</td></tr>
+<tr><td><code>installer.py</code></td><td>1.0</td><td>Crée C:\virpy13 et installe toutes les bibliothèques requises.</td></tr>
+<tr><td><code>style.css</code></td><td>4.2</td><td>Feuille de style du site généré.</td></tr>
+<tr><td><code>config.yaml</code></td><td>1.5</td><td>Configuration personnelle (chemins, token). NON commité.</td></tr>
+</table>
+
+<h1>2. Modules de bibliothèque (prog\lib\)</h1>
+<table><tr><th>Fichier</th><th>Version</th><th>Description</th></tr>
+<tr><td><code>lib\html_utils.py</code></td><td>1.0</td><td>Génération de blocs HTML, interprétation de templates.</td></tr>
+<tr><td><code>lib\structure_utils.py</code></td><td>2.1</td><td>Gestion des fichiers STRUCTURE.py (cache structure).</td></tr>
+<tr><td><code>lib\fichier_utils.py</code></td><td>1.1</td><td>Détection fichiers spéciaux, filtrage par extension.</td></tr>
+<tr><td><code>lib\partition_utils.py</code></td><td>2.3</td><td>Partitions musicales : boutons, correspondances CSV.</td></tr>
+<tr><td><code>lib\pdf_utils.py</code></td><td>1.1</td><td>Logique de régénération PDF, détection conversions.</td></tr>
+</table>
+
+<h1>3. Dépendances entre modules</h1>
+<pre>genere_site.py
+  ← settings.py           (CONFIG, chemins)
+  ← builder.py            (HTML)
+  ← documents.py          (scan DOCX/PDF)
+  ← musique.py            (partitions)
+  ← cree_table_des_matieres.py
+  ← normalisation_utils.py
+  ← lib/html_utils.py
+  ← lib/structure_utils.py
+  ← lib/pdf_utils.py
+  ← lib/fichier_utils.py
+  ← lib/partition_utils.py
+
+maj_github.py
+  ← sync_dossiers.py
+  ← lancer.cmd (appel système nolocal)</pre>
+
+<h1>4. Bibliothèques Python externes</h1>
+<table><tr><th>Package</th><th>Version min.</th><th>Usage</th></tr>
+<tr><td>pyyaml</td><td>5.0</td><td>Lecture config.yaml</td></tr>
+<tr><td>python-docx</td><td>0.8</td><td>Lecture .docx</td></tr>
+<tr><td>pypdf</td><td>3.0</td><td>Boutons YouTube dans les PDF</td></tr>
+<tr><td>reportlab</td><td>3.6</td><td>Génération PDF</td></tr>
+<tr><td>psutil</td><td>5.9</td><td>Détection serveur local</td></tr>
+</table>
+<p>Installation : <code>python prog\installer.py</code></p>
+
+</body></html>

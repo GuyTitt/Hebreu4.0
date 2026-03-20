@@ -1,6 +1,7 @@
-# remplace_v18.py — Version 18
-# v18 : copie si version differente OU si source plus recente (date)
-#        (evite qu'un fichier avec meme numero mais contenu change ne soit pas copie)
+# remplace_v19.py — Version 19
+# v19 : scan package\manuels\ → manuels\ (meme convention que prog)
+#        "manuel" renomme en "manuels"
+# v18 : tiebreaker date (src plus recent = copie forcee)
 # v17 : decouvrir() garde la version MAX (tri numerique)
 # v16 : creation html\Hebreu4.0\html\ + copie style.css
 # v15 : scan recursif de package/prog (sous-dossiers = modules reutilisables)
@@ -24,7 +25,7 @@ import sys
 import re
 from pathlib import Path
 
-version = ("remplace.py", "18")
+version = ("remplace.py", "19")
 
 # ─────────────────────────────────────────────────────────────────────
 # CONFIGURATION
@@ -47,6 +48,7 @@ SUPPRIMER = [
     DST / "lib1",            # ancien dossier renomme en lib
     LIB / "config.py",       # ancien shim (settings.py importe directement)
     LIB / "options.py",      # ancien shim (settings.py importe directement)
+    RACINE / "manuel",       # ancien nom renomme en manuels
 ]
 
 # Extensions deployees
@@ -58,6 +60,18 @@ IGNORER_NOM = {"__pycache__", "__init__.py"}
 
 # Regex : suffixe de version en fin de stem (_vX, _vX.Y, _vX_Y)
 _RE_VER = re.compile(r'_v(\d+(?:[._]\d+)*)$', re.IGNORECASE)
+
+# ─────────────────────────────────────────────────────────────────────
+# MANUELS (meme convention que prog)
+# ─────────────────────────────────────────────────────────────────────
+MANUELS_SRC = RACINE / "package" / "manuels"
+MANUELS_DST = RACINE / "manuels"
+
+# Extensions HTML uniquement pour les manuels
+EXT_MANUELS = {".html", ".css", ".js"}
+
+# Fichiers racine des manuels (pas de prefixe lib_)
+OPTIONNELS_MANUELS = {"index.html", "serveur_manuels.py", "serveur_manuels.cmd"}
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -145,6 +159,57 @@ def decouvrir() -> list:
                     meilleurs[cible] = (src_rel, ver, oblig)
 
     _walk(SRC)
+    return sorted(
+        [(src, cible, oblig) for cible, (src, _, oblig) in meilleurs.items()],
+        key=lambda x: str(x[1])
+    )
+
+def decouvrir_manuels() -> list:
+    """
+    Scan recursif de MANUELS_SRC.
+    Convention : sous-dossier/_general/fichier_vX.Y.html
+                  → MANUELS_DST/sous-dossier/_general/fichier.html
+    Meme logique que decouvrir() : version MAX par nom de base.
+    Fichiers sans suffixe _vX.Y (index.html, serveur*) deployés tels quels.
+    """
+    meilleurs: dict = {}
+
+    def _walk_m(dossier: Path):
+        for item in sorted(dossier.iterdir()):
+            if item.is_dir():
+                if item.name.lower() not in DOSSIERS_IGNORES:
+                    _walk_m(item)
+                continue
+            if item.suffix not in EXT_MANUELS:
+                continue
+
+            rel  = item.relative_to(MANUELS_SRC)
+            m    = _RE_VER.search(item.stem)
+
+            if m:
+                # fichier versionne → retire le suffixe de version
+                base = item.stem[:m.start()]
+                ver  = m.group(1)
+                cible = MANUELS_DST / rel.parent / (base + item.suffix)
+                oblig = cible.name not in OPTIONNELS_MANUELS
+            else:
+                # fichier sans version (index.html, serveur*) → copie directe
+                base  = item.stem
+                ver   = "0"
+                cible = MANUELS_DST / rel
+                oblig = cible.name not in OPTIONNELS_MANUELS
+
+            src_rel = str(item.relative_to(MANUELS_SRC))
+            if cible not in meilleurs:
+                meilleurs[cible] = (src_rel, ver, oblig)
+            else:
+                _, ver_actuel, _ = meilleurs[cible]
+                if _ver_tuple(ver) > _ver_tuple(ver_actuel):
+                    meilleurs[cible] = (src_rel, ver, oblig)
+
+    if MANUELS_SRC.exists():
+        _walk_m(MANUELS_SRC)
+
     return sorted(
         [(src, cible, oblig) for cible, (src, _, oblig) in meilleurs.items()],
         key=lambda x: str(x[1])
@@ -301,6 +366,50 @@ def main():
     if premiere_ligne:
         print()
         print("  Aucun fichier non repertorie dans prog\\ et sous-dossiers")
+
+    # ── Deploiement manuels\ ─────────────────────────────────────────
+    if MANUELS_SRC.exists():
+        FICHIERS_MANUELS = decouvrir_manuels()
+        print()
+        print(f"  {len(FICHIERS_MANUELS)} manuel(s) decouvert(s) dans {rel(MANUELS_SRC)}")
+        print()
+        print("  DEPLOIEMENT MANUELS")
+        print()
+
+        for nom_src, chemin_dst, obligatoire in FICHIERS_MANUELS:
+            chemin_src = MANUELS_SRC / nom_src
+            if not chemin_src.exists():
+                afficher("ABSENT", rel(chemin_src), rel(chemin_dst),
+                         note="OBLIGATOIRE" if obligatoire else "optionnel")
+                if obligatoire:
+                    erreurs += 1
+                continue
+
+            vs = extraire_version(chemin_src)
+            vd = extraire_version(chemin_dst) if chemin_dst.exists() else "—"
+            src_mtime = chemin_src.stat().st_mtime
+            dst_mtime = chemin_dst.stat().st_mtime if chemin_dst.exists() else 0
+            src_plus_recent = src_mtime > dst_mtime + 2
+
+            if vs != vd:
+                raison = ""
+            elif src_plus_recent:
+                raison = "src plus recent"
+            else:
+                raison = None
+
+            if raison is None:
+                afficher("OK",    rel(chemin_src), rel(chemin_dst), vs, vd, "a jour")
+                a_jour += 1
+            else:
+                chemin_dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(str(chemin_src), str(chemin_dst))
+                afficher("COPIE", rel(chemin_src), rel(chemin_dst), vs, vd,
+                         raison if raison else "")
+                copies += 1
+    else:
+        print()
+        print(f"  INFO : {rel(MANUELS_SRC)} absent — manuels non deployes")
 
     # ── Structure html\ pour node.js local ──────────────────────────
     # html\Hebreu4.0\html\style.css est requis pour la consultation locale

@@ -1,5 +1,6 @@
-# versions_v1.3.py — Version 1.3
-# v1.3 : versions minimales mises a jour (maj_github 1.15)
+# versions_v1.4.py — Version 1.4
+# v1.4 : maj_github 1.16, remplace 19
+# v1.3 : maj_github 1.15
 # v1.2 : liste dynamique
 #        tous les fichiers deployes sont verifies automatiquement
 #        ajout conversion_pdf, documents, docx_to_pdf (manquants en v1.1)
@@ -11,7 +12,7 @@ Usage :
     python versions.py  (depuis prog/)
 """
 
-version = ("versions.py", "1.3")
+version = ("versions.py", "1.4")
 
 import ast
 import re
@@ -47,7 +48,7 @@ VERSIONS_MIN = {
     "cree_table_des_matieres.py": "6.32",
     "normalisation_utils.py":     "1.0",
     "place_bouton.py":            "1.1",
-    "maj_github.py":              "1.15",
+    "maj_github.py":              "1.16",
     "sync_dossiers.py":           "1.1",
     "conversion_pdf.py":          "1.0",
     # lib/
@@ -415,4 +416,4 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 
-# fin de versions_v1.3.py — Version 1.3
+# fin de versions_v1.4.py — Version 1.4
