@@ -1,5 +1,7 @@
-# versions_v1.4.py — Version 1.4
-# v1.4 : maj_github 1.16, remplace 19
+# versions_v1.6.py — Version 1.6
+# v1.6 : settings 1.1, builder 1.2, cree_table 6.33, genere_site 25.6 (tdm minusc.)
+# v1.5 : installer 1.1
+# v1.4 : maj_github 1.16
 # v1.3 : maj_github 1.15
 # v1.2 : liste dynamique
 #        tous les fichiers deployes sont verifies automatiquement
@@ -12,7 +14,7 @@ Usage :
     python versions.py  (depuis prog/)
 """
 
-version = ("versions.py", "1.4")
+version = ("versions.py", "1.6")
 
 import ast
 import re
@@ -39,16 +41,17 @@ CONFIG_CHAMPS_OBLIG = [
 # Versions minimales attendues pour les fichiers Python principaux
 # (None = existence suffisante, pas de version minimale)
 VERSIONS_MIN = {
-    "genere_site.py":             "25.5",
-    "settings.py":                "1.0",
+    "genere_site.py":             "25.6",
+    "settings.py":                "1.1",
     "documents.py":               "2.2",
     "musique.py":                 "1.14",
-    "builder.py":                 "1.1",
+    "builder.py":                 "1.2",
     "docx_to_pdf.py":             "1.3",
-    "cree_table_des_matieres.py": "6.32",
+    "cree_table_des_matieres.py": "6.33",
     "normalisation_utils.py":     "1.0",
     "place_bouton.py":            "1.1",
     "maj_github.py":              "1.16",
+    "installer.py":               "1.1",
     "sync_dossiers.py":           "1.1",
     "conversion_pdf.py":          "1.0",
     # lib/
@@ -416,4 +419,4 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 
-# fin de versions_v1.4.py — Version 1.4
+# fin de versions_v1.6.py — Version 1.6

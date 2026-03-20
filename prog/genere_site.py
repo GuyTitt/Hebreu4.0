@@ -1,8 +1,9 @@
 # genere_site.py — Version 25.5
-# v25.5 : shims elimines, import direct depuis settings
+# v25.6 : DOSSIER_TDM defaut "tdm" (minuscules pour GitHub Pages Linux)
+# v25.5 : shims elimines
 # v25.4 : lib1 renomme en lib
 
-version = ("genere_site.py", "25.5")
+version = ("genere_site.py", "25.6")
 
 """
 Générateur de site statique - Version 25.3
@@ -58,7 +59,7 @@ IGNORER = set(CONFIG.get("ignorer", [])) | {"__pycache__", ".pyc", "STRUCTURE.py
 FICHIERS_ENTETE_PIED = {"entete.html", "entete_general.html", "pied.html", "pied_general.html"}
 EXTENSIONS_ACCEPTEES = set(CONFIG.get("extensions_acceptees", ["pdf", "html", "htm", "txt"]))
 EXTENSIONS_COPIABLES = {"pdf", "html", "htm", "jpg", "jpeg", "png", "gif", "css", "js"}
-DOSSIER_TDM = CONFIG.get("dossier_tdm", "TDM")
+DOSSIER_TDM = CONFIG.get("dossier_tdm", "tdm")
 AJOUT_AFFICHAGE = CONFIG.get("ajout_affichage", ["", "", "", ""])
 VOIR_STRUCTURE = CONFIG.get("voir_structure", False)
 LIEN_SOULIGNÉ = CONFIG.get("lien_souligné_index", False)
