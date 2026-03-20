@@ -1,9 +1,13 @@
-# maj_github_v1.12.py — Version 1.12
+# maj_github_v1.13.py — Version 1.13
 # Mise a jour automatique du site GitHub :
 #   1) Synchronisation des fichiers sources modifies (sync_dossiers.py)
 #   2) Generation du site statique (lancer.cmd nolocal — sans serveur node)
 #   3) Commit + Push vers GitHub
-# v1.12 : verification token GitHub via API avant push (diagnostic clair)
+# v1.13 : auth via Credential Manager Windows (git credential fill)
+#         fallback sur config.yaml si absent
+#         http.extraheader + core.askpass= (neutralise GitHub Desktop askpass)
+#         plus d'URL avec token (ne se repete pas en boucle)
+# v1.12 : verification token GitHub via API avant push
 # v1.11 : URL avec token passee directement a git push
 #         du credential manager (core.askpass/GCM ouvrait /dev/tty)
 # v1.10 : http.extraheader (insuffisant, core.askpass non neutralise)
@@ -22,7 +26,7 @@
 # v1.1 : lancer.cmd remplace genere_site.py
 # Usage : double-clic sur MAJ_GITHUB.cmd (qui active virpy13 puis lance ce script)
 
-version = ("maj_github.py", "1.12")
+version = ("maj_github.py", "1.13")
 print(f"[Import] {version[0]} - Version {version[1]} charge")
 
 import sys
@@ -250,6 +254,35 @@ class FenetreMaj(tk.Tk):
             self.log_widget.see("end")
             self.log_widget.config(state="disabled")
         self.after(0, _do)
+
+    def _lire_credential_manager(self, site: str) -> tuple:
+        """
+        Lit les credentials GitHub depuis le Credential Manager Windows
+        via "git credential fill". Retourne (user, token) ou ("", "").
+        Compatible avec GitHub Desktop qui stocke ses credentials via GCM.
+        """
+        try:
+            proc = subprocess.run(
+                ["git", "credential", "fill"],
+                input="protocol=https\nhost=github.com\n\n",
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                cwd=site,
+                timeout=5,
+            )
+            if proc.returncode != 0 or not proc.stdout:
+                return "", ""
+            user = token = ""
+            for line in proc.stdout.splitlines():
+                if line.startswith("username="):
+                    user = line[len("username="):].strip()
+                elif line.startswith("password="):
+                    token = line[len("password="):].strip()
+            return user, token
+        except Exception:
+            return "", ""
 
     def _verifier_token(self, user: str, token: str) -> tuple:
         """
@@ -570,56 +603,57 @@ class FenetreMaj(tk.Tk):
         if remote_txt.strip():
             self._log(f"  Remote : {remote_txt.splitlines()[0]}", "#AED6F1")
 
-        # Authentification :
-        #   - Avec token dans config.yaml :
-        #       On passe l'URL avec token directement a "git push <url> <branche>"
-        #       Cela bypass COMPLETEMENT le credential manager (GCM, core.askpass,
-        #       GIT_ASKPASS...) — git n'interroge aucun helper, pas de /dev/tty.
-        #   - Sans token :
-        #       On utilise "git push origin <branche>" normalement
-        #       => GitHub Desktop / Credential Manager prend la main
+        # ── Recuperation des credentials ─────────────────────────────
+        # Priorite 1 : Credential Manager Windows (stocke par GitHub Desktop)
+        # Priorite 2 : config.yaml (github_token + github_user)
+        # Dans les deux cas : http.extraheader + core.askpass= (pas d'URL avec
+        # token, pas de /dev/tty, fonctionne a chaque appel)
+
         token = self.cfg.get("github_token", "").strip()
-        user  = self.cfg.get("github_user", "").strip()
-        url_github = self.cfg.get("url_github", "").strip().rstrip("/")
+        user  = self.cfg.get("github_user",  "").strip()
+
+        # Tentative lecture Credential Manager via "git credential fill"
+        cm_user, cm_token = self._lire_credential_manager(site)
+        if cm_user and cm_token:
+            user  = cm_user
+            token = cm_token
+            self._log("  Credentials lus depuis le Credential Manager Windows.", "#2ECC71")
+        elif token and user:
+            self._log("  Credentials lus depuis config.yaml.", "#AED6F1")
 
         env = os.environ.copy()
+        extra_git_args = []
 
-        if token and user and url_github:
-            # ── Verification token via API GitHub (avant le push) ────
+        if token and user:
+            # Verification token via API
             self._log("  Verification token GitHub...", "#DDDDDD")
             api_ok, api_msg, api_login = self._verifier_token(user, token)
             if api_ok:
-                self._log(f"  Token OK — login GitHub : {api_login}", "#2ECC71")
+                self._log(f"  Token OK — login : {api_login}", "#2ECC71")
             else:
                 self._log(f"  ERREUR token : {api_msg}", "#FF6B6B")
-                self._log(f"  Token lu   : {token[:4]}...{token[-4:]} ({len(token)} car.)", "#FF6B6B")
-                self._log(f"  User lu    : {repr(user)}", "#FF6B6B")
-                self._log("  → Regenerer un token PAT classic (cocher repo)", "#FFD700")
-                self._log("    github.com > Settings > Developer settings >", "#FFD700")
-                self._log("    Personal access tokens > Tokens (classic)", "#FFD700")
+                if token:
+                    self._log(f"  Token lu : {token[:4]}...{token[-4:]} ({len(token)} car.)", "#FF6B6B")
+                self._log("  → Ouvrir GitHub Desktop et vous reconnecter, ou", "#FFD700")
+                self._log("    regenerer un PAT : github.com > Settings > Developer settings", "#FFD700")
                 self._set_etape(idx, "erreur")
                 return False
 
-            # Construire l'URL avec credentials
-            if url_github.startswith("https://"):
-                host_path = url_github[len("https://"):]
-            else:
-                host_path = url_github
-            push_url = f"https://{user}:{token}@{host_path}"
-            if not push_url.endswith(".git"):
-                push_url += ".git"
-            push_target = push_url
-            self._log("  Authentification via token PAT (URL directe).", "#AED6F1")
+            import base64
+            b64 = base64.b64encode(f"{user}:{token}".encode()).decode()
+            extra_git_args = [
+                "-c", f"http.extraheader=Authorization: Basic {b64}",
+                "-c", "credential.helper=",  # desactive GCM pour cette commande
+                "-c", "core.askpass=",        # neutralise le askpass de GitHub Desktop
+            ]
         else:
-            push_target = "origin"
-            if not token:
-                self._log("  Pas de token — Credential Manager Windows utilise.", "#FFD700")
+            self._log("  Aucun credential trouve — push sans auth explicite.", "#FFD700")
 
         # git push
-        self._log(f"  git push {branche} ...", "#DDDDDD")
+        self._log(f"  git push origin {branche} ...", "#DDDDDD")
         try:
             proc_git = subprocess.run(
-                ["git", "push", push_target, branche],
+                ["git"] + extra_git_args + ["push", "origin", branche],
                 cwd=site,
                 capture_output=True,
                 text=True,
@@ -632,13 +666,9 @@ class FenetreMaj(tk.Tk):
         except Exception as e:
             code, sortie = -1, str(e)
 
-        # Masquer le token dans les logs (token brut + URL avec token)
+        # Masquer le token dans les logs
         if token and sortie:
             sortie = sortie.replace(token, "***")
-            try:
-                sortie = sortie.replace(f"{user}:{token}@", "***@")
-            except Exception:
-                pass
         if sortie.strip():
             for ligne in sortie.strip().split("\n"):
                 couleur = "#FF6B6B" if "error" in ligne.lower() else "#DDDDDD"
